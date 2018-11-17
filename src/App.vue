@@ -1,0 +1,69 @@
+<template>
+  <div id="app">
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'app'
+}
+</script>
+
+<style>
+html,body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#app {
+  height: 100%;
+}
+.el-table td {
+  /*这里是一个坑-必须在父容器中设置样式，否则无法处理行高*/
+  padding: 6px 0px !important;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('./assets/myfonts/icomoon.eot?1hpwbn');
+  src:  url('./assets/myfonts/icomoon.eot?1hpwbn#iefix') format('embedded-opentype'),
+    url('./assets/myfonts/icomoon.ttf?1hpwbn') format('truetype'),
+    url('./assets/myfonts/icomoon.woff?1hpwbn') format('woff'),
+    url('./assets/myfonts/icomoon.svg?1hpwbn#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*[class^="icon-"], [class*=" icon-"] {*/
+.myicon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.myicon-menu:before {
+  content: "\e9bd";
+}
+.myicon-user:before {
+  content: "\e975";
+  font-size: 20px;
+  line-height: 40px;
+}
+.myicon-key:before {
+  content: "\e98d";
+  font-size: 20px;
+  line-height: 40px;
+}
+
+</style>
