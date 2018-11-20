@@ -1,0 +1,177 @@
+<template>
+  <div>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+      <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+    </el-breadcrumb>
+    <!--搜索-->
+    <el-form :inline="true" :model="searchProduct" size="mini" class="searchProduct">
+      <el-form-item label="产品名称:">
+        <el-input v-model="searchProduct.productName" placeholder="请输入产品名称"></el-input>
+      </el-form-item>
+      <el-form-item label="产品编号:">
+        <el-input v-model="searchProduct.ProductNumber" placeholder="请输入产品编号"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSearch">查询</el-button>
+        <el-button type="primary" @click="reset">重置</el-button>
+      </el-form-item>
+    </el-form>
+    <el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>
+    <el-button type="primary" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
+    <el-table
+      :data="productList"
+      stripe
+      max-height="500"
+      style="width: 100%">
+      <el-table-column
+        type="selection"
+        @selection-change="handleSelectionChange"
+        label="选择"
+        width="40">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="产品编号（SKU）"
+        width="150">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="产品名称">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="产品品牌">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="规格">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="型号">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="厂商">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="单价">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="创建时间">
+        <template slot-scope="scope">
+          <!--<i class="el-icon-time"></i>-->
+          <span style="margin-left: 10px">{{ scope.row.date }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="状态">
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="150">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
+<script>
+  import { searchProduct, getProductList } from '@/api/commodity.js'
+  export default {
+    data () {
+      return {
+        searchProduct: {// 搜索数据
+          productName: '', // 产品名称
+          ProductNumber: '' // 产品编号
+        },
+        productList: [{}], // 产品列表
+        btnDisabled: false, // 是否禁用按钮
+        checkedProductList: [] // CheckBox选择的数据
+      }
+    },
+    methods: {
+      // 搜索
+      onSearch () {
+        searchProduct(this.searchProduct).then(res => {
+          if (res.meta.status === 200) {
+            this.productList = res.data.productList
+          }
+        })
+      },
+      // 重置
+      reset () {
+        this.searchProduct = {
+          productName: '',
+          ProductNumber: ''
+        }
+        getProductList().then(res => {
+          this.productList = res.data.productList
+        })
+      },
+      // 添加
+      addProduct () {
+        // 到编辑页面
+      },
+      // 删除
+      deleteProduct () {
+        if (this.checkedProductList.length === 0) {
+          this.$message({
+            message: '请选择至少一项产品记录！',
+            type: 'warning'
+          })
+          return false
+        }
+      },
+      // 选中数据
+      handleSelectionChange (val) {
+        this.checkedProductList = val
+      },
+      // 修改
+      handleEdit () {
+      // 到编辑页面
+      },
+      // 明细
+      handleDetail () {
+      // 到详情页面
+      }
+    },
+    components: {
+
+    },
+    created () {
+      // getProductList().then(res => {
+      //   if (res.meta.status === 200) {
+      //     this.productList = res.data.productList
+      //     this.btnDisabled = res.data.btnDisabled
+      //   }
+      // })
+    }
+  }
+</script>
+<style scoped>
+  .el-breadcrumb {
+    background-color: #D3DCE6;
+    height: 45px;
+    font-size: 15px;
+    padding-left: 10px;
+    line-height: 45px;
+  }
+  .searchProduct {
+    margin-top: 10px;
+  }
+</style>

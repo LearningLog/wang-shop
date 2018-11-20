@@ -13,93 +13,134 @@
             <span>{{tag.authName}}</span>
           </el-menu-item>
         </el-submenu>
-        <!-- <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span slot="title">用户管理</span>
-          </template>
-          <el-menu-item index="/user">
-            <i class="el-icon-menu"></i>
-            <span>用户列表</span>
-          </el-menu-item>
-        </el-submenu>
-        <el-submenu index="2">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span slot="title">权限管理</span>
-          </template>
-          <el-menu-item index="/role">
-            <i class="el-icon-menu"></i>
-            <span slot="title">角色列表</span>
-          </el-menu-item>
-          <el-menu-item index="/auth">
-            <i class="el-icon-menu"></i>
-            <span slot="title">权限列表</span>
-          </el-menu-item>
-        </el-submenu>
-        <el-submenu index="3">
+
+        <el-submenu index="6">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span slot="title">商品管理</span>
           </template>
-          <el-menu-item index="/product">
+          <el-menu-item index="/commodityList">
             <i class="el-icon-menu"></i>
-            <span slot="title">商品列表</span>
-          </el-menu-item>
-          <el-menu-item index="/category">
-            <i class="el-icon-menu"></i>
-            <span slot="title">商品分类</span>
-          </el-menu-item>
-          <el-menu-item index="/param">
-            <i class="el-icon-menu"></i>
-            <span slot="title">商品参数</span>
+            <span>商品列表</span>
           </el-menu-item>
         </el-submenu>
-        <el-submenu index="4">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span slot="title">订单管理</span>
-          </template>
-          <el-menu-item index="/order">
-            <i class="el-icon-menu"></i>
-            <span slot="title">订单列表</span>
-          </el-menu-item>
-        </el-submenu>
-        <el-submenu index="5">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span slot="title">数据统计</span>
-          </template>
-          <el-menu-item index="/report">
-            <i class="el-icon-menu"></i>
-            <span slot="title">数据报表</span>
-          </el-menu-item>
-        </el-submenu> -->
+        <!--<el-submenu index="2">-->
+          <!--<template slot="title">-->
+            <!--<i class="el-icon-location"></i>-->
+            <!--<span slot="title">权限管理</span>-->
+          <!--</template>-->
+          <!--<el-menu-item index="/role">-->
+            <!--<i class="el-icon-menu"></i>-->
+            <!--<span slot="title">角色列表</span>-->
+          <!--</el-menu-item>-->
+          <!--<el-menu-item index="/auth">-->
+            <!--<i class="el-icon-menu"></i>-->
+            <!--<span slot="title">权限列表</span>-->
+          <!--</el-menu-item>-->
+        <!--</el-submenu>-->
+        <!--<el-submenu index="3">-->
+          <!--<template slot="title">-->
+            <!--<i class="el-icon-location"></i>-->
+            <!--<span slot="title">商品管理</span>-->
+          <!--</template>-->
+          <!--<el-menu-item index="/product">-->
+            <!--<i class="el-icon-menu"></i>-->
+            <!--<span slot="title">商品列表</span>-->
+          <!--</el-menu-item>-->
+          <!--<el-menu-item index="/category">-->
+            <!--<i class="el-icon-menu"></i>-->
+            <!--<span slot="title">商品分类</span>-->
+          <!--</el-menu-item>-->
+          <!--<el-menu-item index="/param">-->
+            <!--<i class="el-icon-menu"></i>-->
+            <!--<span slot="title">商品参数</span>-->
+          <!--</el-menu-item>-->
+        <!--</el-submenu>-->
+        <!--<el-submenu index="4">-->
+          <!--<template slot="title">-->
+            <!--<i class="el-icon-location"></i>-->
+            <!--<span slot="title">订单管理</span>-->
+          <!--</template>-->
+          <!--<el-menu-item index="/order">-->
+            <!--<i class="el-icon-menu"></i>-->
+            <!--<span slot="title">订单列表</span>-->
+          <!--</el-menu-item>-->
+        <!--</el-submenu>-->
+        <!--<el-submenu index="5">-->
+          <!--<template slot="title">-->
+            <!--<i class="el-icon-location"></i>-->
+            <!--<span slot="title">数据统计</span>-->
+          <!--</template>-->
+          <!--<el-menu-item index="/report">-->
+            <!--<i class="el-icon-menu"></i>-->
+            <!--<span slot="title">数据报表</span>-->
+          <!--</el-menu-item>-->
+        <!--</el-submenu>-->
       </el-menu>
     </el-aside>
     <el-container>
       <el-header>
         <div v-model="isCollapse">
           <i @click="toggleFlag" class="myicon myicon-menu btnsize"></i>
-          <div class="stitle">电商后台管理系统</div>
-          <a href="javascript:;" @click='handleLogout' class="logoutbtn">退出</a>
+          <div class="stitle">孖孖后台管理系统</div>
+          <div class="userEdit">
+            <el-button class="modify" type="primary" size="mini" @click='modifyDialog = true'>修改密码</el-button>
+            <el-button class="logoutbtn" type="warning" size="mini" @click='handleLogout'>退出</el-button>
+          </div>
         </div>
       </el-header>
       <el-main>
         <router-view></router-view>
       </el-main>
     </el-container>
+    <!--修改密码-->
+    <el-dialog title="修改密码" :visible.sync="modifyDialog">
+    <el-form ref="userInfo" :rules="rules" :model="userInfo" label-width="110px">
+      <el-form-item label="原密码" prop="formerPsd">
+        <el-input v-model="userInfo.formerPsd"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="userInfo.password"></el-input>
+      </el-form-item>
+      <el-form-item label="再次输入密码" prop="secondNowPsd">
+        <el-input v-model="userInfo.secondNowPsd"></el-input>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelModifyDialog">取 消</el-button>
+        <el-button type="primary" @click="modify('userInfo')">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-container>
 </template>
 
 <script>
 import { getMenus } from '../api/index.js'
+import {removeUserInfo} from '../api/auth.js'
+import { modifyPassword } from '../api/login.js'
 export default {
   data () {
     return {
       isCollapse: false,
       uniqueFlag: true,
-      menuData: []
+      menuData: [], // 菜单
+      modifyDialog: false, // 是否显示修改密码对话框
+      userInfo: {
+        formerPsd: '', // 原密码
+        password: '', // 密码
+        secondNowPsd: '' // 第二次输入密码
+      },
+      rules: {
+        formerPsd: [
+          { required: true, message: '请输入原密码', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ],
+        secondNowPsd: [
+          { required: true, message: '请再次输入密码', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
@@ -109,6 +150,39 @@ export default {
     handleClose (key, keyPath) {
       // console.log(key, keyPath)
     },
+    // 确定 修改密码
+    modify (userInfo) {
+      // 添加角色
+      this.$refs[userInfo].validate(valid => {
+        if (valid) {
+          modifyPassword(this.userInfo).then(res => {
+            if (res.meta.status === 201) {
+              this.initData()
+              this.modifyDialog = false
+              this.$message({
+                type: 'success',
+                message: '添加角色成功!'
+              })
+            } else {
+              this.$message({
+                type: 'warning',
+                message: '添加角色失败!'
+              })
+            }
+          })
+        }
+      })
+    },
+    // 取消 修改密码
+    cancelModifyDialog () {
+      this.modifyDialog = false
+      this.userInfo = {
+        formerPsd: '', // 原密码
+        password: '', // 密码
+        secondNowPsd: '' // 第二次输入密码
+      }
+    },
+    // 退出
     handleLogout () {
       this.$confirm('确认退出吗?', '退出提示', {
         confirmButtonText: '确定',
@@ -120,6 +194,7 @@ export default {
         localStorage.removeItem('mytoken')
         // 跳转到登录页面
         this.$router.push({path: 'login'})
+        removeUserInfo()
         // 提示用户退出成功
         this.$message({
           type: 'success',
@@ -169,6 +244,7 @@ export default {
     color: #333;
     text-align: left;
     display: block;
+    box-sizing: border-box;
   }
   .el-main {
     background-color: #E9EEF3;
@@ -176,20 +252,18 @@ export default {
     text-align: left;
     overflow: '';
   }
-  .logoutbtn {
+  .userEdit {
     position: absolute;
+    top: 0px;
     right: 10px;
-    color: orange;
   }
   .el-header {
-    background: url(../assets/headerBgi.jpg);
     background-color: #545c64;
   }
   .logo {
     height:60px;
     background: url(../assets/logo.jpg);
-    background-size:cover;
-    background-color: #989898;
+    background-size:contain;
   }
   .stitle {
     position: absolute;
@@ -201,4 +275,7 @@ export default {
     top: 0px;
   }
 
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 10px;
+  }
 </style>

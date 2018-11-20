@@ -55,15 +55,35 @@ html,body {
 .myicon-menu:before {
   content: "\e9bd";
 }
+.el-input__prefix {
+  left: 10px;
+}
+.el-input--prefix .el-input__inner {
+  float: left;
+  background: none;
+  outline: none;
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-left: 2px solid #fff;
+  width: 96%;
+  display: inline-block;
+  margin-left: 40px;
+  border-radius: 0px;
+}
 .myicon-user:before {
   content: "\e975";
-  font-size: 20px;
+  font-size: 30px;
   line-height: 40px;
+  vertical-align: middle;
 }
 .myicon-key:before {
   content: "\e98d";
-  font-size: 20px;
+  font-size: 28px;
   line-height: 40px;
+  vertical-align: middle;
 }
 
 </style>
