@@ -23,6 +23,10 @@
             <i class="el-icon-menu"></i>
             <span>商品列表</span>
           </el-menu-item>
+          <el-menu-item index="/commodityAdd">
+            <i class="el-icon-menu"></i>
+            <span>新增商品</span>
+          </el-menu-item>
         </el-submenu>
         <!--<el-submenu index="2">-->
           <!--<template slot="title">-->

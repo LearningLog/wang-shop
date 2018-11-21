@@ -19,49 +19,61 @@
       </el-form-item>
     </el-form>
     <el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>
-    <el-button type="primary" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
+    <el-button type="danger" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
     <el-table
       :data="productList"
       stripe
+      border
+      ref="checkedProductList"
+      @selection-change="handleSelectionChange"
       max-height="500"
       style="width: 100%">
       <el-table-column
         type="selection"
-        @selection-change="handleSelectionChange"
         label="选择"
+        align="center"
         width="40">
       </el-table-column>
       <el-table-column
         prop="name"
         label="产品编号（SKU）"
-        width="150">
+        align="center"
+        width="140">
       </el-table-column>
       <el-table-column
         prop="address"
+        align="center"
         label="产品名称">
       </el-table-column>
       <el-table-column
         prop="address"
+        align="center"
         label="产品品牌">
       </el-table-column>
       <el-table-column
         prop="address"
+        align="center"
         label="规格">
       </el-table-column>
       <el-table-column
         prop="address"
+        align="center"
         label="型号">
       </el-table-column>
       <el-table-column
         prop="address"
+        align="center"
         label="厂商">
       </el-table-column>
       <el-table-column
         prop="address"
+        header-align="center"
+        align="right"
         label="单价">
       </el-table-column>
       <el-table-column
         prop="address"
+        align="center"
         label="创建时间">
         <template slot-scope="scope">
           <!--<i class="el-icon-time"></i>-->
@@ -70,11 +82,13 @@
       </el-table-column>
       <el-table-column
         prop="address"
+        align="center"
         label="状态">
       </el-table-column>
       <el-table-column
         fixed="right"
         label="操作"
+        align="center"
         width="150">
         <template slot-scope="scope">
           <el-button
@@ -129,6 +143,7 @@
       },
       // 删除
       deleteProduct () {
+        console.log(this.checkedProductList)
         if (this.checkedProductList.length === 0) {
           this.$message({
             message: '请选择至少一项产品记录！',
@@ -138,16 +153,18 @@
         }
       },
       // 选中数据
-      handleSelectionChange (val) {
-        this.checkedProductList = val
+      handleSelectionChange (row) {
+        this.checkedProductList = row
       },
       // 修改
-      handleEdit () {
+      handleEdit (index, row) {
       // 到编辑页面
+        this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
       },
       // 明细
-      handleDetail () {
+      handleDetail (index, row) {
       // 到详情页面
+        this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
       }
     },
     components: {

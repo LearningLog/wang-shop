@@ -18,6 +18,7 @@ import Pparam from '@/views/product/Param'
 import Order from '@/views/order/Order'
 import Report from '@/views/report/Report'
 import commodityList from '@/views/commodity/commodity-list'
+import commodityAdd from '@/views/commodity/commodity-add'
 
 // 这是在为 Vue 扩展实例成员
 // 如果你没有这句话，那么你就无法在组件中使用 this.$route 和 this.$router
@@ -49,7 +50,8 @@ const router = new Router({
       name: '商品管理',
       component: Home,
       children: [
-        {path: '/commodityList', component: commodityList, name: 'commodityList'}
+        {path: '/commodityList', component: commodityList, name: 'commodityList'},
+        {path: '/commodityAdd', component: commodityAdd, name: 'commodityAdd'}
       ]
     },
     {
