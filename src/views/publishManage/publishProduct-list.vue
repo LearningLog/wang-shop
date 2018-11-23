@@ -3,7 +3,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+      <el-breadcrumb-item>商品发布列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
     <el-form :inline="true" :model="searchProduct" size="mini" class="searchProduct">
@@ -12,6 +12,26 @@
       </el-form-item>
       <el-form-item label="产品编号:">
         <el-input v-model="searchProduct.ProductNumber" placeholder="请输入产品编号"></el-input>
+      </el-form-item>
+      <el-form-item label="发布时间:">
+        <el-date-picker
+          class="publishTime"
+          v-model="searchProduct.publishTime"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="发布时间:">
+        <el-select v-model="searchProduct.status" placeholder="请选择状态">
+          <el-option
+            v-for="item in stateList"
+            :key="item.id"
+            :label="item.title"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSearch">查询</el-button>
@@ -63,18 +83,18 @@
       <el-table-column
         prop="address"
         align="center"
-        label="厂商">
+        label="厂家">
       </el-table-column>
       <el-table-column
         prop="address"
         header-align="center"
         align="right"
-        label="单价">
+        label="发布时间">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
-        label="创建时间">
+        label="发布数量">
         <template slot-scope="scope">
           <!--<i class="el-icon-time"></i>-->
           <span style="margin-left: 10px">{{ scope.row.date }}</span>
@@ -82,8 +102,9 @@
       </el-table-column>
       <el-table-column
         prop="address"
-        align="center"
-        label="状态">
+        header-align="center"
+        align="right"
+        label="现存数量">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -105,14 +126,45 @@
   </div>
 </template>
 <script>
-  import { searchProduct, getProductList, edeleteProduct } from '@/api/commodity.js'
+  import { searchProduct, getProductList } from '@/api/publishManage.js'
   export default {
     data () {
       return {
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近一个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近三个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
+          }]
+        },
+
         searchProduct: {// 搜索数据
           productName: '', // 产品名称
-          ProductNumber: '' // 产品编号
+          ProductNumber: '', // 产品编号
+          publishTime: '', // 发布时间
+          status: '' // 状态
         },
+        stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
         productList: [{}], // 产品列表
         btnDisabled: false, // 是否禁用按钮
         checkedProductList: [] // CheckBox选择的数据
@@ -130,8 +182,10 @@
       // 重置
       reset () {
         this.searchProduct = {
-          productName: '',
-          ProductNumber: ''
+          productName: '', // 产品名称
+          ProductNumber: '', // 产品编号
+          publishTime: '', // 发布时间
+          status: '' // 状态
         }
         getProductList().then(res => {
           this.productList = res.data.productList
@@ -139,8 +193,7 @@
       },
       // 添加
       addProduct () {
-        // 到新增页面
-        this.$router.push({path: '/commodityAdd'})
+        // 到编辑页面
       },
       // 删除
       deleteProduct () {
@@ -152,11 +205,7 @@
           })
           return false
         } else {
-          edeleteProduct(this.checkedProductList).then(res => {
-            if (res.meta.status === 200) {
-              this.productList = res.data.productList
-            }
-          })
+
         }
       },
       // 选中数据
@@ -165,12 +214,12 @@
       },
       // 修改
       handleEdit (index, row) {
-      // 到编辑页面
+        // 到编辑页面
         this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
       },
       // 明细
       handleDetail (index, row) {
-      // 到详情页面
+        // 到详情页面
         this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
       }
     },
@@ -197,5 +246,8 @@
   }
   .searchProduct {
     margin-top: 10px;
+  }
+  .publishTime {
+    width:220px;
   }
 </style>

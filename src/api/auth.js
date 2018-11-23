@@ -3,33 +3,35 @@
  * 封装和用户授权相关函数
  */
 
-const userInfoKey = 'mytoken'
+const userInfoKey = 'userInfoToken'
 
 /**
- * 保存登陆用户信息到cookie
- * @param value            token值 String
- * @param expires          [可选]
- * @param domain           [可选]
- * @param path             [可选]
- * @param secure           [可选]
- * @return {undefined}     无返回值
+ * 这是有设定过期时间的使用示例：
+ * @param str             s20是代表20秒  h是指小时，如12小时则是：h12   d是天数，30天则：d30
+ * @returns {number}
  */
-export function saveUserInfo (value, expires, domain, path, secure) {
-  let cookieText = ''
-  cookieText += encodeURIComponent(userInfoKey) + '=' + encodeURIComponent(value)
-  if (expires instanceof Date) {
-    cookieText += '; expires=' + expires.toGMTString()
+function getsec (str) {
+  var str1 = str.substring(1, str.length) * 1
+  var str2 = str.substring(0, 1)
+  if (str2 === 's') {
+    return str1 * 1000
+  } else if (str2 === 'h') {
+    return str1 * 60 * 60 * 1000
+  } else if (str2 === 'd') {
+    return str1 * 24 * 60 * 60 * 1000
   }
-  if (path) {
-    cookieText += '; path=' + path
-  }
-  if (domain) {
-    cookieText += '; domain=' + domain
-  }
-  if (secure) {
-    cookieText += '; secure'
-  }
-  document.cookie = cookieText
+}
+/**
+ *保存登陆用户信息到cookie
+ * @param name
+ * @param value
+ * @param time    这是有设定过期时间的使用示例：s20是代表20秒  h是指小时，如12小时则是：h12   d是天数，30天则：d30
+ */
+export function saveUserInfo (value, time) {
+  var strsec = getsec(time)
+  var exp = new Date()
+  exp.setTime(exp.getTime() + strsec * 1)
+  document.cookie = userInfoKey + '=' + escape(value) + ';expires=' + exp.toGMTString()
 }
 
 /**
@@ -37,17 +39,14 @@ export function saveUserInfo (value, expires, domain, path, secure) {
  * @return {string} 当前登陆用户信息对象字符串
  */
 export function getUserInfo () {
-  let cookieName = encodeURIComponent(userInfoKey) + '='
-  let cookieStart = document.cookie.indexOf(cookieName)
-  let cookieValue = ''
-  if (cookieStart > -1) {
-    var cookieEnd = document.cookie.indexOf(';', cookieStart)
-    if (cookieEnd === -1) {
-      cookieEnd = document.cookie.length
-    }
-    cookieValue = decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length, cookieEnd))
+  var arr = []
+  var reg = new RegExp('(^| )' + userInfoKey + '=([^;]*)(;|$)')
+  if (document.cookie.match(reg)) {
+    arr = document.cookie.match(reg)
+    return unescape(arr[2])
+  } else {
+    return null
   }
-  return cookieValue
 }
 
 /**
@@ -57,8 +56,13 @@ export function getUserInfo () {
  * @param secure
  * @return {undefined} 无返回值
  */
-export function removeUserInfo (domain, path, secure) {
-  this.saveUserInfo('', Date(0), domain, path, secure)
+export function removeUserInfo () {
+  var exp = new Date()
+  exp.setTime(exp.getTime() - 1)
+  var cval = getUserInfo(userInfoKey)
+  if (cval != null) {
+    document.cookie = userInfoKey + '=' + cval + ';expires=' + exp.toGMTString()
+  }
 }
 
 /**

@@ -2,73 +2,81 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>新增商品</el-breadcrumb-item>
+      <el-breadcrumb-item>发布管理</el-breadcrumb-item>
+      <el-breadcrumb-item>新增发布</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="product" :model="product" label-width="140px" size="small" class="productForm">
       <el-col span="12">
         <el-form-item label="产品编号（SKU）">
-          <el-input v-model="product.productNumber" disabled></el-input>
+          <el-select v-model="product.productNumber" placeholder="请选择产品编号" class="productNumber">
+            <el-option v-for="item in productNumberList" :label="item.title" :value="item.id" :key="item.id"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="产品名称" prop="productName">
-          <el-input v-model="product.productName"></el-input>
+        <el-form-item label="产品名称">
+          <el-input v-model="product.productName" disabled></el-input>
         </el-form-item>
-        <el-form-item label="规格" prop="standard">
-          <el-input v-model="product.standard"></el-input>
+        <el-form-item label="规格">
+          <el-input v-model="product.standard" disabled></el-input>
         </el-form-item>
         <el-form-item label="单价" prop="unitPrice">
           <el-input v-model="product.unitPrice"></el-input>
         </el-form-item>
-        <el-form-item label="分润比例" prop="wettingRatio">
+        <el-form-item label="起订数量" prop="wettingRatio">
           <el-input v-model="product.wettingRatio"></el-input>
+        </el-form-item>
+        <!--minOrderQuantity: '', // 起订量-->
+        <!--increaseNum: '', // 递增数量-->
+        <!--publishNum: '', // 发布数量-->
+        <!--startTime:'', // 有效开始日期-->
+        <!--endTime:'', // 有效结束日期-->
+        <!--createTime: '', // 创建时间-->
+        <!--creater: '', // 创建人-->
+        <el-form-item label="发布数量" prop="publishNum">
+          <el-input v-model="product.publishNum"></el-input>
+        </el-form-item>
+        <el-form-item label="有效开始时间" prop="startTime">
+          <el-date-picker
+            v-model="product.startTime"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="创建时间" prop="creater">
           <el-input v-model="product.creater"></el-input>
         </el-form-item>
       </el-col>
       <el-col span="12">
-        <el-form-item label="产品品牌" prop="brand">
-          <el-input v-model="product.brand"></el-input>
+        <el-form-item label="产品品牌">
+          <el-input v-model="product.brand" disabled></el-input>
         </el-form-item>
-        <el-form-item label="厂家" prop="vender">
-          <el-select v-model="product.vender" placeholder="请选择厂家" class="vender">
-            <el-option v-for="item in venderList" :label="item.title" :value="item.id" :key="item.id"></el-option>
-          </el-select>
+        <el-form-item label="厂家">
+          <el-input v-model="product.vender" disabled></el-input>
         </el-form-item>
-        <el-form-item label="型号" prop="model">
-          <el-input v-model="product.model"></el-input>
+        <el-form-item label="型号">
+          <el-input v-model="product.model" disabled></el-input>
         </el-form-item>
         <el-form-item label="售价" prop="price">
           <el-input v-model="product.price"></el-input>
         </el-form-item>
+        <el-form-item label="递增数量" prop="increaseNum">
+          <el-input v-model="product.increaseNum"></el-input>
+        </el-form-item>
+        <el-form-item label="" prop="" v-show="false">
+        </el-form-item>
+        <el-form-item label="有效结束时间" prop="endTime">
+          <el-date-picker
+            v-model="product.endTime"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item label="创建人">
           <el-input v-model="product.creater" disabled></el-input>
         </el-form-item>
-        <el-form-item label="商品图片" prop="fileList">
-          <!-- 图片上传 -->
-          <el-dialog :visible.sync="dialogVisible" append-to-body>
-            <img width="100%" :src="dialogImageUrl" alt="">
-          </el-dialog>
-          <el-upload
-            multiple
-            limit="3"
-            :on-exceed="handleExceed"
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-success="handleSuccess"
-            :before-remove="beforeRemove"
-            :on-remove="handleRemove"
-            :file-list="product.fileList"
-            list-type="picture">
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
-        </el-form-item>
       </el-col>
       <el-form-item>
-        <el-button type="primary" @click="saveProduct('product')">保存</el-button>
+        <el-button type="primary" @click="publishProduct('product')">发布</el-button>
         <el-button type="warning" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
@@ -89,13 +97,17 @@
           model: '', // 型号
           unitPrice: '', // 单价
           price: '', // 售价
-          wettingRatio: '', // 分润比例
-          creater: '', // 创建人
+          minOrderQuantity: '', // 起订量
+          increaseNum: '', // 递增数量
+          publishNum: '', // 发布数量
+          startTime: '', // 有效开始日期
+          endTime: '', // 有效结束日期
           createTime: '', // 创建时间
-          fileList: [] // 商品图片
+          creater: '' // 创建人
         },
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
+        productNumberList: [{id: 1, title: '厂家一'}, {id: 2, title: '厂家二'}], // 产品编号数组
         venderList: [{id: 1, title: '厂家一'}, {id: 2, title: '厂家二'}], // 厂家数组
         rules: {
           brand: [
@@ -130,7 +142,7 @@
     },
     methods: {
       //
-      saveProduct () {
+      publishProduct () {
         this.$refs['product'].validate((valid) => {
           if (valid) {
             editProduct(this.product).then(res => {
@@ -219,12 +231,12 @@
     line-height: 45px;
   }
   .productForm {
-     margin-top: 10px;
-   }
+    margin-top: 10px;
+  }
   /*.productForm input {*/
-    /*margin-right: 150px !important;*/
+  /*margin-right: 150px !important;*/
   /*}*/
-  .vender {
+  .productNumber {
     width: 200px;
   }
 </style>

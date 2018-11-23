@@ -19,6 +19,10 @@ import Order from '@/views/order/Order'
 import Report from '@/views/report/Report'
 import commodityList from '@/views/commodity/commodity-list'
 import commodityAdd from '@/views/commodity/commodity-add'
+import commodityDetail from '@/views/commodity/commodity-detail'
+import publishProductList from '@/views/publishManage/publishProduct-list'
+import addPublishProduct from '@/views/publishManage/publishProduct-add'
+import publishProductApprove from '@/views/publishManage/publishProduct-approve'
 
 // 这是在为 Vue 扩展实例成员
 // 如果你没有这句话，那么你就无法在组件中使用 this.$route 和 this.$router
@@ -51,7 +55,18 @@ const router = new Router({
       component: Home,
       children: [
         {path: '/commodityList', component: commodityList, name: 'commodityList'},
-        {path: '/commodityAdd', component: commodityAdd, name: 'commodityAdd'}
+        {path: '/commodityAdd', component: commodityAdd, name: 'commodityAdd'},
+        {path: '/commodityDetail', component: commodityDetail, name: 'commodityDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: '发布管理',
+      component: Home,
+      children: [
+        {path: '/publishProductList', component: publishProductList, name: 'publishProductList'},
+        {path: '/addPublishProduct', component: addPublishProduct, name: 'addPublishProduct'},
+        {path: '/publishProductApprove', component: publishProductApprove, name: 'publishProductApprove'}
       ]
     },
     {

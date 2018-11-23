@@ -13,7 +13,7 @@
             <span>{{tag.authName}}</span>
           </el-menu-item>
         </el-submenu>
-
+        <!--商品管理-->
         <el-submenu index="6">
           <template slot="title">
             <i class="el-icon-location"></i>
@@ -26,6 +26,25 @@
           <el-menu-item index="/commodityAdd">
             <i class="el-icon-menu"></i>
             <span>新增商品</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--发布管理-->
+        <el-submenu index="7">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">发布管理</span>
+          </template>
+          <el-menu-item index="/publishProductList">
+            <i class="el-icon-menu"></i>
+            <span>商品发布列表</span>
+          </el-menu-item>
+          <el-menu-item index="/addPublishProduct">
+            <i class="el-icon-menu"></i>
+            <span>新增发布</span>
+          </el-menu-item>
+          <el-menu-item index="/publishProductApprove">
+            <i class="el-icon-menu"></i>
+            <span>发布审核</span>
           </el-menu-item>
         </el-submenu>
         <!--<el-submenu index="2">-->
@@ -98,7 +117,7 @@
       </el-main>
     </el-container>
     <!--修改密码-->
-    <el-dialog title="修改密码" :visible.sync="modifyDialog">
+    <el-dialog title="修改密码" :visible.sync="modifyDialog" append-to-body>
     <el-form ref="userInfo" :rules="rules" :model="userInfo" label-width="110px">
       <el-form-item label="原密码" prop="formerPsd">
         <el-input v-model="userInfo.formerPsd"></el-input>

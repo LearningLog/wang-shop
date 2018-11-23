@@ -64,7 +64,7 @@ export default {
             if (res.meta.status === 200) {
               // 路由跳转
               localStorage.setItem('mytoken', res.data.token)
-              saveUserInfo(res.data.token)
+              saveUserInfo(res.data.token, 'h2')
               this.$router.push({path: '/'})
               // 给出登陆成功的提示消息
               this.$message({
