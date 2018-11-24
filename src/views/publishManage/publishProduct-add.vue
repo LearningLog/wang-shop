@@ -22,21 +22,15 @@
         <el-form-item label="单价" prop="unitPrice">
           <el-input v-model="product.unitPrice"></el-input>
         </el-form-item>
-        <el-form-item label="起订数量" prop="wettingRatio">
-          <el-input v-model="product.wettingRatio"></el-input>
+        <el-form-item label="起订数量" prop="minOrderQuantity">
+          <el-input v-model="product.minOrderQuantity"></el-input>
         </el-form-item>
-        <!--minOrderQuantity: '', // 起订量-->
-        <!--increaseNum: '', // 递增数量-->
-        <!--publishNum: '', // 发布数量-->
-        <!--startTime:'', // 有效开始日期-->
-        <!--endTime:'', // 有效结束日期-->
-        <!--createTime: '', // 创建时间-->
-        <!--creater: '', // 创建人-->
         <el-form-item label="发布数量" prop="publishNum">
           <el-input v-model="product.publishNum"></el-input>
         </el-form-item>
         <el-form-item label="有效开始时间" prop="startTime">
           <el-date-picker
+            class="startTime"
             v-model="product.startTime"
             type="date"
             placeholder="选择日期">
@@ -63,9 +57,11 @@
           <el-input v-model="product.increaseNum"></el-input>
         </el-form-item>
         <el-form-item label="" prop="" v-show="false">
+          <el-input></el-input>
         </el-form-item>
         <el-form-item label="有效结束时间" prop="endTime">
           <el-date-picker
+            class="endTime"
             v-model="product.endTime"
             type="date"
             placeholder="选择日期">
@@ -83,7 +79,7 @@
   </div>
 </template>
 <script>
-  import { editProduct, uploadInfo } from '@/api/commodity.js'
+  import { publishProduct, uploadInfo } from '@/api/publishManage.js'
   // import { productDetail } from '@/api/commodity.js'
   export default {
     data () {
@@ -110,46 +106,39 @@
         productNumberList: [{id: 1, title: '厂家一'}, {id: 2, title: '厂家二'}], // 产品编号数组
         venderList: [{id: 1, title: '厂家一'}, {id: 2, title: '厂家二'}], // 厂家数组
         rules: {
-          brand: [
-            { required: true, message: '请输入产品品牌', trigger: 'blur' }
-          ],
-          productName: [
-            { required: true, message: '请输入产品名称', trigger: 'blur' }
-          ],
-          vender: [
-            { required: true, message: '请选择厂家', trigger: 'change' }
-          ],
-          standard: [
-            { required: true, message: '请输入规格', trigger: 'blur' }
-          ],
-          model: [
-            { required: true, message: '请输入型号', trigger: 'blur' }
-          ],
           unitPrice: [
             { required: true, message: '请输入单价', trigger: 'blur' }
           ],
           price: [
             { required: true, message: '请输入售价', trigger: 'blur' }
           ],
-          wettingRatio: [
-            { required: true, message: '请输入分润比例', trigger: 'blur' }
+          minOrderQuantity: [
+            { required: true, message: '请输入起订量', trigger: 'blur' }
           ],
-          fileList: [
-            { required: true, message: '请上传商品图片', trigger: 'change' }
+          increaseNum: [
+            { required: true, message: '请输入递增数量', trigger: 'blur' }
+          ],
+          publishNum: [
+            { required: true, message: '请输入发布数量', trigger: 'blur' }
+          ],
+          startTime: [
+            { required: true, message: '请输入开始日期', trigger: 'blur' }
+          ],
+          endTime: [
+            { required: true, message: '请输入结束日期', trigger: 'blur' }
           ]
         }
       }
     },
     methods: {
-      //
+      // 发布
       publishProduct () {
         this.$refs['product'].validate((valid) => {
           if (valid) {
-            editProduct(this.product).then(res => {
+            publishProduct(this.product).then(res => {
               if (res.meta.status === 200) {
-                this.productList = res.data.productList
-                // 到编辑页面
-                this.$router.push({path: '/commodityList'})
+                // 到列表页面
+                this.$router.push({path: '/publishProductList'})
               }
             })
           } else {
@@ -160,7 +149,7 @@
       // 重置
       reset () {
         this.product = {
-          ProductNumber: '', // 产品编号,
+          productNumber: '', // 产品编号,
           brand: '', // 产品品牌
           productName: '', // 产品名称
           vender: '', // 厂家
@@ -168,10 +157,13 @@
           model: '', // 型号
           unitPrice: '', // 单价
           price: '', // 售价
-          wettingRatio: '', // 分润比例
-          creater: '', // 创建人
+          minOrderQuantity: '', // 起订量
+          increaseNum: '', // 递增数量
+          publishNum: '', // 发布数量
+          startTime: '', // 有效开始日期
+          endTime: '', // 有效结束日期
           createTime: '', // 创建时间
-          picture: '' // 商品图片
+          creater: '' // 创建人
         }
       },
       // 上传路径
@@ -237,6 +229,9 @@
   /*margin-right: 150px !important;*/
   /*}*/
   .productNumber {
+    width: 200px;
+  }
+  .startTime, .endTime {
     width: 200px;
   }
 </style>

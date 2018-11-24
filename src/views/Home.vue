@@ -47,6 +47,21 @@
             <span>发布审核</span>
           </el-menu-item>
         </el-submenu>
+        <!--总库存管理-->
+        <el-submenu index="8">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">总库存管理</span>
+          </template>
+          <el-menu-item index="/totalInventoryList">
+            <i class="el-icon-menu"></i>
+            <span>总库存列表</span>
+          </el-menu-item>
+          <el-menu-item index="/totalInventoryDetail">
+            <i class="el-icon-menu"></i>
+            <span>总库存明细</span>
+          </el-menu-item>
+        </el-submenu>
         <!--<el-submenu index="2">-->
           <!--<template slot="title">-->
             <!--<i class="el-icon-location"></i>-->
@@ -297,7 +312,6 @@ export default {
     left: 600px;
     top: 0px;
   }
-
   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
     margin-bottom: 10px;
   }

@@ -2,106 +2,139 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>商品详情</el-breadcrumb-item>
+      <el-breadcrumb-item>发布管理</el-breadcrumb-item>
+      <el-breadcrumb-item>发布审核</el-breadcrumb-item>
     </el-breadcrumb>
-    <!--商品编辑-->
-    <el-form :rules="rules" ref="product" :model="product" label-width="140px" size="small" class="productForm">
-      <el-col span="12">
-        <el-form-item label="产品编号（SKU）：">
-          <div>{{product.productNumber}}</div>
-        </el-form-item>
-        <el-form-item label="产品名称：" prop="productName">
-          <div>{{product.productName}}</div>
-        </el-form-item>
-        <el-form-item label="规格：" prop="standard">
-          <div>{{product.standard}}</div>
-        </el-form-item>
-        <el-form-item label="单价：" prop="unitPrice">
-          <div>{{product.unitPrice}}</div>
-        </el-form-item>
-        <el-form-item label="分润比例：" prop="wettingRatio">
-          <div>{{product.wettingRatio}}</div>
-        </el-form-item>
-        <el-form-item label="创建时间：" prop="creater">
-          <div>{{product.creater}}</div>
-        </el-form-item>
-      </el-col>
-      <el-col span="12">
-        <el-form-item label="产品品牌：" prop="brand">
-          <div>{{product.brand}}</div>
-        </el-form-item>
-        <el-form-item label="厂家：" prop="vender">
-          <div>{{product.vender}}</div>
-        </el-form-item>
-        <el-form-item label="型号：" prop="model">
-          <div>{{product.model}}</div>
-        </el-form-item>
-        <el-form-item label="售价：" prop="price">
-          <div>{{product.price}}</div>
-        </el-form-item>
-        <el-form-item label="创建人：">
-          <div>{{product.creater}}</div>
-        </el-form-item>
-        <el-form-item label="商品图片：" prop="fileList">
-          <!-- 图片上传 -->
-          <el-dialog :visible.sync="dialogVisible" append-to-body>
-            <img width="100%" :src="dialogImageUrl" alt="">
-          </el-dialog>
-          <el-upload
-            multiple
-            limit="3"
-            :on-exceed="handleExceed"
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-success="handleSuccess"
-            :before-remove="beforeRemove"
-            :on-remove="handleRemove"
-            :file-list="product.fileList"
-            list-type="picture">
-          </el-upload>
-        </el-form-item>
-      </el-col>
-    </el-form>
+    <el-button type="primary" size="mini" @click="volumeApprove" class="volumeApprove" :disabled="btnDisabled">批量审核</el-button>
+    <!--表格-->
+    <el-table
+      :data="productList"
+      stripe
+      border
+      ref="checkedProductList"
+      @selection-change="handleSelectionChange"
+      max-height="500"
+      style="width: 100%">
+      <el-table-column
+        type="selection"
+        label="选择"
+        align="center"
+        width="40">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="产品编号（SKU）"
+        align="center"
+        width="140">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        align="center"
+        label="产品名称">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        align="center"
+        label="产品品牌">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        align="center"
+        label="规格">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        align="center"
+        label="型号">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        align="center"
+        label="厂家">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        header-align="center"
+        align="right"
+        label="发布时间">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        align="center"
+        label="发布数量">
+        <template slot-scope="scope">
+          <!--<i class="el-icon-time"></i>-->
+          <span style="margin-left: 10px">{{ scope.row.date }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        header-align="center"
+        align="right"
+        label="现存数量">
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        align="center"
+        width="150">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 <script>
-  // import { productDetail } from '@/api/commodity.js'
+  // import { searchProduct, getProductList } from '@/api/publishManage.js'
   export default {
     data () {
       return {
-        product: {// 表单数据
-          productNumber: '11111', // 产品编号,
-          brand: '2222', // 产品品牌
-          productName: '222222', // 产品名称
-          vender: '333333', // 厂家
-          standard: '444444', // 规格
-          model: '55555555', // 型号
-          unitPrice: '66666666', // 单价
-          price: '777777', // 售价
-          wettingRatio: '', // 分润比例
-          creater: '88888888', // 创建人
-          createTime: '999999999', // 创建时间
-          fileList: [] // 商品图片
-        },
-        dialogImageUrl: '', // dialog弹窗图片路径
-        dialogVisible: false // dialog弹窗是否显示
+        productList: [{name: 'SKU'}], // 产品列表
+        btnDisabled: false, // 是否禁用按钮
+        checkedProductList: [] // CheckBox选择的数据
       }
     },
     methods: {
-      // 处理预览
-      handlePreview (file) {
-        // 图片预览
-        this.dialogImageUrl = file.url
-        this.dialogVisible = true
+      // 批量审批
+      volumeApprove () {
+        if (this.checkedProductList.length === 0) {
+          this.$message({
+            message: '请选择至少一项产品记录！',
+            type: 'warning'
+          })
+          return false
+        } else {
+          console.log(this.checkedProductList)
+        }
+      },
+      // 选中数据
+      handleSelectionChange (row) {
+        this.checkedProductList = row
+      },
+      // 修改
+      handleEdit (index, row) {
+        // 到编辑页面
+        this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
+      },
+      // 明细
+      handleDetail (index, row) {
+        // 到详情页面
+        this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
       }
     },
     components: {
 
     },
     created () {
-      // productDetail().then(res => {
+      // getProductList().then(res => {
       //   if (res.meta.status === 200) {
       //     this.productList = res.data.productList
       //     this.btnDisabled = res.data.btnDisabled
@@ -118,13 +151,13 @@
     padding-left: 10px;
     line-height: 45px;
   }
-  .productForm {
+  .searchProduct {
     margin-top: 10px;
   }
-  /*.productForm input {*/
-  /*margin-right: 150px !important;*/
-  /*}*/
-  .vender {
-    width: 200px;
+  .publishTime {
+    width:220px;
+  }
+  .volumeApprove {
+    margin-top: 10px;
   }
 </style>

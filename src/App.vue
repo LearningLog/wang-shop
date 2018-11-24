@@ -58,7 +58,7 @@ html,body {
 .el-input__prefix {
   left: 10px;
 }
-.el-input--prefix .el-input__inner {
+.username .el-input__inner, .password .el-input__inner {
   float: left;
   background: none;
   outline: none;

@@ -13,7 +13,7 @@
         </el-form-item>
         <el-form-item prop="userType">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="userType">身份类型</label>
+            <label class="input-group-text">身份类型</label>
           </div>
           <el-select placeholder="请选择身份类型" class="userType">
               <el-option label="商户" value="1"></el-option>

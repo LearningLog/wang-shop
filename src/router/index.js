@@ -23,6 +23,8 @@ import commodityDetail from '@/views/commodity/commodity-detail'
 import publishProductList from '@/views/publishManage/publishProduct-list'
 import addPublishProduct from '@/views/publishManage/publishProduct-add'
 import publishProductApprove from '@/views/publishManage/publishProduct-approve'
+import totalInventoryList from '@/views/totalInventoryManage/totalInventory-list'
+import totalInventoryDetail from '@/views/totalInventoryManage/totalInventory-detail'
 
 // 这是在为 Vue 扩展实例成员
 // 如果你没有这句话，那么你就无法在组件中使用 this.$route 和 this.$router
@@ -67,6 +69,15 @@ const router = new Router({
         {path: '/publishProductList', component: publishProductList, name: 'publishProductList'},
         {path: '/addPublishProduct', component: addPublishProduct, name: 'addPublishProduct'},
         {path: '/publishProductApprove', component: publishProductApprove, name: 'publishProductApprove'}
+      ]
+    },
+    {
+      path: '/',
+      name: '总库存管理',
+      component: Home,
+      children: [
+        {path: '/totalInventoryList', component: totalInventoryList, name: 'totalInventoryList'},
+        {path: '/totalInventoryDetail', component: totalInventoryDetail, name: 'totalInventoryDetail'}
       ]
     },
     {

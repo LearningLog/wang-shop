@@ -8,9 +8,9 @@ export const getProductList = params => {
 export const searchProduct = params => {
   return http.get('searchProduct', params).then(res => res.data)
 }
-// 发布产品
-export const publishProduct = params => {
-  return this.$http.post('publishProduct', params).then(res => res.data)
+// 新增||编辑产品
+export const editProduct = params => {
+  return http.post('editProduct', params).then(res => res.data)
 }
 // 删除产品
 export const edeleteProduct = params => {
