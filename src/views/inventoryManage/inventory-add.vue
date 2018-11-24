@@ -73,13 +73,13 @@
       </el-col>
     </el-form>
     <div class='operfixed'>
-      <el-button type="primary" size="small" @click="publishProduct">发布</el-button>
+      <el-button type="primary" size="small" @click="save">发布</el-button>
       <el-button type="warning" size="small" @click="reset">重置</el-button>
     </div>
   </div>
 </template>
 <script>
-  import { productDetail, publishProduct } from '../../api/inventoryManage.js'
+  import { productDetail, editProduct } from '../../api/inventoryManage.js'
   export default {
     created () {
       this.productId = this.$route.query.pId
@@ -141,14 +141,14 @@
       }
     },
     methods: {
-      // 发布
-      publishProduct () {
+      // 保存
+      save () {
         this.$refs['product'].validate((valid) => {
           if (valid) {
-            publishProduct(this.product).then(res => {
+            editProduct(this.product).then(res => {
               if (res.meta.status === 200) {
                 // 到列表页面
-                this.$router.push({path: '/publishProductList'})
+                this.$router.push({path: '/editProductList'})
               }
             })
           } else {

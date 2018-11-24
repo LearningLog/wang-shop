@@ -11,7 +11,7 @@
       :data="productList"
       stripe
       border
-      ref="checkedProductList"
+      ref="checkedList"
       @selection-change="handleSelectionChange"
       max-height="500"
       style="width: 100%">
@@ -99,25 +99,25 @@
       return {
         productList: [{name: 'SKU'}], // 产品列表
         btnDisabled: false, // 是否禁用按钮
-        checkedProductList: [] // CheckBox选择的数据
+        checkedList: [] // CheckBox选择的数据
       }
     },
     methods: {
       // 批量审批
       volumeApprove () {
-        if (this.checkedProductList.length === 0) {
+        if (this.checkedList.length === 0) {
           this.$message({
             message: '请选择至少一项产品记录！',
             type: 'warning'
           })
           return false
         } else {
-          console.log(this.checkedProductList)
+          console.log(this.checkedList)
         }
       },
       // 选中数据
       handleSelectionChange (row) {
-        this.checkedProductList = row
+        this.checkedList = row
       },
       // 修改
       handleEdit (index, row) {

@@ -81,6 +81,21 @@
             <span>入库单</span>
           </el-menu-item>
         </el-submenu>
+        <!--库存管理-->
+        <el-submenu index="10">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">厂商管理</span>
+          </template>
+          <el-menu-item index="/manufacturerList">
+            <i class="el-icon-menu"></i>
+            <span>厂商列表</span>
+          </el-menu-item>
+          <el-menu-item index="/manufacturerAdd">
+            <i class="el-icon-menu"></i>
+            <span>新增厂商</span>
+          </el-menu-item>
+        </el-submenu>
         <!--<el-submenu index="2">-->
           <!--<template slot="title">-->
             <!--<i class="el-icon-location"></i>-->

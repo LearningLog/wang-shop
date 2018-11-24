@@ -28,7 +28,7 @@
       :data="productList"
       stripe
       border
-      ref="checkedProductList"
+      ref="checkedList"
       style="width: 100%">
       <el-table-column
         prop="name"
@@ -87,7 +87,7 @@
   </div>
 </template>
 <script>
-  import { getProductList, searchProduct } from '../../api/totalInventoryManage.js'
+  import { getProductList } from '../../api/totalInventoryManage.js'
   export default {
     created () {
       // getProductList().then(res => {
@@ -112,7 +112,7 @@
     methods: {
       // 搜索
       onSearch () {
-        searchProduct(this.searchProduct).then(res => {
+        getProductList(this.searchProduct).then(res => {
           if (res.meta.status === 200) {
             this.productList = res.data.productList
           }

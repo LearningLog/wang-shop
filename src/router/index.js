@@ -29,6 +29,8 @@ import inventoryList from '@/views/inventoryManage/inventory-list'
 import inventoryAdd from '@/views/inventoryManage/inventory-add'
 import godownEntry from '@/views/inventoryManage/godownEntry'
 import inventoryDetail from '@/views/inventoryManage/inventory-detail'
+import manufacturerList from '@/views/manufacturerManage/manufacturer-list'
+import manufacturerAdd from '@/views/manufacturerManage/manufacturer-add'
 
 // 这是在为 Vue 扩展实例成员
 // 如果你没有这句话，那么你就无法在组件中使用 this.$route 和 this.$router
@@ -93,6 +95,15 @@ const router = new Router({
         {path: '/inventoryAdd', component: inventoryAdd, name: 'inventoryAdd'},
         {path: '/godownEntry', component: godownEntry, name: 'godownEntry'},
         {path: '/inventoryDetail', component: inventoryDetail, name: 'inventoryDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: '厂商管理',
+      component: Home,
+      children: [
+        {path: '/manufacturerList', component: manufacturerList, name: 'manufacturerList'},
+        {path: '/manufacturerAdd', component: manufacturerAdd, name: 'manufacturerAdd'}
       ]
     },
     {

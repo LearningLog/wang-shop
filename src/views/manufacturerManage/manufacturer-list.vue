@@ -2,16 +2,16 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+      <el-breadcrumb-item>厂商管理</el-breadcrumb-item>
+      <el-breadcrumb-item>厂商列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
-      <el-form-item label="产品名称:">
-        <el-input v-model="searchData.productName" placeholder="请输入产品名称"></el-input>
+      <el-form-item label="厂商名称:">
+        <el-input v-model="searchData.manufacturerName" placeholder="请输入厂商名称"></el-input>
       </el-form-item>
-      <el-form-item label="产品编号:">
-        <el-input v-model="searchData.ProductNumber" placeholder="请输入产品编号"></el-input>
+      <el-form-item label="厂商编号:">
+        <el-input v-model="searchData.manufacturerCode" placeholder="请输入厂商编号"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSearch">查询</el-button>
@@ -36,79 +36,54 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="产品编号（SKU）"
+        label="厂商编号"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
-        label="产品名称">
+        label="厂商名称">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
-        label="产品品牌">
+        label="品牌">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
-        label="规格">
+        label="注册地址">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
-        label="型号">
+        label="联系电话">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
-        label="厂商">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        header-align="center"
-        align="right"
-        label="单价">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        align="center"
-        label="创建时间">
-        <template slot-scope="scope">
-          <!--<i class="el-icon-time"></i>-->
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        align="center"
-        label="状态">
+        label="联系人">
       </el-table-column>
       <el-table-column
         fixed="right"
         label="操作"
-        align="center"
-        width="150">
+        align="center">
         <template slot-scope="scope">
           <el-button
             type="primary"
             size="mini"
             @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-          <el-button
-            type="success"
-            size="mini"
-            @click="handleDetail(scope.$index, scope.row)">明细</el-button>
         </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 <script>
-  import { getProductList, deleteProduct } from '../../api/commodityManage.js'
+  import { getManufacturerList, deleteManufacturer } from '../../api/manufacturerManage.js'
   export default {
     created () {
-      // getProductList().then(res => {
+      // getManufacturerList().then(res => {
       //   if (res.meta.status === 200) {
       //     this.productList = res.data.productList
       //     this.btnDisabled = res.data.btnDisabled
@@ -118,8 +93,8 @@
     data () {
       return {
         searchData: { // 搜索数据
-          productName: '', // 产品名称
-          ProductNumber: '' // 产品编号
+          manufacturerName: '', // 厂商名称
+          manufacturerCode: '' // 厂商编号
         },
         productList: [{}], // 产品列表
         btnDisabled: false, // 是否禁用按钮
@@ -129,7 +104,7 @@
     methods: {
       // 搜索
       onSearch () {
-        getProductList(this.searchData).then(res => {
+        getManufacturerList(this.searchData).then(res => {
           if (res.meta.status === 200) {
             this.productList = res.data.productList
           }
@@ -138,15 +113,19 @@
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          productName: '', // 产品名称
-          ProductNumber: '' // 产品编号
+          manufacturerName: '', // 厂商名称
+          manufacturerCode: '' // 厂商编号
         }
         this.onSearch()
       },
       // 添加
       add () {
         // 到新增页面
-        this.$router.push({path: '/commodityAdd'})
+        this.$router.push({path: '/manufacturerAdd'})
+      },
+      // 选中数据
+      handleSelectionChange (row) {
+        this.checkedList = row
       },
       // 删除
       remove () {
@@ -157,28 +136,18 @@
           })
           return false
         } else {
-          deleteProduct(this.checkedList).then(res => {
+          deleteManufacturer(this.checkedList).then(res => {
             if (res.meta.status === 200) {
               this.productList = res.data.productList
             }
           })
         }
       },
-      // 选中数据
-      handleSelectionChange (row) {
-        this.checkedList = row
-      },
       // 修改
       handleEdit (index, row) {
-      // 到编辑页面
-      //   this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
-        this.$router.push({path: '/commodityAdd', query: {pId: '1111'}})
-      },
-      // 明细
-      handleDetail (index, row) {
-      // 到详情页面
-      //   this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
-        this.$router.push({path: '/commodityDetail', query: {pId: '11111'}})
+        // 到编辑页面
+        //   this.$router.push({path: '/manufacturerAdd', query: {pId: row.goods_id}})
+        this.$router.push({path: '/manufacturerAdd', query: {pId: '1111'}})
       }
     }
   }

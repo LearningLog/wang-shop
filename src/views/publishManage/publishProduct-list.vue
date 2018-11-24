@@ -49,7 +49,7 @@
       :data="productList"
       stripe
       border
-      ref="checkedProductList"
+      ref="checkedList"
       @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
@@ -178,7 +178,7 @@
         stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
         productList: [{}], // 产品列表
         btnDisabled: false, // 是否禁用按钮
-        checkedProductList: [] // CheckBox选择的数据
+        checkedList: [] // CheckBox选择的数据
       }
     },
     methods: {
@@ -209,11 +209,11 @@
       },
       // 选中数据
       handleSelectionChange (row) {
-        this.checkedProductList = row
+        this.checkedList = row
       },
       // 删除
       deleteProduct () {
-        if (this.checkedProductList.length === 0) {
+        if (this.checkedList.length === 0) {
           this.$message({
             message: '请选择至少一项产品记录！',
             type: 'warning'
