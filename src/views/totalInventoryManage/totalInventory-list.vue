@@ -19,17 +19,16 @@
       <el-form-item label="品牌:">
         <el-input v-model="searchProduct.brand" placeholder="请输入品牌"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSearch">查询</el-button>
-        <el-button type="primary" @click="reset">重置</el-button>
-      </el-form-item>
+      <div>
+        <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
+        <el-button type="primary" size="mini" @click="reset">重置</el-button>
+      </div>
     </el-form>
     <el-table
       :data="productList"
       stripe
       border
       ref="checkedProductList"
-      max-height="500"
       style="width: 100%">
       <el-table-column
         prop="name"
@@ -76,8 +75,7 @@
       <el-table-column
         fixed="right"
         label="操作"
-        align="center"
-        width="150">
+        align="center">
         <template slot-scope="scope">
           <el-button
             type="success"
@@ -89,7 +87,7 @@
   </div>
 </template>
 <script>
-  import { getProductList, searchProduct } from '@/api/totalInventoryManage.js'
+  import { getProductList, searchProduct } from '../../api/totalInventoryManage.js'
   export default {
     created () {
       // getProductList().then(res => {

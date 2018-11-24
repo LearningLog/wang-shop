@@ -20,13 +20,13 @@
     </el-form>
     <el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>
     <el-button type="danger" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
+    <!--表格-->
     <el-table
       :data="productList"
       stripe
       border
       ref="checkedProductList"
       @selection-change="handleSelectionChange"
-      max-height="500"
       style="width: 100%">
       <el-table-column
         type="selection"
@@ -105,11 +105,19 @@
   </div>
 </template>
 <script>
-  import { searchProduct, getProductList, edeleteProduct } from '@/api/commodity.js'
+  import { getProductList, deleteProduct } from '../../api/commodityManage.js'
   export default {
+    created () {
+      // getProductList().then(res => {
+      //   if (res.meta.status === 200) {
+      //     this.productList = res.data.productList
+      //     this.btnDisabled = res.data.btnDisabled
+      //   }
+      // })
+    },
     data () {
       return {
-        searchProduct: {// 搜索数据
+        searchProduct: { // 搜索数据
           productName: '', // 产品名称
           ProductNumber: '' // 产品编号
         },
@@ -121,7 +129,7 @@
     methods: {
       // 搜索
       onSearch () {
-        searchProduct(this.searchProduct).then(res => {
+        getProductList(this.searchProduct).then(res => {
           if (res.meta.status === 200) {
             this.productList = res.data.productList
           }
@@ -129,13 +137,11 @@
       },
       // 重置
       reset () {
-        this.searchProduct = {
-          productName: '',
-          ProductNumber: ''
+        this.searchProduct = { // 搜索数据
+          productName: '', // 产品名称
+          ProductNumber: '' // 产品编号
         }
-        getProductList().then(res => {
-          this.productList = res.data.productList
-        })
+        this.onSearch()
       },
       // 添加
       addProduct () {
@@ -144,7 +150,6 @@
       },
       // 删除
       deleteProduct () {
-        console.log(this.checkedProductList)
         if (this.checkedProductList.length === 0) {
           this.$message({
             message: '请选择至少一项产品记录！',
@@ -152,7 +157,7 @@
           })
           return false
         } else {
-          edeleteProduct(this.checkedProductList).then(res => {
+          deleteProduct(this.checkedProductList).then(res => {
             if (res.meta.status === 200) {
               this.productList = res.data.productList
             }
@@ -166,24 +171,15 @@
       // 修改
       handleEdit (index, row) {
       // 到编辑页面
-        this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
+      //   this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
+        this.$router.push({path: '/commodityAdd', query: {pId: '1111'}})
       },
       // 明细
       handleDetail (index, row) {
       // 到详情页面
-        this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
+      //   this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
+        this.$router.push({path: '/commodityDetail', query: {pId: '11111'}})
       }
-    },
-    components: {
-
-    },
-    created () {
-      // getProductList().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
     }
   }
 </script>

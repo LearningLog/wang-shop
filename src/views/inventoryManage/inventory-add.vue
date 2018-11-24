@@ -2,8 +2,8 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>发布管理</el-breadcrumb-item>
-      <el-breadcrumb-item>新增发布</el-breadcrumb-item>
+      <el-breadcrumb-item>库存管理</el-breadcrumb-item>
+      <el-breadcrumb-item>新增库存</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="product" :model="product" label-width="140px" size="small" class="productForm">
@@ -73,13 +73,13 @@
       </el-col>
     </el-form>
     <div class='operfixed'>
-      <el-button type="primary" size="small" @click="publishProduct('product')">发布</el-button>
+      <el-button type="primary" size="small" @click="publishProduct">发布</el-button>
       <el-button type="warning" size="small" @click="reset">重置</el-button>
     </div>
   </div>
 </template>
 <script>
-  import { productDetail, publishProduct } from '../../api/publishManage.js'
+  import { productDetail, publishProduct } from '../../api/inventoryManage.js'
   export default {
     created () {
       this.productId = this.$route.query.pId

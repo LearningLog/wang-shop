@@ -2,48 +2,48 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/commodityList'}">商品管理</el-breadcrumb-item>
       <el-breadcrumb-item>商品详情</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
-    <el-form :rules="rules" ref="product" :model="product" label-width="140px" size="small" class="productForm">
+    <el-form label-width="140px" size="small" class="productForm">
       <el-col span="12">
         <el-form-item label="产品编号（SKU）：">
           <div>{{product.productNumber}}</div>
         </el-form-item>
-        <el-form-item label="产品名称：" prop="productName">
+        <el-form-item label="产品名称：">
           <div>{{product.productName}}</div>
         </el-form-item>
-        <el-form-item label="规格：" prop="standard">
+        <el-form-item label="规格：">
           <div>{{product.standard}}</div>
         </el-form-item>
-        <el-form-item label="单价：" prop="unitPrice">
+        <el-form-item label="单价：">
           <div>{{product.unitPrice}}</div>
         </el-form-item>
-        <el-form-item label="分润比例：" prop="wettingRatio">
+        <el-form-item label="分润比例：">
           <div>{{product.wettingRatio}}</div>
         </el-form-item>
-        <el-form-item label="创建时间：" prop="creater">
+        <el-form-item label="创建时间：">
           <div>{{product.creater}}</div>
         </el-form-item>
       </el-col>
       <el-col span="12">
-        <el-form-item label="产品品牌：" prop="brand">
+        <el-form-item label="产品品牌：">
           <div>{{product.brand}}</div>
         </el-form-item>
-        <el-form-item label="厂家：" prop="vender">
+        <el-form-item label="厂家：">
           <div>{{product.vender}}</div>
         </el-form-item>
-        <el-form-item label="型号：" prop="model">
+        <el-form-item label="型号：">
           <div>{{product.model}}</div>
         </el-form-item>
-        <el-form-item label="售价：" prop="price">
+        <el-form-item label="售价：">
           <div>{{product.price}}</div>
         </el-form-item>
         <el-form-item label="创建人：">
           <div>{{product.creater}}</div>
         </el-form-item>
-        <el-form-item label="商品图片：" prop="fileList">
+        <el-form-item label="商品图片：">
           <!-- 图片上传 -->
           <el-dialog :visible.sync="dialogVisible" append-to-body>
             <img width="100%" :src="dialogImageUrl" alt="">
@@ -67,8 +67,18 @@
   </div>
 </template>
 <script>
-  // import { productDetail } from '@/api/commodity.js'
+  // import { productDetail } from '../../api/commodityManage.js'
   export default {
+    created () {
+      this.productId = this.$route.query.pId
+      if (this.productId) {
+        // productDetail(this.productId).then(res => {
+        //   if (res.meta.status === 200) {
+        //     this.productList = res.data.productList
+        //   }
+        // })
+      }
+    },
     data () {
       return {
         product: {// 表单数据
@@ -96,17 +106,6 @@
         this.dialogImageUrl = file.url
         this.dialogVisible = true
       }
-    },
-    components: {
-
-    },
-    created () {
-      // productDetail().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
     }
   }
 </script>

@@ -17,14 +17,18 @@ import Pcategory from '@/views/product/Category'
 import Pparam from '@/views/product/Param'
 import Order from '@/views/order/Order'
 import Report from '@/views/report/Report'
-import commodityList from '@/views/commodity/commodity-list'
-import commodityAdd from '@/views/commodity/commodity-add'
-import commodityDetail from '@/views/commodity/commodity-detail'
+import commodityList from '@/views/commodityManage/commodity-list'
+import commodityAdd from '@/views/commodityManage/commodity-add'
+import commodityDetail from '@/views/commodityManage/commodity-detail'
 import publishProductList from '@/views/publishManage/publishProduct-list'
 import addPublishProduct from '@/views/publishManage/publishProduct-add'
 import publishProductApprove from '@/views/publishManage/publishProduct-approve'
 import totalInventoryList from '@/views/totalInventoryManage/totalInventory-list'
 import totalInventoryDetail from '@/views/totalInventoryManage/totalInventory-detail'
+import inventoryList from '@/views/inventoryManage/inventory-list'
+import inventoryAdd from '@/views/inventoryManage/inventory-add'
+import godownEntry from '@/views/inventoryManage/godownEntry'
+import inventoryDetail from '@/views/inventoryManage/inventory-detail'
 
 // 这是在为 Vue 扩展实例成员
 // 如果你没有这句话，那么你就无法在组件中使用 this.$route 和 this.$router
@@ -78,6 +82,17 @@ const router = new Router({
       children: [
         {path: '/totalInventoryList', component: totalInventoryList, name: 'totalInventoryList'},
         {path: '/totalInventoryDetail', component: totalInventoryDetail, name: 'totalInventoryDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: '库存管理',
+      component: Home,
+      children: [
+        {path: '/inventoryList', component: inventoryList, name: 'inventoryList'},
+        {path: '/inventoryAdd', component: inventoryAdd, name: 'inventoryAdd'},
+        {path: '/godownEntry', component: godownEntry, name: 'godownEntry'},
+        {path: '/inventoryDetail', component: inventoryDetail, name: 'inventoryDetail'}
       ]
     },
     {

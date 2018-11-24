@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside :style='{width:"auto",overflow:"visible"}'>
+    <el-aside :style='{width:"auto"}'>
       <div class="logo"></div>
       <el-menu router default-active="12" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>
@@ -60,6 +60,25 @@
           <el-menu-item index="/totalInventoryDetail">
             <i class="el-icon-menu"></i>
             <span>总库存明细</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--库存管理-->
+        <el-submenu index="9">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">库存管理</span>
+          </template>
+          <el-menu-item index="/inventoryList">
+            <i class="el-icon-menu"></i>
+            <span>库存列表</span>
+          </el-menu-item>
+          <el-menu-item index="/inventoryAdd">
+            <i class="el-icon-menu"></i>
+            <span>新增库存</span>
+          </el-menu-item>
+          <el-menu-item index="/godownEntry">
+            <i class="el-icon-menu"></i>
+            <span>入库单</span>
           </el-menu-item>
         </el-submenu>
         <!--<el-submenu index="2">-->
@@ -282,6 +301,8 @@ export default {
     color: #333;
     text-align: left;
     display: block;
+    overflow-x: hidden;
+    overflow-y: scroll;
     box-sizing: border-box;
   }
   .el-main {

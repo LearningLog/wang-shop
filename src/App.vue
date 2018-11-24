@@ -85,5 +85,19 @@ html,body {
   line-height: 40px;
   vertical-align: middle;
 }
-
+.operfixed {
+  position: fixed;
+  bottom: 10px;
+  left: 100px;
+  right: 0px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+  .fl {
+    float: left;
+  }
+  .fr {
+    float: right;
+  }
 </style>

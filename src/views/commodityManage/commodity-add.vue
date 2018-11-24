@@ -2,8 +2,9 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>新增商品</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="goPage==false">商品管理</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="goPage" :to="{ path: '/publishProductList' }">商品管理</el-breadcrumb-item>
+      <el-breadcrumb-item>{{nowPageTitle}}</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="product" :model="product" label-width="140px" size="small" class="productForm">
@@ -67,19 +68,35 @@
           </el-upload>
         </el-form-item>
       </el-col>
-      <el-form-item>
-        <el-button type="primary" @click="saveProduct('product')">保存</el-button>
-        <el-button type="warning" @click="reset">重置</el-button>
-      </el-form-item>
     </el-form>
+    <div class="operfixed">
+      <el-button type="primary" size="small" @click="saveProduct">保存</el-button>
+      <el-button type="warning" size="small" @click="reset">重置</el-button>
+    </div>
   </div>
 </template>
 <script>
-  import { editProduct, uploadInfo } from '@/api/commodity.js'
-  // import { productDetail } from '@/api/commodity.js'
+  import { saveProduct, uploadInfo } from '../../api/commodityManage.js'
+  // import { productDetail } from '@/api/commodityManage.js'
   export default {
+    created () {
+      this.productId = this.$route.query.pId
+      if (this.productId) {
+        this.nowPageTitle = '商品编辑'
+        this.goPage = true
+        // getProductDetail(this.productId).then(res => {
+        //   if (res.meta.status === 200) {
+        //     this.productList = res.data.productList
+        //     this.btnDisabled = res.data.btnDisabled
+        //   }
+        // })
+      }
+    },
     data () {
       return {
+        nowPageTitle: '新增商品',  // 面包屑第三级title
+        goPage: false, // 是否给商品管理配置路径
+        productId: '', // 产品ID
         product: {// 表单数据
           productNumber: '', // 产品编号,
           brand: '', // 产品品牌
@@ -129,11 +146,11 @@
       }
     },
     methods: {
-      //
+      // 保存
       saveProduct () {
         this.$refs['product'].validate((valid) => {
           if (valid) {
-            editProduct(this.product).then(res => {
+            saveProduct(this.product).then(res => {
               if (res.meta.status === 200) {
                 this.productList = res.data.productList
                 // 到编辑页面
@@ -196,17 +213,6 @@
       beforeRemove (file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`)
       }
-    },
-    components: {
-
-    },
-    created () {
-      // productDetail().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
     }
   }
 </script>
