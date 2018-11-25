@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside :style='{width:"auto",overflow:"visible"}'>
+    <el-aside :style='{width:"auto"}'>
       <div class="logo"></div>
       <el-menu router default-active="12" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>
@@ -60,6 +60,119 @@
           <el-menu-item index="/totalInventoryDetail">
             <i class="el-icon-menu"></i>
             <span>总库存明细</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--库存管理-->
+        <el-submenu index="9">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">库存管理</span>
+          </template>
+          <el-menu-item index="/inventoryList">
+            <i class="el-icon-menu"></i>
+            <span>库存列表</span>
+          </el-menu-item>
+          <el-menu-item index="/inventoryAdd">
+            <i class="el-icon-menu"></i>
+            <span>新增库存</span>
+          </el-menu-item>
+          <el-menu-item index="/godownEntry">
+            <i class="el-icon-menu"></i>
+            <span>入库单</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--库存管理-->
+        <el-submenu index="10">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">厂商管理</span>
+          </template>
+          <el-menu-item index="/manufacturerList">
+            <i class="el-icon-menu"></i>
+            <span>厂商列表</span>
+          </el-menu-item>
+          <el-menu-item index="/manufacturerAdd">
+            <i class="el-icon-menu"></i>
+            <span>新增厂商</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--订单管理-->
+        <el-submenu index="11">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">订单管理</span>
+          </template>
+          <el-menu-item index="/orderFormList">
+            <i class="el-icon-menu"></i>
+            <span>订单列表</span>
+          </el-menu-item>
+          <el-menu-item index="/orderFormDetail">
+            <i class="el-icon-menu"></i>
+            <span>订单明细</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--销售管理-->
+        <el-submenu index="12">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">销售管理</span>
+          </template>
+          <el-menu-item index="/marketList">
+            <i class="el-icon-menu"></i>
+            <span>销售列表</span>
+          </el-menu-item>
+          <el-menu-item index="/marketDetail">
+            <i class="el-icon-menu"></i>
+            <span>销售明细</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--分账管理-->
+        <el-submenu index="13">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">分账管理</span>
+          </template>
+          <el-menu-item index="/splitAccountList">
+            <i class="el-icon-menu"></i>
+            <span>分账列表</span>
+          </el-menu-item>
+          <el-menu-item index="/splitAccountDetail">
+            <i class="el-icon-menu"></i>
+            <span>分账明细</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--客户端管理-->
+        <el-submenu index="14">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">C端客户</span>
+          </template>
+          <el-menu-item index="/clientList">
+            <i class="el-icon-menu"></i>
+            <span>客户列表</span>
+          </el-menu-item>
+          <el-menu-item index="/customerSalesOrderDetail">
+            <i class="el-icon-menu"></i>
+            <span>客户销售单</span>
+          </el-menu-item>
+        </el-submenu>
+        <!--账户管理-->
+        <el-submenu index="15">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">账户管理</span>
+          </template>
+          <el-menu-item index="/myMarketDocList">
+            <i class="el-icon-menu"></i>
+            <span>我的销售单</span>
+          </el-menu-item>
+          <el-menu-item index="/myCoinsList">
+            <i class="el-icon-menu"></i>
+            <span>我的孖蹦</span>
+          </el-menu-item>
+          <el-menu-item index="/myBeansList">
+            <i class="el-icon-menu"></i>
+            <span>我的孖豆</span>
           </el-menu-item>
         </el-submenu>
         <!--<el-submenu index="2">-->
@@ -282,6 +395,8 @@ export default {
     color: #333;
     text-align: left;
     display: block;
+    overflow-x: hidden;
+    overflow-y: scroll;
     box-sizing: border-box;
   }
   .el-main {

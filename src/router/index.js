@@ -17,14 +17,31 @@ import Pcategory from '@/views/product/Category'
 import Pparam from '@/views/product/Param'
 import Order from '@/views/order/Order'
 import Report from '@/views/report/Report'
-import commodityList from '@/views/commodity/commodity-list'
-import commodityAdd from '@/views/commodity/commodity-add'
-import commodityDetail from '@/views/commodity/commodity-detail'
+import commodityList from '@/views/commodityManage/commodity-list'
+import commodityAdd from '@/views/commodityManage/commodity-add'
+import commodityDetail from '@/views/commodityManage/commodity-detail'
 import publishProductList from '@/views/publishManage/publishProduct-list'
 import addPublishProduct from '@/views/publishManage/publishProduct-add'
 import publishProductApprove from '@/views/publishManage/publishProduct-approve'
 import totalInventoryList from '@/views/totalInventoryManage/totalInventory-list'
 import totalInventoryDetail from '@/views/totalInventoryManage/totalInventory-detail'
+import inventoryList from '@/views/inventoryManage/inventory-list'
+import inventoryAdd from '@/views/inventoryManage/inventory-add'
+import godownEntry from '@/views/inventoryManage/godownEntry'
+import inventoryDetail from '@/views/inventoryManage/inventory-detail'
+import manufacturerList from '@/views/manufacturerManage/manufacturer-list'
+import manufacturerAdd from '@/views/manufacturerManage/manufacturer-add'
+import orderFormList from '@/views/orderFormManage/orderForm-list'
+import orderFormDetail from '@/views/orderFormManage/orderForm-detail'
+import marketList from '@/views/marketManage/market-list'
+import marketDetail from '@/views/marketManage/market-detail'
+import splitAccountList from '@/views/splitAccountManage/splitAccount-list'
+import splitAccountDetail from '@/views/splitAccountManage/splitAccount-detail'
+import clientList from '@/views/clientManage/client-list'
+import customerSalesOrderDetail from '@/views/clientManage/customerSalesOrder-detail'
+import myMarketDocList from '@/views/accountManage/myMarketDoc-list'
+import myCoinsList from '@/views/accountManage/myCoins-list'
+import myBeansList from '@/views/accountManage/myBeans-list'
 
 // 这是在为 Vue 扩展实例成员
 // 如果你没有这句话，那么你就无法在组件中使用 this.$route 和 this.$router
@@ -78,6 +95,72 @@ const router = new Router({
       children: [
         {path: '/totalInventoryList', component: totalInventoryList, name: 'totalInventoryList'},
         {path: '/totalInventoryDetail', component: totalInventoryDetail, name: 'totalInventoryDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: '库存管理',
+      component: Home,
+      children: [
+        {path: '/inventoryList', component: inventoryList, name: 'inventoryList'},
+        {path: '/inventoryAdd', component: inventoryAdd, name: 'inventoryAdd'},
+        {path: '/godownEntry', component: godownEntry, name: 'godownEntry'},
+        {path: '/inventoryDetail', component: inventoryDetail, name: 'inventoryDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: '厂商管理',
+      component: Home,
+      children: [
+        {path: '/manufacturerList', component: manufacturerList, name: 'manufacturerList'},
+        {path: '/manufacturerAdd', component: manufacturerAdd, name: 'manufacturerAdd'}
+      ]
+    },
+    {
+      path: '/',
+      name: '订单管理',
+      component: Home,
+      children: [
+        {path: '/orderFormList', component: orderFormList, name: 'orderFormList'},
+        {path: '/orderFormDetail', component: orderFormDetail, name: 'orderFormDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: '销售管理',
+      component: Home,
+      children: [
+        {path: '/marketList', component: marketList, name: 'marketList'},
+        {path: '/marketDetail', component: marketDetail, name: 'marketDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: '分账管理',
+      component: Home,
+      children: [
+        {path: '/splitAccountList', component: splitAccountList, name: 'splitAccountList'},
+        {path: '/splitAccountDetail', component: splitAccountDetail, name: 'splitAccountDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: 'C端客户',
+      component: Home,
+      children: [
+        {path: '/clientList', component: clientList, name: 'clientList'},
+        {path: '/customerSalesOrderDetail', component: customerSalesOrderDetail, name: 'customerSalesOrderDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: '账户管理',
+      component: Home,
+      children: [
+        {path: '/myMarketDocList', component: myMarketDocList, name: 'myMarketDocList'},
+        {path: '/myCoinsList', component: myCoinsList, name: 'myCoinsList'},
+        {path: '/myBeansList', component: myBeansList, name: 'myBeansList'}
       ]
     },
     {

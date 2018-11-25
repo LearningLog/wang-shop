@@ -33,21 +33,24 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSearch">查询</el-button>
-        <el-button type="primary" @click="reset">重置</el-button>
-      </el-form-item>
     </el-form>
-    <el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>
-    <el-button type="danger" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
+    <!--查询按钮-->
+    <div class="fl">
+      <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
+      <el-button type="primary" size="mini" @click="reset">重置</el-button>
+    </div>
+    <!--操作按钮-->
+    <div class="fr operBtn">
+      <el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>
+      <el-button type="danger" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
+    </div>
     <!--表格-->
     <el-table
       :data="productList"
       stripe
       border
-      ref="checkedProductList"
+      ref="checkedList"
       @selection-change="handleSelectionChange"
-      max-height="500"
       style="width: 100%">
       <el-table-column
         type="selection"
@@ -127,8 +130,16 @@
   </div>
 </template>
 <script>
-  import { searchProduct, getProductList } from '@/api/publishManage.js'
+  import { getProductList, deleteProduct } from '../../api/publishManage.js'
   export default {
+    created () {
+      // getProductList().then(res => {
+      //   if (res.meta.status === 200) {
+      //     this.productList = res.data.productList
+      //     this.btnDisabled = res.data.btnDisabled
+      //   }
+      // })
+    },
     data () {
       return {
         pickerOptions: {
@@ -158,23 +169,22 @@
             }
           }]
         },
-
         searchProduct: {// 搜索数据
           productName: '', // 产品名称
           ProductNumber: '', // 产品编号
-          publishTime: '', // 发布时间
+          publishTime: [], // 发布时间
           status: '' // 状态
         },
         stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
         productList: [{}], // 产品列表
         btnDisabled: false, // 是否禁用按钮
-        checkedProductList: [] // CheckBox选择的数据
+        checkedList: [] // CheckBox选择的数据
       }
     },
     methods: {
       // 搜索
       onSearch () {
-        searchProduct(this.searchProduct).then(res => {
+        getProductList(this.searchProduct).then(res => {
           if (res.meta.status === 200) {
             this.productList = res.data.productList
           }
@@ -185,7 +195,7 @@
         this.searchProduct = {
           productName: '', // 产品名称
           ProductNumber: '', // 产品编号
-          publishTime: '', // 发布时间
+          publishTime: [], // 发布时间
           status: '' // 状态
         }
         getProductList().then(res => {
@@ -195,45 +205,38 @@
       // 添加
       addProduct () {
         // 到编辑页面
+        this.$router.push({path: '/addPublishProduct'})
+      },
+      // 选中数据
+      handleSelectionChange (row) {
+        this.checkedList = row
       },
       // 删除
       deleteProduct () {
-        console.log(this.checkedProductList)
-        if (this.checkedProductList.length === 0) {
+        if (this.checkedList.length === 0) {
           this.$message({
             message: '请选择至少一项产品记录！',
             type: 'warning'
           })
           return false
         } else {
-
+          deleteProduct().then(res => {
+            this.productList = res.data.productList
+          })
         }
-      },
-      // 选中数据
-      handleSelectionChange (row) {
-        this.checkedProductList = row
       },
       // 修改
       handleEdit (index, row) {
         // 到编辑页面
-        this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
+        // this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
+        this.$router.push({path: '/addPublishProduct', query: {pId: '1111'}})
       },
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
+        // this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
+        this.$router.push({path: '/publishProductDetail', query: {pId: '111'}})
       }
-    },
-    components: {
-
-    },
-    created () {
-      // getProductList().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
     }
   }
 </script>
@@ -250,5 +253,8 @@
   }
   .publishTime {
     width:220px;
+  }
+  .operBtn {
+    margin-right: 14px;
   }
 </style>

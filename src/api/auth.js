@@ -1,6 +1,7 @@
 /**
- * @/assets/js/auth.js
- * 封装和用户授权相关函数
+ * @author: YanHuaKang
+ * @2018/11/24
+ * @Description:封装和用户授权相关函数
  */
 
 const userInfoKey = 'userInfoToken'

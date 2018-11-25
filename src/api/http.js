@@ -1,3 +1,8 @@
+/**
+ * @author: YanHuaKang
+ * @2018/11/24
+ * @Description:配置请求头信息、配置请求拦截器并携带token、配置响应拦截器处理权限及错误码、配置axios未VUE插件
+ */
 import axios from 'axios'
 import router from '@/router/index'
 import {getToken} from './auth'

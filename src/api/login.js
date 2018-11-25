@@ -1,3 +1,8 @@
+/**
+ * @author: YanHuaKang
+ * @2018/11/24
+ * @Description:登录
+ */
 import {http} from '../api/http'
 
 // export const uploadInfo = () => {
