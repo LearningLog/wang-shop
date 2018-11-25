@@ -111,6 +111,21 @@
             <span>订单明细</span>
           </el-menu-item>
         </el-submenu>
+        <!--销售管理-->
+        <el-submenu index="12">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">销售管理</span>
+          </template>
+          <el-menu-item index="/marketList">
+            <i class="el-icon-menu"></i>
+            <span>销售列表</span>
+          </el-menu-item>
+          <el-menu-item index="/marketDetail">
+            <i class="el-icon-menu"></i>
+            <span>销售明细</span>
+          </el-menu-item>
+        </el-submenu>
         <!--<el-submenu index="2">-->
           <!--<template slot="title">-->
             <!--<i class="el-icon-location"></i>-->
