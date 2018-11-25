@@ -141,6 +141,21 @@
             <span>分账明细</span>
           </el-menu-item>
         </el-submenu>
+        <!--客户端管理-->
+        <el-submenu index="14">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">C端客户</span>
+          </template>
+          <el-menu-item index="/clientList">
+            <i class="el-icon-menu"></i>
+            <span>客户列表</span>
+          </el-menu-item>
+          <el-menu-item index="/customerSalesOrderDetail">
+            <i class="el-icon-menu"></i>
+            <span>客户销售单</span>
+          </el-menu-item>
+        </el-submenu>
         <!--<el-submenu index="2">-->
           <!--<template slot="title">-->
             <!--<i class="el-icon-location"></i>-->

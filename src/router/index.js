@@ -37,6 +37,8 @@ import marketList from '@/views/marketManage/market-list'
 import marketDetail from '@/views/marketManage/market-detail'
 import splitAccountList from '@/views/splitAccountManage/splitAccount-list'
 import splitAccountDetail from '@/views/splitAccountManage/splitAccount-detail'
+import clientList from '@/views/clientManage/client-list'
+import customerSalesOrderDetail from '@/views/clientManage/customerSalesOrder-detail'
 
 // 这是在为 Vue 扩展实例成员
 // 如果你没有这句话，那么你就无法在组件中使用 this.$route 和 this.$router
@@ -137,6 +139,15 @@ const router = new Router({
       children: [
         {path: '/splitAccountList', component: splitAccountList, name: 'splitAccountList'},
         {path: '/splitAccountDetail', component: splitAccountDetail, name: 'splitAccountDetail'}
+      ]
+    },
+    {
+      path: '/',
+      name: 'C端客户',
+      component: Home,
+      children: [
+        {path: '/clientList', component: clientList, name: 'clientList'},
+        {path: '/customerSalesOrderDetail', component: customerSalesOrderDetail, name: 'customerSalesOrderDetail'}
       ]
     },
     {
