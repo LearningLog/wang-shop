@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/clientList'}">C端客户</el-breadcrumb-item>
+      <el-breadcrumb-item>账户管理</el-breadcrumb-item>
       <el-breadcrumb-item>我的孖蹦</el-breadcrumb-item>
     </el-breadcrumb>
     <h2 class="condition">最近三个月收支情况</h2>

@@ -2,8 +2,8 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>C端客户</el-breadcrumb-item>
-      <el-breadcrumb-item>客户列表</el-breadcrumb-item>
+      <el-breadcrumb-item>账户管理</el-breadcrumb-item>
+      <el-breadcrumb-item>我的销售单</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
