@@ -96,6 +96,21 @@
             <span>新增厂商</span>
           </el-menu-item>
         </el-submenu>
+        <!--订单管理-->
+        <el-submenu index="11">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">订单管理</span>
+          </template>
+          <el-menu-item index="/orderFormList">
+            <i class="el-icon-menu"></i>
+            <span>订单列表</span>
+          </el-menu-item>
+          <el-menu-item index="/orderFormDetail">
+            <i class="el-icon-menu"></i>
+            <span>订单明细</span>
+          </el-menu-item>
+        </el-submenu>
         <!--<el-submenu index="2">-->
           <!--<template slot="title">-->
             <!--<i class="el-icon-location"></i>-->

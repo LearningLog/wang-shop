@@ -172,7 +172,7 @@
         searchProduct: {// 搜索数据
           productName: '', // 产品名称
           ProductNumber: '', // 产品编号
-          publishTime: '', // 发布时间
+          publishTime: [], // 发布时间
           status: '' // 状态
         },
         stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
@@ -195,7 +195,7 @@
         this.searchProduct = {
           productName: '', // 产品名称
           ProductNumber: '', // 产品编号
-          publishTime: '', // 发布时间
+          publishTime: [], // 发布时间
           status: '' // 状态
         }
         getProductList().then(res => {

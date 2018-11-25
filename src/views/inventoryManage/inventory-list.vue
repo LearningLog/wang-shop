@@ -195,7 +195,4 @@
   .searchProduct {
     margin-top: 10px;
   }
-  .operBtn {
-    margin-right: 14px;
-  }
 </style>
