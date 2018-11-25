@@ -126,6 +126,21 @@
             <span>销售明细</span>
           </el-menu-item>
         </el-submenu>
+        <!--分账管理-->
+        <el-submenu index="13">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">分账管理</span>
+          </template>
+          <el-menu-item index="/splitAccountList">
+            <i class="el-icon-menu"></i>
+            <span>分账列表</span>
+          </el-menu-item>
+          <el-menu-item index="/splitAccountDetail">
+            <i class="el-icon-menu"></i>
+            <span>分账明细</span>
+          </el-menu-item>
+        </el-submenu>
         <!--<el-submenu index="2">-->
           <!--<template slot="title">-->
             <!--<i class="el-icon-location"></i>-->
