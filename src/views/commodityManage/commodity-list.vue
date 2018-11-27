@@ -66,19 +66,18 @@
         label="厂商">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="unitPrice"
         header-align="center"
         align="right"
+        :formatter="unitPriceFormatter"
         label="单价">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="createTime"
+        header-align="center"
+        align="right"
+        :formatter="createTimeFormatter"
         label="创建时间">
-        <template slot-scope="scope">
-          <!--<i class="el-icon-time"></i>-->
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
       </el-table-column>
       <el-table-column
         prop="address"
@@ -121,7 +120,7 @@
           productName: '', // 产品名称
           ProductNumber: '' // 产品编号
         },
-        productList: [{}], // 产品列表
+        productList: [{unitPrice: '1111111.21', createTime: 1521111111111, name: 'qqqq'}], // 产品列表
         btnDisabled: false, // 是否禁用按钮
         checkedList: [] // CheckBox选择的数据
       }
@@ -179,6 +178,14 @@
       // 到详情页面
       //   this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
         this.$router.push({path: '/commodityDetail', query: {pId: '11111'}})
+      },
+      // 单价格式化
+      unitPriceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 创建时间格式化
+      createTimeFormatter (row, column, cellValue, index) {
+        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       }
     }
   }
