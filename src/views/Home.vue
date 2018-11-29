@@ -288,7 +288,7 @@ export default {
   },
   mounted () {
     this.currentMenu = getActiveMenu(this.$route.path) // default-openeds 默认打开的全菜单的index数组
-    this.defaultActive = this.$route.path // default-active 默认激活的当前index菜单（或子菜单）
+    this.defaultActive = getActiveMenu(this.$route.path)?this.$route.path:'' // default-active 默认激活的当前index菜单（或子菜单）
   },
   data () {
     return {

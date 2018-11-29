@@ -24,6 +24,8 @@ export const getActiveMenu = path => {
       var item2 = item[j]
       if (item2 === path) {
         return [i.toString()]
+      } else {
+        return []
       }
     }
   }
