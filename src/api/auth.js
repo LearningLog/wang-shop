@@ -4,7 +4,7 @@
  * @Description:封装和用户授权相关函数
  */
 
-const userInfoKey = 'userInfoToken'
+const tokenKey = 'adminToken'
 
 /**
  * 这是有设定过期时间的使用示例：
@@ -28,20 +28,20 @@ function getsec (str) {
  * @param value
  * @param time    这是有设定过期时间的使用示例：s20是代表20秒  h是指小时，如12小时则是：h12   d是天数，30天则：d30
  */
-export function saveUserInfo (value, time) {
+export function saveToken (value, time) {
   var strsec = getsec(time)
   var exp = new Date()
   exp.setTime(exp.getTime() + strsec * 1)
-  document.cookie = userInfoKey + '=' + escape(value) + ';expires=' + exp.toGMTString()
+  document.cookie = tokenKey + '=' + escape(value) + ';expires=' + exp.toGMTString()
 }
 
 /**
  * 从cookie中获取当前登陆用户信息
  * @return {string} 当前登陆用户信息对象字符串
  */
-export function getUserInfo () {
+export function getToken () {
   var arr = []
-  var reg = new RegExp('(^| )' + userInfoKey + '=([^;]*)(;|$)')
+  var reg = new RegExp('(^| )' + tokenKey + '=([^;]*)(;|$)')
   if (document.cookie.match(reg)) {
     arr = document.cookie.match(reg)
     return unescape(arr[2])
@@ -57,12 +57,12 @@ export function getUserInfo () {
  * @param secure
  * @return {undefined} 无返回值
  */
-export function removeUserInfo () {
+export function removeToken () {
   var exp = new Date()
   exp.setTime(exp.getTime() - 1)
-  var cval = getUserInfo(userInfoKey)
+  var cval = getToken(tokenKey)
   if (cval != null) {
-    document.cookie = userInfoKey + '=' + cval + ';expires=' + exp.toGMTString()
+    document.cookie = tokenKey + '=' + cval + ';expires=' + exp.toGMTString()
   }
 }
 
@@ -70,12 +70,12 @@ export function removeUserInfo () {
  * 获取cookie中用户信息的 Token 令牌
  * @return {string} 用户的 Token 身份令牌
  */
-export function getToken () {
-  try {
-    // 本地存储中的 user-info 可能不是一个有效的 JSON 格式字符串
-    // 所以我们这里为了避免程序出错，使用了 try-catcher 来捕获转换失败的异常
-    return JSON.parse(getUserInfo()).token
-  } catch (err) {
-    return ''
-  }
-}
+// export function getToken () {
+//   try {
+//     // cooike存储中的 adminToken 可能不是一个有效的 JSON 格式字符串
+//     // 所以我们这里为了避免程序出错，使用了 try-catcher 来捕获转换失败的异常
+//     return getToken()
+//   } catch (err) {
+//     return ''
+//   }
+// }

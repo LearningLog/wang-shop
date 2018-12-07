@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import {getToken} from '../api/auth'
 // 功能组件
 // @ 是 src 路径的别名，webpack 配置的
 import Login from '@/views/Login'
@@ -239,8 +239,8 @@ const router = new Router({
 //    from 我从哪儿来的
 //    next 用来放行的
 // router.beforeEach((to, from, next) => {
-//   let user = localStorage.getItem('mytoken')
-//   if (user) {
+//   debugger
+//   if (getToken()) {
 //     next()
 //   } else {
 //     if (to.path !== '/login') {
@@ -258,7 +258,6 @@ const router = new Router({
 //    from 我从哪儿来的
 //    next 用来放行的
 router.beforeEach((to, from, next) => {
-  let user = localStorage.getItem('mytoken')
   // 2.
   // 拿到当前请求的视图路径标识
   // 2.1 如果是登陆组件，则直接放行通过
@@ -268,8 +267,9 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     next()
   } else {
+    debugger
     // 检查是否具有当前登陆的用户信息状态
-    if (!user) { // 无令牌，则让其登陆去
+    if (!getToken()) { // 无令牌，则让其登陆去
       next({
         path: '/login'
       })

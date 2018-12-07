@@ -273,22 +273,23 @@
 </template>
 
 <script>
-import { getMenus } from '../api/index.js'
-import {removeUserInfo} from '../api/auth.js'
-import { modifyPassword } from '../api/login.js'
+// import { getMenus } from '../api/index.js'
+import {getToken, removeToken} from '../api/auth.js'
+import { logout, modifyPassword } from '../api/login.js'
 import { getActiveMenu } from '../api/leftMenuConfig.js'
 export default {
   created () {
-    getMenus().then(res => {
-      if (res.meta.status === 200) {
-        console.log(res)
-        this.menuData = res.data
-      }
-    })
+    // getMenus().then(res => {
+    //   debugger
+    //   if (res.meta.status === 200) {
+    //     console.log(res)
+    //     this.menuData = res.data
+    //   }
+    // })
   },
   mounted () {
     this.currentMenu = getActiveMenu(this.$route.path) // default-openeds 默认打开的全菜单的index数组
-    this.defaultActive = getActiveMenu(this.$route.path)?this.$route.path:'' // default-active 默认激活的当前index菜单（或子菜单）
+    this.defaultActive = getActiveMenu(this.$route.path) ? this.$route.path : '' // default-active 默认激活的当前index菜单（或子菜单）
   },
   data () {
     return {
@@ -369,16 +370,26 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => { // 点击确认执行 resolve 函数
-        // 1. 删除本地存储中的用户登陆信息
-        // 清除token
-        localStorage.removeItem('mytoken')
-        // 跳转到登录页面
-        this.$router.push({path: 'login'})
-        removeUserInfo()
-        // 提示用户退出成功
-        this.$message({
-          type: 'success',
-          message: '退出成功!'
+        // 调用后台退出接口
+        logout({adminToken: getToken()}).then(res => {
+          debugger
+          if (res.code === 1) {
+            // 1. 删除本地存储中的用户登陆信息
+            // 清除token
+            removeToken()
+            // 跳转到登录页面
+            this.$router.push({path: 'login'})
+            // 提示用户退出成功
+            this.$message({
+              type: 'success',
+              message: '退出成功!'
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: '退出失败!'
+            })
+          }
         })
       }).catch(() => {
         // 点击取消的处理
@@ -424,7 +435,7 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     text-align: left;
-    overflow: '';
+    /*overflow: '';*/
   }
   .userEdit {
     position: absolute;

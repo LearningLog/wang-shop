@@ -5,22 +5,22 @@
     </div>
     <el-form :rules='rules' :model='loginForm' ref='loginForm' class='container'>
       <!--<div class="userInfo">-->
-        <el-form-item prop="username">
-          <el-input prefix-icon="myicon myicon-user" class="username" style="BACKGROUND-COLOR: transparent;" v-model='loginForm.username' placeholder='账号'></el-input>
+        <el-form-item prop="loginName">
+          <el-input prefix-icon="myicon myicon-user" class="loginName" style="BACKGROUND-COLOR: transparent;" v-model='loginForm.loginName' placeholder='账号'></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input type='password' prefix-icon="myicon myicon-key" class="password" style="BACKGROUND-COLOR: transparent;" v-model='loginForm.password' placeholder='密码'></el-input>
         </el-form-item>
-        <el-form-item prop="userType">
-          <div class="input-group-prepend">
-            <label class="input-group-text">身份类型</label>
-          </div>
-          <el-select placeholder="请选择身份类型" class="userType">
-              <el-option label="商户" value="1"></el-option>
-              <el-option label="渠道" value="2"></el-option>
-              <el-option label="内部员工" value="3"></el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item prop="userType">-->
+          <!--<div class="input-group-prepend">-->
+            <!--<label class="input-group-text">身份类型</label>-->
+          <!--</div>-->
+          <!--<el-select placeholder="请选择身份类型" class="userType">-->
+              <!--<el-option label="商户" value="1"></el-option>-->
+              <!--<el-option label="渠道" value="2"></el-option>-->
+              <!--<el-option label="内部员工" value="3"></el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
         <!-- <el-checkbox>记住密码</el-checkbox> -->
         <el-form-item>
           <el-button type='primary' class='btn' @click='loginSubmit'>登录</el-button>
@@ -31,17 +31,17 @@
 </template>
 <script>
 import { checkUser } from '../api/login.js'
-import { saveUserInfo } from '../api/auth.js'
+import { saveToken } from '../api/auth.js'
 const qs = require('querystring')
 export default {
   data () {
     return {
       loginForm: {
-        username: '',
+        loginName: '',
         password: ''
       },
       rules: {
-        username: [
+        loginName: [
           { required: true, message: '请输入账号', trigger: 'blur' }
         ],
         password: [
@@ -56,15 +56,14 @@ export default {
         if (valid) {
           // 表单数据
           let params = {
-            username: this.loginForm.username,
+            loginName: this.loginForm.loginName,
             password: this.loginForm.password
           }
           // 调用后台接口
           checkUser(qs.stringify(params)).then(res => {
-            if (res.meta.status === 200) {
+            if (res.code === 1) {
               // 路由跳转
-              localStorage.setItem('mytoken', res.data.token)
-              saveUserInfo(res.data.token, 'h2')
+              saveToken(res.data, 'h24')
               this.$router.push({path: '/'})
               // 给出登陆成功的提示消息
               this.$message({
@@ -128,7 +127,7 @@ export default {
     width: 300px;
     padding: 100px 50px;
   }
-  .username, .password, .userType {
+  .loginName, .password, .userType {
     background: rgba(255, 255, 255, 0.32);
     /*margin-bottom: 1.5em;*/
     padding: 8px;

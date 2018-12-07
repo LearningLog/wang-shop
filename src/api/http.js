@@ -8,7 +8,8 @@ import router from '@/router/index'
 import {getToken} from './auth'
 
 export const http = axios.create({
-  baseURL: 'http://localhost:8888/api/private/v1/'
+  baseURL: 'http://39.105.158.244:8001'
+  // baseURL: 'http://localhost:8888/api/private/v1/'
 })
 
 // 添加请求拦截器
@@ -20,11 +21,10 @@ export const http = axios.create({
 // 也就是说在请求拦截器内部的请求还没有发出去
 // 我们可以在这里定制请求之前的行为
 axios.interceptors.request.use(function (config) {
-  let token = localStorage.getItem('mytoken')
+  debugger
   // 如果本次请求的不是 /login 接口，则我们就加入请求头
   if (config.url !== '/login') {
-    config.headers['Authorization'] = getToken()
-    config.headers['Authorization'] = token
+    config.headers['adminToken'] = getToken()
   }
 
   // return config 就好比 next() 允许通过
@@ -40,14 +40,14 @@ axios.interceptors.request.use(function (config) {
 // 例如需要对每个接口进行 403 权限认证判断
 // 如果本地响应的数据是 403 ，则我们提示用户：你没有权限执行该操作
 http.interceptors.response.use(function (response) {
-  const {meta} = response.data
-  if (meta.status === 403) {
+  const res = response.data
+  if (res.code === 403) {
     this.$message({
       message: '你没有权限执行该操作！',
       type: 'error'
     })
     // return false
-  } else if (meta.status === 401) {
+  } else if (res.code === 401) {
     // 如果用户长时间未操作导致 token 失效或者有人恶意伪造 token
     // 我们也不允许他进入我的系统界面
     // 所以我们这里通过对 401 统一拦截跳转到登录页

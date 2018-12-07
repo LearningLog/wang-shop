@@ -7,7 +7,7 @@ import {http} from '../api/http'
 
 // 获取列表
 export const getProductList = params => {
-  return http.get('getProductList', params).then(res => res.data)
+  return http.get('/admin/sku/page/list', params).then(res => res.data)
 }
 // 新增||编辑产品
 export const saveProduct = params => {

@@ -107,12 +107,13 @@
   import { getProductList, deleteProduct } from '../../api/commodityManage.js'
   export default {
     created () {
-      // getProductList().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
+      getProductList().then(res => {
+        debugger
+        if (res.data === 1) {
+          this.productList = res.data.productList
+          this.btnDisabled = res.data.btnDisabled
+        }
+      })
     },
     data () {
       return {
