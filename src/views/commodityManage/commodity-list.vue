@@ -74,9 +74,9 @@
       </el-table-column>
       <el-table-column
         prop="createTime"
-        header-align="center"
-        align="right"
+        align="center"
         :formatter="createTimeFormatter"
+        width="140"
         label="创建时间">
       </el-table-column>
       <el-table-column
@@ -102,37 +102,50 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="searchData.pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
   import { getProductList, deleteProduct } from '../../api/commodityManage.js'
   export default {
     created () {
-      getProductList(this.searchData).then(res => {
-        if (res.code === 1 && res.data) {
-          this.productList = res.data.list
-        }
-      })
+      this.initData()
     },
     data () {
       return {
         searchData: { // 搜索数据
-          pageSize: 10,
-          pageNum: 1,
+          pageSize: 10, // 每页条数
+          pageNum: 1, // 当前第几页
           skuName: '', // 产品名称
           skuId: '' // 产品编号
         },
         productList: [], // 产品列表
         btnDisabled: false, // 是否禁用按钮
-        checkedList: [] // CheckBox选择的数据
+        checkedList: [], // CheckBox选择的数据
+        total: 0, // 总页数
+        currentSize: 0 // 当前页数据条数
       }
     },
     methods: {
       // 搜索
       onSearch () {
+        this.initData()
+      },
+      initData () {
         getProductList(this.searchData).then(res => {
           if (res.code === 1 && res.data) {
             this.productList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       },
@@ -163,10 +176,14 @@
           let skuIdList = this.checkedList.map(function (item) {
             return item.skuId
           })
+          let len = skuIdList.length
           skuIdList = skuIdList.join(',')
           deleteProduct(skuIdList).then(res => {
             if (res.code === 1) {
-              this.productList = res.data.list
+              if ((this.currentSize - len) === 0) { // 如果当前页数据已删完，则去往上一页
+                this.searchData.pageNum = this.searchData.pageNum - 1
+              }
+              this.initData()
             }
           })
         }
@@ -202,6 +219,15 @@
           case 2:
             return '下架'
         }
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.searchData.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.searchData.pageNum = val
+        this.initData()
       }
     }
   }
