@@ -4,7 +4,7 @@
  * @Description:封装和用户授权相关函数
  */
 
-const tokenKey = 'adminToken'
+// var tokenName = ''
 
 /**
  * 这是有设定过期时间的使用示例：
@@ -28,20 +28,20 @@ function getsec (str) {
  * @param value
  * @param time    这是有设定过期时间的使用示例：s20是代表20秒  h是指小时，如12小时则是：h12   d是天数，30天则：d30
  */
-export function saveToken (value, time) {
+export function saveToken (name, value, time) {
   var strsec = getsec(time)
   var exp = new Date()
   exp.setTime(exp.getTime() + strsec * 1)
-  document.cookie = tokenKey + '=' + escape(value) + ';expires=' + exp.toGMTString()
+  document.cookie = name + '=' + escape(value) + ';expires=' + exp.toGMTString()
 }
 
 /**
  * 从cookie中获取当前登陆用户信息
  * @return {string} 当前登陆用户信息对象字符串
  */
-export function getToken () {
+export function getToken (name) {
   var arr = []
-  var reg = new RegExp('(^| )' + tokenKey + '=([^;]*)(;|$)')
+  var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
   if (document.cookie.match(reg)) {
     arr = document.cookie.match(reg)
     return unescape(arr[2])
@@ -57,12 +57,12 @@ export function getToken () {
  * @param secure
  * @return {undefined} 无返回值
  */
-export function removeToken () {
+export function removeToken (name) {
   var exp = new Date()
   exp.setTime(exp.getTime() - 1)
-  var cval = getToken(tokenKey)
+  var cval = getToken(name)
   if (cval != null) {
-    document.cookie = tokenKey + '=' + cval + ';expires=' + exp.toGMTString()
+    document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
   }
 }
 

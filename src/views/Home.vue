@@ -4,18 +4,18 @@
       <div class="logo"></div>
       <el-scrollbar style="height: 100%;">
         <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-          <el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span slot="title">{{item.authName}}</span>
-            </template>
-            <el-menu-item :key='tag.id' v-for='tag in item.children' :index="tag.path">
-              <i class="el-icon-menu"></i>
-            <span>{{tag.authName}}</span>
-          </el-menu-item>
-          </el-submenu>
+          <!--<el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>-->
+            <!--<template slot="title">-->
+              <!--<i class="el-icon-location"></i>-->
+              <!--<span slot="title">{{item.authName}}</span>-->
+            <!--</template>-->
+            <!--<el-menu-item :key='tag.id' v-for='tag in item.children' :index="tag.path">-->
+              <!--<i class="el-icon-menu"></i>-->
+            <!--<span>{{tag.authName}}</span>-->
+          <!--</el-menu-item>-->
+          <!--</el-submenu>-->
           <!--商品管理-->
-          <el-submenu index="6">
+          <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">商品管理</span>
@@ -30,7 +30,7 @@
             </el-menu-item>
           </el-submenu>
           <!--发布管理-->
-          <el-submenu index="7">
+          <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">发布管理</span>
@@ -49,7 +49,7 @@
             </el-menu-item>
           </el-submenu>
           <!--总库存管理-->
-          <el-submenu index="8">
+          <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">总库存管理</span>
@@ -64,7 +64,7 @@
             </el-menu-item>
           </el-submenu>
           <!--库存管理-->
-          <el-submenu index="9">
+          <el-submenu index="4">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">库存管理</span>
@@ -83,7 +83,7 @@
             </el-menu-item>
           </el-submenu>
           <!--库存管理-->
-          <el-submenu index="10">
+          <el-submenu index="5">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">厂商管理</span>
@@ -98,7 +98,7 @@
             </el-menu-item>
           </el-submenu>
           <!--订单管理-->
-          <el-submenu index="11">
+          <el-submenu index="6">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">订单管理</span>
@@ -113,7 +113,7 @@
             </el-menu-item>
           </el-submenu>
           <!--销售管理-->
-          <el-submenu index="12">
+          <el-submenu index="7">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">销售管理</span>
@@ -128,7 +128,7 @@
             </el-menu-item>
           </el-submenu>
           <!--分账管理-->
-          <el-submenu index="13">
+          <el-submenu index="8">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">分账管理</span>
@@ -143,7 +143,7 @@
             </el-menu-item>
           </el-submenu>
           <!--客户端管理-->
-          <el-submenu index="14">
+          <el-submenu index="9">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">C端客户</span>
@@ -158,7 +158,7 @@
             </el-menu-item>
           </el-submenu>
           <!--账户管理-->
-          <el-submenu index="15">
+          <el-submenu index="10">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span slot="title">账户管理</span>
@@ -176,58 +176,7 @@
               <span>我的孖豆</span>
             </el-menu-item>
           </el-submenu>
-          <!--<el-submenu index="2">-->
-          <!--<template slot="title">-->
-          <!--<i class="el-icon-location"></i>-->
-          <!--<span slot="title">权限管理</span>-->
-          <!--</template>-->
-          <!--<el-menu-item index="/role">-->
-          <!--<i class="el-icon-menu"></i>-->
-          <!--<span slot="title">角色列表</span>-->
-          <!--</el-menu-item>-->
-          <!--<el-menu-item index="/auth">-->
-          <!--<i class="el-icon-menu"></i>-->
-          <!--<span slot="title">权限列表</span>-->
-          <!--</el-menu-item>-->
-          <!--</el-submenu>-->
-          <!--<el-submenu index="3">-->
-          <!--<template slot="title">-->
-          <!--<i class="el-icon-location"></i>-->
-          <!--<span slot="title">商品管理</span>-->
-          <!--</template>-->
-          <!--<el-menu-item index="/product">-->
-          <!--<i class="el-icon-menu"></i>-->
-          <!--<span slot="title">商品列表</span>-->
-          <!--</el-menu-item>-->
-          <!--<el-menu-item index="/category">-->
-          <!--<i class="el-icon-menu"></i>-->
-          <!--<span slot="title">商品分类</span>-->
-          <!--</el-menu-item>-->
-          <!--<el-menu-item index="/param">-->
-          <!--<i class="el-icon-menu"></i>-->
-          <!--<span slot="title">商品参数</span>-->
-          <!--</el-menu-item>-->
-          <!--</el-submenu>-->
-          <!--<el-submenu index="4">-->
-          <!--<template slot="title">-->
-          <!--<i class="el-icon-location"></i>-->
-          <!--<span slot="title">订单管理</span>-->
-          <!--</template>-->
-          <!--<el-menu-item index="/order">-->
-          <!--<i class="el-icon-menu"></i>-->
-          <!--<span slot="title">订单列表</span>-->
-          <!--</el-menu-item>-->
-          <!--</el-submenu>-->
-          <!--<el-submenu index="5">-->
-          <!--<template slot="title">-->
-          <!--<i class="el-icon-location"></i>-->
-          <!--<span slot="title">数据统计</span>-->
-          <!--</template>-->
-          <!--<el-menu-item index="/report">-->
-          <!--<i class="el-icon-menu"></i>-->
-          <!--<span slot="title">数据报表</span>-->
-          <!--</el-menu-item>-->
-          <!--</el-submenu>-->
+
         </el-menu>
       </el-scrollbar>
     </el-aside>
@@ -275,7 +224,7 @@
 <script>
 // import { getMenus } from '../api/index.js'
 import {getToken, removeToken} from '../api/auth.js'
-import { logout, modifyPassword } from '../api/login.js'
+import { logoutAdmin, logoutManufacturer, modifyPassword } from '../api/login.js'
 import { getActiveMenu } from '../api/leftMenuConfig.js'
 export default {
   created () {
@@ -288,8 +237,9 @@ export default {
     // })
   },
   mounted () {
-    this.currentMenu = getActiveMenu(this.$route.path) // default-openeds 默认打开的全菜单的index数组
-    this.defaultActive = getActiveMenu(this.$route.path) ? this.$route.path : '' // default-active 默认激活的当前index菜单（或子菜单）
+    this.showActiveLeftMenu(this.$route.path)
+    // this.currentMenu = getActiveMenu(this.$route.path) // default-openeds 默认打开的全菜单的index数组
+    // this.defaultActive = getActiveMenu(this.$route.path).length ? this.$route.path : '' // default-active 默认激活的当前index菜单（或子菜单）
   },
   data () {
     return {
@@ -318,6 +268,10 @@ export default {
     }
   },
   methods: {
+    showActiveLeftMenu (path) {
+      this.currentMenu = getActiveMenu(path) // default-openeds 默认打开的全菜单的index数组
+      this.defaultActive = getActiveMenu(path).length ? path : '' // default-active 默认激活的当前index菜单（或子菜单）
+    },
     handleOpen (key, keyPath) {
       // console.log(key, keyPath)
     },
@@ -371,32 +325,66 @@ export default {
         type: 'warning'
       }).then(() => { // 点击确认执行 resolve 函数
         // 调用后台退出接口
-        logout({adminToken: getToken()}).then(res => {
-          debugger
-          if (res.code === 1) {
-            // 1. 删除本地存储中的用户登陆信息
-            // 清除token
-            removeToken()
-            // 跳转到登录页面
-            this.$router.push({path: 'login'})
-            // 提示用户退出成功
-            this.$message({
-              type: 'success',
-              message: '退出成功!'
-            })
-          } else {
-            this.$message({
-              type: 'error',
-              message: '退出失败!'
-            })
-          }
-        })
+        if (getToken('userType') === 'adminToken') {
+          logoutAdmin({adminToken: getToken('adminToken')}).then(res => {
+            if (res.code === 1) {
+              // 1. 删除本地存储中的用户登陆信息
+              // 清除token
+              removeToken('adminToken')
+              removeToken('userType')
+              // 跳转到登录页面
+              this.$router.push({path: 'login'})
+              // 提示用户退出成功
+              this.$message({
+                type: 'success',
+                message: '退出成功!'
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '退出失败!'
+              })
+            }
+          })
+        } else {
+          logoutManufacturer({manufacturerToken: getToken('manufacturerToken')}).then(res => {
+            debugger
+            if (res.code === 1) {
+              // 1. 删除本地存储中的用户登陆信息
+              // 清除token
+              removeToken('manufacturerToken')
+              removeToken('userType')
+              // 跳转到登录页面
+              this.$router.push({path: 'login'})
+              // 提示用户退出成功
+              this.$message({
+                type: 'success',
+                message: '退出成功!'
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '退出失败!'
+              })
+            }
+          })
+        }
       }).catch(() => {
         // 点击取消的处理
       })
     },
     toggleFlag () {
       this.isCollapse = !this.isCollapse
+    }
+  },
+  watch: {
+    // 监听,当路由发生变化的时候执行
+    $route: {
+      handler: function (val, oldVal) {
+        this.showActiveLeftMenu(val.path)
+      },
+      // 深度观察监听
+      deep: true
     }
   }
 }

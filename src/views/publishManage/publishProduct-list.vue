@@ -8,16 +8,18 @@
     <!--搜索-->
     <el-form :inline="true" :model="searchProduct" size="mini" class="searchProduct">
       <el-form-item label="产品名称:">
-        <el-input v-model="searchProduct.productName" placeholder="请输入产品名称"></el-input>
+        <el-input v-model="searchProduct.skuName" placeholder="请输入产品名称"></el-input>
       </el-form-item>
       <el-form-item label="产品编号:">
-        <el-input v-model="searchProduct.ProductNumber" placeholder="请输入产品编号"></el-input>
+        <el-input v-model="searchProduct.skuId" placeholder="请输入产品编号"></el-input>
       </el-form-item>
       <el-form-item label="发布时间:">
         <el-date-picker
           class="publishTime"
-          v-model="searchProduct.publishTime"
+          v-model="publishTime"
+          value-format="timestamp"
           type="daterange"
+          :onPick="publishTimePick"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
@@ -170,11 +172,13 @@
           }]
         },
         searchProduct: {// 搜索数据
-          productName: '', // 产品名称
-          ProductNumber: '', // 产品编号
-          publishTime: [], // 发布时间
+          skuName: '', // 产品名称
+          skuId: '', // 产品编号
+          startTime: '', // 开始日期
+          endTime: '', // 结束日期
           status: '' // 状态
         },
+        publishTime: [], // 发布时间
         stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
         productList: [{}], // 产品列表
         btnDisabled: false, // 是否禁用按钮
@@ -184,6 +188,7 @@
     methods: {
       // 搜索
       onSearch () {
+        console.log(this.searchProduct)
         getProductList(this.searchProduct).then(res => {
           if (res.meta.status === 200) {
             this.productList = res.data.productList
@@ -193,14 +198,17 @@
       // 重置
       reset () {
         this.searchProduct = {
-          productName: '', // 产品名称
-          ProductNumber: '', // 产品编号
+          skuName: '', // 产品名称
+          skuId: '', // 产品编号
           publishTime: [], // 发布时间
           status: '' // 状态
         }
         getProductList().then(res => {
           this.productList = res.data.productList
         })
+      },
+      publishTimePick (maxDate, minDate) {
+        debugger
       },
       // 添加
       addProduct () {

@@ -238,25 +238,6 @@ const router = new Router({
 //    to 我要去哪里
 //    from 我从哪儿来的
 //    next 用来放行的
-// router.beforeEach((to, from, next) => {
-//   debugger
-//   if (getToken()) {
-//     next()
-//   } else {
-//     if (to.path !== '/login') {
-//       next({path: '/login'})
-//     } else {
-//       next()
-//     }
-//   }
-// })
-
-// 1. 添加路由拦截器（导航钩子、守卫）
-//    接下来所有的视图导航都必须经过这道关卡
-//    一旦进入这道关卡，你得告诉路由守卫，
-//    to 我要去哪里
-//    from 我从哪儿来的
-//    next 用来放行的
 router.beforeEach((to, from, next) => {
   // 2.
   // 拿到当前请求的视图路径标识
@@ -267,9 +248,8 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     next()
   } else {
-    debugger
     // 检查是否具有当前登陆的用户信息状态
-    if (!getToken()) { // 无令牌，则让其登陆去
+    if (!getToken(getToken('userType'))) { // 无令牌，则让其登陆去
       next({
         path: '/login'
       })

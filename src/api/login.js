@@ -13,12 +13,21 @@ import {http} from '../api/http'
 // }
 
 /**
- * 登录验证
+ * 管理员登录
  * @param params loginName 用户名, password 密码
  * @returns {*}
  */
-export const checkUser = params => {
+export const loginAdmin = params => {
   return http.post('/admin/passport/login', params).then(res => res.data)
+}
+
+/**
+ * 厂商登录
+ * @param params loginName 用户名, password 密码
+ * @returns {*}
+ */
+export const loginManufacturer = params => {
+  return http.post('/manufacturer/passport/login', params).then(res => res.data)
 }
 
 /**
@@ -26,8 +35,12 @@ export const checkUser = params => {
  * @param params cookie中携带 adminToken 参数
  * @returns {*}
  */
-export const logout = params => {
+export const logoutAdmin = params => {
   return http.post('/admin/passport/logout', params).then(res => res.data)
+}
+
+export const logoutManufacturer = params => {
+  return http.post('/manufacturer/passport/logout', params).then(res => res.data)
 }
 
 /**

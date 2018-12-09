@@ -11,7 +11,7 @@ export const getProductList = params => {
 }
 // 发布产品
 export const publishProduct = params => {
-  return this.$http.post('publishProduct', params).then(res => res.data)
+  return http.post('publishProduct', params).then(res => res.data)
 }
 // 删除产品
 export const deleteProduct = params => {

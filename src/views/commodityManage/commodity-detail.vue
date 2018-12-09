@@ -9,19 +9,22 @@
     <el-form label-width="140px" size="small" class="productForm">
       <el-col span="12">
         <el-form-item label="产品编号（SKU）：">
-          <div>{{product.productNumber}}</div>
+          <div>{{product.skuId}}</div>
         </el-form-item>
         <el-form-item label="产品名称：">
-          <div>{{product.productName}}</div>
+          <div>{{product.skuName}}</div>
         </el-form-item>
         <el-form-item label="规格：">
-          <div>{{product.standard}}</div>
+          <div>{{product.saleProperty}}</div>
         </el-form-item>
         <el-form-item label="单价：">
-          <div>{{product.unitPrice}}</div>
+          <div>{{product.originalPrice}}</div>
         </el-form-item>
         <el-form-item label="分润比例：">
-          <div>{{product.wettingRatio}}</div>
+          <div>{{product.fraction}}</div>
+        </el-form-item>
+        <el-form-item label="起定数量">
+          <div>{{product.minPurchaseNum}}</div>
         </el-form-item>
         <el-form-item label="创建时间：">
           <div>{{product.creater}}</div>
@@ -32,13 +35,16 @@
           <div>{{product.brand}}</div>
         </el-form-item>
         <el-form-item label="厂家：">
-          <div>{{product.vender}}</div>
+          <div>{{product.manufacturerName}}</div>
         </el-form-item>
         <el-form-item label="型号：">
           <div>{{product.model}}</div>
         </el-form-item>
         <el-form-item label="售价：">
-          <div>{{product.price}}</div>
+          <div>{{product.salePrice}}</div>
+        </el-form-item>
+        <el-form-item label="递增数量">
+          <div>{{product.increaseNum}}</div>
         </el-form-item>
         <el-form-item label="创建人：">
           <div>{{product.creater}}</div>
@@ -48,53 +54,29 @@
           <el-dialog :visible.sync="dialogVisible" append-to-body>
             <img width="100%" :src="dialogImageUrl" alt="">
           </el-dialog>
-          <el-upload
-            multiple
-            limit="3"
-            :on-exceed="handleExceed"
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-success="handleSuccess"
-            :before-remove="beforeRemove"
-            :on-remove="handleRemove"
-            :file-list="product.fileList"
-            list-type="picture">
-          </el-upload>
+          <a class="skuImageDiv" @click="visible" v-show="product.skuImage">
+            <img :src="product.skuImage" alt="" class=skuImage>
+          </a>
         </el-form-item>
       </el-col>
     </el-form>
   </div>
 </template>
 <script>
-  // import { productDetail } from '../../api/commodityManage.js'
+  import { getProductDetail } from '../../api/commodityManage.js'
   export default {
     created () {
-      this.productId = this.$route.query.pId
-      if (this.productId) {
-        // productDetail(this.productId).then(res => {
-        //   if (res.meta.status === 200) {
-        //     this.productList = res.data.productList
-        //   }
-        // })
-      }
+      this.skuId = this.$route.query.skuId
+      getProductDetail(this.skuId).then(res => {
+        if (res.code === 1 && res.data) {
+          this.product = res.data
+          this.dialogImageUrl = res.data.skuImage
+        }
+      })
     },
     data () {
       return {
-        product: {// 表单数据
-          productNumber: '11111', // 产品编号,
-          brand: '2222', // 产品品牌
-          productName: '222222', // 产品名称
-          vender: '333333', // 厂家
-          standard: '444444', // 规格
-          model: '55555555', // 型号
-          unitPrice: '66666666', // 单价
-          price: '777777', // 售价
-          wettingRatio: '', // 分润比例
-          creater: '88888888', // 创建人
-          createTime: '999999999', // 创建时间
-          fileList: [] // 商品图片
-        },
+        product: {}, // 表单数据
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false // dialog弹窗是否显示
       }
@@ -105,6 +87,11 @@
         // 图片预览
         this.dialogImageUrl = file.url
         this.dialogVisible = true
+      },
+      visible () {
+        if (this.product.skuImage) {
+          this.dialogVisible = true
+        }
       }
     }
   }
@@ -120,10 +107,24 @@
   .productForm {
     margin-top: 10px;
   }
-  /*.productForm input {*/
-  /*margin-right: 150px !important;*/
-  /*}*/
-  .vender {
-    width: 200px;
+  .skuImageDiv {
+    display: inline-block;
+    border: 1px solid #c0ccda;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-top: 10px;
+    padding: 10px 10px 10px 90px;
+    height: 122px;
+  }
+  .skuImage {
+    vertical-align: middle;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    float: left;
+    position: relative;
+    z-index: 1;
+    margin-left: -80px;
   }
 </style>

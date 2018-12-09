@@ -6,12 +6,12 @@
       <el-breadcrumb-item>商品列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
-    <el-form :inline="true" :model="searchData" size="mini" class="searchData">
+    <el-form :inline="true" size="mini" class="searchData">
       <el-form-item label="产品名称:">
-        <el-input v-model="searchData.productName" placeholder="请输入产品名称"></el-input>
+        <el-input v-model="searchData.skuName" placeholder="请输入产品名称"></el-input>
       </el-form-item>
       <el-form-item label="产品编号:">
-        <el-input v-model="searchData.ProductNumber" placeholder="请输入产品编号"></el-input>
+        <el-input v-model="searchData.skuId" placeholder="请输入产品编号"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSearch">查询</el-button>
@@ -35,38 +35,38 @@
         width="40">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="skuId"
         label="产品编号（SKU）"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuName"
         align="center"
         label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="brand"
         align="center"
         label="产品品牌">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="saleProperty"
         align="center"
         label="规格">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="model"
         align="center"
         label="型号">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="manufacturerName"
         align="center"
         label="厂商">
       </el-table-column>
       <el-table-column
-        prop="unitPrice"
+        prop="originalPrice"
         header-align="center"
         align="right"
         :formatter="unitPriceFormatter"
@@ -80,8 +80,9 @@
         label="创建时间">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="status"
         align="center"
+        :formatter="statusFormatter"
         label="状态">
       </el-table-column>
       <el-table-column
@@ -107,21 +108,21 @@
   import { getProductList, deleteProduct } from '../../api/commodityManage.js'
   export default {
     created () {
-      getProductList().then(res => {
-        debugger
-        if (res.data === 1) {
-          this.productList = res.data.productList
-          this.btnDisabled = res.data.btnDisabled
+      getProductList(this.searchData).then(res => {
+        if (res.code === 1 && res.data) {
+          this.productList = res.data.list
         }
       })
     },
     data () {
       return {
         searchData: { // 搜索数据
-          productName: '', // 产品名称
-          ProductNumber: '' // 产品编号
+          pageSize: 10,
+          pageNum: 1,
+          skuName: '', // 产品名称
+          skuId: '' // 产品编号
         },
-        productList: [{unitPrice: '1111111.21', createTime: 1521111111111, name: 'qqqq'}], // 产品列表
+        productList: [], // 产品列表
         btnDisabled: false, // 是否禁用按钮
         checkedList: [] // CheckBox选择的数据
       }
@@ -130,16 +131,18 @@
       // 搜索
       onSearch () {
         getProductList(this.searchData).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
+          if (res.code === 1 && res.data) {
+            this.productList = res.data.list
           }
         })
       },
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          productName: '', // 产品名称
-          ProductNumber: '' // 产品编号
+          pageSize: 10,
+          pageNum: 1,
+          skuName: '', // 产品名称
+          skuId: '' // 产品编号
         }
         this.onSearch()
       },
@@ -157,9 +160,13 @@
           })
           return false
         } else {
-          deleteProduct(this.checkedList).then(res => {
-            if (res.meta.status === 200) {
-              this.productList = res.data.productList
+          let skuIdList = this.checkedList.map(function (item) {
+            return item.skuId
+          })
+          skuIdList = skuIdList.join(',')
+          deleteProduct(skuIdList).then(res => {
+            if (res.code === 1) {
+              this.productList = res.data.list
             }
           })
         }
@@ -171,14 +178,12 @@
       // 修改
       handleEdit (index, row) {
       // 到编辑页面
-      //   this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
-        this.$router.push({path: '/commodityAdd', query: {pId: '1111'}})
+        this.$router.push({path: '/commodityAdd', query: {skuId: row.skuId}})
       },
       // 明细
       handleDetail (index, row) {
       // 到详情页面
-      //   this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
-        this.$router.push({path: '/commodityDetail', query: {pId: '11111'}})
+        this.$router.push({path: '/commodityDetail', query: {skuId: row.skuId}})
       },
       // 单价格式化
       unitPriceFormatter (row, column, cellValue, index) {
@@ -187,6 +192,16 @@
       // 创建时间格式化
       createTimeFormatter (row, column, cellValue, index) {
         return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
+      },
+      statusFormatter (row, column, cellValue, index) {
+        switch (cellValue) {
+          case 0:
+            return '待审核'
+          case 1:
+            return '上架'
+          case 2:
+            return '下架'
+        }
       }
     }
   }
