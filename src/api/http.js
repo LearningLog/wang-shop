@@ -5,7 +5,7 @@
  */
 import axios from 'axios'
 import router from '@/router/index'
-import { Message } from 'element-ui'
+import { Message, Loading } from 'element-ui'
 import {getToken} from './auth'
 const baseURL = 'http://39.105.158.244:8001'
 export const http = axios.create({
@@ -19,6 +19,16 @@ export const uploadInfo = () => {
     token: getToken(getToken('userType'))
   }
 }
+// loading遮罩层
+export const loading = (close) => {
+  let loadingInstance = Loading.service({
+    lock: true,
+    text: 'Loading',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0)'
+  })
+  if (close) loadingInstance.close()
+}
 
 // 添加请求拦截器
 // 拦截器的本身就是一个方法
@@ -29,6 +39,7 @@ export const uploadInfo = () => {
 // 也就是说在请求拦截器内部的请求还没有发出去
 // 我们可以在这里定制请求之前的行为
 http.interceptors.request.use(function (config) {
+  loading()
   // 如果本次请求的不是 /login 接口，则我们就加入请求头
   if (config.url !== '/admin/passport/login' && config.url !== '/manufacturer/passport/login') {
     config.headers.Authorization = getToken(getToken('userType'))
@@ -47,6 +58,7 @@ http.interceptors.request.use(function (config) {
 // 例如需要对每个接口进行 403 权限认证判断
 // 如果本地响应的数据是 403 ，则我们提示用户：你没有权限执行该操作
 http.interceptors.response.use(function (response) {
+  loading('close')
   const res = response.data
   if (res.code === 403) {
     Message({

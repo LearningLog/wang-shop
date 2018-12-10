@@ -89,7 +89,7 @@
         fixed="right"
         label="操作"
         align="center"
-        width="150">
+        width="220">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -99,6 +99,10 @@
             type="success"
             size="mini"
             @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="handlePublish(scope.$index, scope.row)">发布</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -152,8 +156,8 @@
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          pageSize: 10,
-          pageNum: 1,
+          pageSize: 10, // 每页条数
+          pageNum: 1, // 当前第几页
           skuName: '', // 产品名称
           skuId: '' // 产品编号
         }
@@ -201,6 +205,11 @@
       handleDetail (index, row) {
       // 到详情页面
         this.$router.push({path: '/commodityDetail', query: {skuId: row.skuId}})
+      },
+      // 发布
+      handlePublish (index, row) {
+        // 到发布商品页面
+        this.$router.push({path: '/addPublishProduct', query: {skuId: row.skuId}})
       },
       // 单价格式化
       unitPriceFormatter (row, column, cellValue, index) {

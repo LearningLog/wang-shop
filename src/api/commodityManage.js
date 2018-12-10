@@ -8,7 +8,6 @@ import {http} from '../api/http'
 // 获取列表
 export const getProductList = params => {
   return http.get('/admin/sku/page/list/' + params.pageNum + '/' + params.pageSize + '?skuName=' + params.skuName + '&skuId=' + params.skuId).then(res => res.data)
-  // return http.get('/admin/sku/page/list/' + params.pageSize + '/' + params.pageNum).then(res => res.data)
 }
 // 新增产品
 export const addProduct = params => {

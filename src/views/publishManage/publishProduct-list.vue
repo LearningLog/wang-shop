@@ -6,12 +6,12 @@
       <el-breadcrumb-item>商品发布列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
-    <el-form :inline="true" :model="searchProduct" size="mini" class="searchProduct">
+    <el-form :inline="true" :model="searchData" size="mini" class="searchData">
       <el-form-item label="产品名称:">
-        <el-input v-model="searchProduct.skuName" placeholder="请输入产品名称"></el-input>
+        <el-input v-model="searchData.skuName" placeholder="请输入产品名称"></el-input>
       </el-form-item>
       <el-form-item label="产品编号:">
-        <el-input v-model="searchProduct.skuId" placeholder="请输入产品编号"></el-input>
+        <el-input v-model="searchData.skuId" placeholder="请输入产品编号"></el-input>
       </el-form-item>
       <el-form-item label="发布时间:">
         <el-date-picker
@@ -19,14 +19,14 @@
           v-model="publishTime"
           value-format="timestamp"
           type="daterange"
-          :onPick="publishTimePick"
+          @change="publishTimeChange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="状态:">
-        <el-select v-model="searchProduct.status" placeholder="请选择状态">
+        <el-select v-model="searchData.status" placeholder="请选择状态">
           <el-option
             v-for="item in stateList"
             :key="item.id"
@@ -61,55 +61,54 @@
         width="40">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="skuId"
         label="产品编号（SKU）"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuName"
         align="center"
         label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="brand"
         align="center"
         label="产品品牌">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="saleProperty"
         align="center"
         label="规格">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="model"
         align="center"
         label="型号">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="manufacturerName"
         align="center"
         label="厂家">
       </el-table-column>
       <el-table-column
-        prop="address"
-        header-align="center"
-        align="right"
+        prop="createTime"
+        align="center"
+        :formatter="createTimeFormatter"
         label="发布时间">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="publishNum"
+        header-align="center"
+        align="right"
+        :formatter="numFormatter"
         label="发布数量">
-        <template slot-scope="scope">
-          <!--<i class="el-icon-time"></i>-->
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
       </el-table-column>
       <el-table-column
         prop="address"
         header-align="center"
         align="right"
+        :formatter="numFormatter"
         label="现存数量">
       </el-table-column>
       <el-table-column
@@ -129,86 +128,75 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
   import { getProductList, deleteProduct } from '../../api/publishManage.js'
+  const qs = require('querystring')
+
   export default {
     created () {
-      // getProductList().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
+      this.initData()
     },
     data () {
       return {
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        },
-        searchProduct: {// 搜索数据
+        searchData: {// 搜索数据
           skuName: '', // 产品名称
           skuId: '', // 产品编号
           startTime: '', // 开始日期
           endTime: '', // 结束日期
           status: '' // 状态
         },
-        publishTime: [], // 发布时间
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        publishTime: '', // 发布时间
         stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
-        productList: [{}], // 产品列表
+        productList: [{skuId: 2000}], // 产品列表
         btnDisabled: false, // 是否禁用按钮
         checkedList: [] // CheckBox选择的数据
       }
     },
     methods: {
-      // 搜索
-      onSearch () {
-        console.log(this.searchProduct)
-        getProductList(this.searchProduct).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
+      initData () {
+        getProductList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1) {
+            this.productList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       },
+      // 搜索
+      onSearch () {
+        this.initData()
+      },
       // 重置
       reset () {
-        this.searchProduct = {
+        this.searchData = {
           skuName: '', // 产品名称
           skuId: '', // 产品编号
-          publishTime: [], // 发布时间
+          startTime: '', // 开始日期
+          endTime: '', // 结束日期
           status: '' // 状态
         }
-        getProductList().then(res => {
-          this.productList = res.data.productList
-        })
+        this.initData()
       },
-      publishTimePick (maxDate, minDate) {
-        debugger
+      // 获取发布时间
+      publishTimeChange (date) {
+        this.searchData.startTime = date[0]
+        this.searchData.endTime = date[1]
       },
       // 添加
       addProduct () {
@@ -228,23 +216,51 @@
           })
           return false
         } else {
-          deleteProduct().then(res => {
-            this.productList = res.data.productList
+          let publishIdStr = this.checkedList.map(function (item) {
+            return item.publishId
+          })
+          let len = publishIdStr.length
+          publishIdStr = publishIdStr.join(',')
+          publishIdStr = '20'
+          deleteProduct(publishIdStr).then(res => {
+            if (res.code === 1) {
+              if ((this.currentSize - len) === 0) { // 如果当前页数据已删完，则去往上一页
+                this.pageNum = this.searchData.pageNum - 1
+              }
+              this.initData()
+            }
           })
         }
       },
       // 修改
       handleEdit (index, row) {
         // 到编辑页面
-        // this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
-        this.$router.push({path: '/addPublishProduct', query: {pId: '1111'}})
+        // this.$router.push({path: '/addPublishProduct', query: {publishId: row.publishId}})
+        this.$router.push({path: '/addPublishProduct', query: {publishId: 2000}})
       },
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        // this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
-        this.$router.push({path: '/publishProductDetail', query: {pId: '111'}})
+        // this.$router.push({path: '/publishProductDetail', query: {publishId: row.publishId}})
+        this.$router.push({path: '/publishProductDetail', query: {publishId: 2000}})
       }
+    },
+    // 发布时间格式化
+    createTimeFormatter (row, column, cellValue, index) {
+      return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
+    },
+    // 数量格式化
+    numFormatter (row, column, cellValue, index) {
+      return this.$accounting.format(cellValue, '2')
+    },
+    // 处理分页
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.initData()
+    },
+    handleCurrentChange (val) {
+      this.pageNum = val
+      this.initData()
     }
   }
 </script>
@@ -256,7 +272,7 @@
     padding-left: 10px;
     line-height: 45px;
   }
-  .searchProduct {
+  .searchData {
     margin-top: 10px;
   }
   .publishTime {

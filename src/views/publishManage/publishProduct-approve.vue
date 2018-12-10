@@ -90,19 +90,65 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
+    <el-dialog
+      title="发布审核"
+      :close-on-click-modal="false"
+      :visible.sync="dialogVisible"
+      width="30%"
+      center>
+      <span>是否通过审核？</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="noAgree">不通过</el-button>
+    <el-button type="primary" @click="agree">通 过</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-  // import { searchProduct, getProductList } from '@/api/publishManage.js'
+  import { getPublishList, approve } from '../../api/publishManage.js'
+  const qs = require('querystring')
   export default {
+    created () {
+      this.initData()
+    },
     data () {
       return {
-        productList: [{name: 'SKU'}], // 产品列表
-        btnDisabled: false, // 是否禁用按钮
-        checkedList: [] // CheckBox选择的数据
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        productList: [{name: 'SKU', publishId: 2000}], // 产品列表
+        checkedList: [], // CheckBox选择的数据
+        status: null, // 状态 1 通过 2 未通过
+        approveIdList: [], // 发布编号数组
+        approveIdListLength: null, // 发布编号数组长度,
+        dialogVisible: false // 弹出框是否显示
       }
     },
     methods: {
+      initData () {
+        getPublishList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1) {
+            this.productList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
+          }
+        })
+      },
+      // 选中数据
+      handleSelectionChange (row) {
+        this.checkedList = row
+      },
       // 批量审批
       volumeApprove () {
         if (this.checkedList.length === 0) {
@@ -112,34 +158,55 @@
           })
           return false
         } else {
-          console.log(this.checkedList)
+          this.approveIdList = this.checkedList.map(function (item) {
+            return item.publishId
+          })
+          this.approveIdListLength = this.approveIdList.length
+          this.approveIdList = JSON.stringify(this.approveIdList)
+          this.dialogVisible = true
         }
       },
-      // 选中数据
-      handleSelectionChange (row) {
-        this.checkedList = row
+      approve (data) {
+        approve(data).then(res => {
+          if (res.code === 1) {
+            if ((this.currentSize - this.approveIdListLength) === 0) { // 如果当前页数据已删完，则去往上一页
+              this.pageNum = this.searchData.pageNum - 1
+            }
+            this.initData()
+          }
+        })
+      },
+      noAgree () {
+        this.status = 2
+        this.dialogVisible = false
+        approve(qs.stringify({publishIds: this.approveIdList, status: this.status}))
+      },
+      agree () {
+        this.status = 1
+        this.dialogVisible = false
+        approve(qs.stringify({publishIds: this.approveIdList, status: this.status}))
       },
       // 修改
       handleEdit (index, row) {
         // 到编辑页面
-        this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
+        // this.$router.push({path: '/addPublishProduct', query: {publishId: row.publishId}})
+        this.$router.push({path: '/addPublishProduct', query: {publishId: 2000}})
       },
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
+        // this.$router.push({path: '/publishProductDetail', query: {publishId: row.publishId}})
+        this.$router.push({path: '/publishProductDetail', query: {publishId: 2000}})
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
-    },
-    components: {
-
-    },
-    created () {
-      // getProductList().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
     }
   }
 </script>

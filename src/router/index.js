@@ -22,6 +22,7 @@ import commodityAdd from '@/views/commodityManage/commodity-add'
 import commodityDetail from '@/views/commodityManage/commodity-detail'
 import publishProductList from '@/views/publishManage/publishProduct-list'
 import addPublishProduct from '@/views/publishManage/publishProduct-add'
+import publishProductDetail from '@/views/publishManage/publishProduct-detail'
 import publishProductApprove from '@/views/publishManage/publishProduct-approve'
 import totalInventoryList from '@/views/totalInventoryManage/totalInventory-list'
 import totalInventoryDetail from '@/views/totalInventoryManage/totalInventory-detail'
@@ -85,6 +86,7 @@ const router = new Router({
       children: [
         {path: '/publishProductList', component: publishProductList, name: 'publishProductList'},
         {path: '/addPublishProduct', component: addPublishProduct, name: 'addPublishProduct'},
+        {path: '/publishProductDetail', component: publishProductDetail, name: 'publishProductDetail'},
         {path: '/publishProductApprove', component: publishProductApprove, name: 'publishProductApprove'}
       ]
     },
