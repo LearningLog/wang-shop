@@ -54,11 +54,11 @@
               <i class="el-icon-location"></i>
               <span slot="title">总库存管理</span>
             </template>
-            <el-menu-item index="/totalInventoryList">
+            <el-menu-item index="/totalStockList">
               <i class="el-icon-menu"></i>
               <span>总库存列表</span>
             </el-menu-item>
-            <el-menu-item index="/totalInventoryDetail">
+            <el-menu-item index="/totalStockDetail">
               <i class="el-icon-menu"></i>
               <span>总库存明细</span>
             </el-menu-item>
@@ -69,11 +69,11 @@
               <i class="el-icon-location"></i>
               <span slot="title">库存管理</span>
             </template>
-            <el-menu-item index="/inventoryList">
+            <el-menu-item index="/stockList">
               <i class="el-icon-menu"></i>
               <span>库存列表</span>
             </el-menu-item>
-            <el-menu-item index="/inventoryAdd">
+            <el-menu-item index="/stockAdd">
               <i class="el-icon-menu"></i>
               <span>新增库存</span>
             </el-menu-item>

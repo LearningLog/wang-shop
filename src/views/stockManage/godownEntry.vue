@@ -6,18 +6,18 @@
       <el-breadcrumb-item>入库单</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
-    <el-form :inline="true" :model="searchProduct" size="mini" class="searchProduct">
+    <el-form :inline="true" :model="searchData" size="mini" class="searchData">
       <el-form-item label="产品名称:">
-        <el-input v-model="searchProduct.productName" placeholder="请输入产品名称"></el-input>
+        <el-input v-model="searchData.skuName" placeholder="请输入产品名称"></el-input>
       </el-form-item>
       <el-form-item label="产品编号:">
-        <el-input v-model="searchProduct.ProductNumber" placeholder="请输入产品编号"></el-input>
+        <el-input v-model="searchData.skuId" placeholder="请输入产品编号"></el-input>
       </el-form-item>
       <el-form-item label="订单编号:">
-        <el-input v-model="searchProduct.orderGoodsNumber" placeholder="请输入产品编号"></el-input>
+        <el-input v-model="searchData.orderId" placeholder="请输入订单编号"></el-input>
       </el-form-item>
       <el-form-item label="入库状态:">
-        <el-select v-model="searchProduct.putStorageState" placeholder="请选择入库状态">
+        <el-select v-model="searchData.orderStatus" placeholder="请选择入库状态">
           <el-option
             v-for="item in stateList"
             :key="item.id"
@@ -27,7 +27,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="配送编号:">
-        <el-input v-model="searchProduct. dispatchNumber" placeholder="请输入配送编号"></el-input>
+        <el-input v-model="searchData.logisticsNo" placeholder="请输入配送编号"></el-input>
       </el-form-item>
       <!--查询按钮-->
       <el-form-item>
@@ -35,199 +35,146 @@
         <el-button type="primary" size="mini" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
-    <!--查询按钮-->
-    <!--<div class="fl">-->
-      <!--<el-button type="primary" size="mini" @click="onSearch">查询</el-button>-->
-      <!--<el-button type="primary" size="mini" @click="reset">重置</el-button>-->
-    <!--</div>-->
-    <!--操作按钮-->
-    <!--<div class="fr operBtn">-->
-      <!--<el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>-->
-      <!--<el-button type="danger" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>-->
-    <!--</div>-->
     <!--表格-->
     <el-table
       :data="productList"
       stripe
       border
-      ref="checkedList"
-      @selection-change="handleSelectionChange"
-      max-height="500"
       style="width: 100%">
       <el-table-column
-        type="selection"
-        label="选择"
-        align="center"
-        width="40">
-      </el-table-column>
-      <el-table-column
-        prop="name"
+        prop="orderId"
         label="订单编号"
         align="center">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="skuId"
         label="产品编号（SKU）"
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuName"
         align="center"
         label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="brand"
         align="center"
         label="产品品牌">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="saleProperty"
         align="center"
         label="规格">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="model"
         align="center"
         label="型号">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="manufacturerName"
         align="center"
         label="厂家">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuBuyPrice"
         header-align="center"
         align="right"
+        :formatter="priceFormatter"
         label="单价">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="createTime"
         align="center"
+        :formatter="timeFormatter"
         label="创建时间">
-        <template slot-scope="scope">
-          <!--<i class="el-icon-time"></i>-->
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="orderStatus"
         header-align="center"
         align="cenetr"
         label="状态">
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getProductList, deleteProduct } from '../../api/stockManage.js'
+  import { getGodownEntryList } from '../../api/stockManage.js'
+  const qs = require('querystring')
   export default {
     created () {
-      // getProductList().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
+      this.venderId = this.$route.query.venderId
+      this.initData()
     },
     data () {
       return {
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
+        searchData: {// 搜索数据
+          skuName: '', // 产品名称
+          skuId: '', // 产品编号
+          orderId: '', // 订单编号
+          orderStatus: '', // 入库状态
+          logisticsNo: '' // 配送编号
         },
-        searchProduct: {// 搜索数据
-          productName: '', // 产品名称
-          ProductNumber: '', // 产品编号
-          orderGoodsNumber: '', // 订单编号
-          putStorageState: '', // 入库状态
-          dispatchNumber: '' // 配送编号
-        },
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        venderId: null, // 商家id
         stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
-        productList: [{}], // 产品列表
-        btnDisabled: false, // 是否禁用按钮
-        checkedList: [] // CheckBox选择的数据
+        productList: [] // 产品列表
       }
     },
     methods: {
       // 搜索
       onSearch () {
-        getProductList(this.searchProduct).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
+        this.initData()
+      },
+      initData () {
+        getGodownEntryList({pageSize: this.pageSize, pageNum: this.pageNum, venderId: this.venderId, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1 && res.data) {
+            this.productList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       },
       // 重置
       reset () {
-        this.searchProduct = {
-          productName: '', // 产品名称
-          ProductNumber: '', // 产品编号
-          orderGoodsNumber: '', // 订单编号
-          putStorageState: '', // 入库状态
-          dispatchNumber: '' // 配送编号
+        this.searchData = { // 搜索数据
+          skuName: '', // 产品名称
+          skuId: '', // 产品编号
+          orderId: '', // 订单编号
+          orderStatus: '', // 入库状态
+          logisticsNo: '' // 配送编号
         }
-        getProductList().then(res => {
-          this.productList = res.data.productList
-        })
+        this.onSearch()
       },
-      // 添加
-      addProduct () {
-        // 到编辑页面
-        this.$router.push({path: '/addPublishProduct'})
+      // 单价、数量格式化
+      priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
       },
-      // 选中数据
-      handleSelectionChange (row) {
-        this.checkedList = row
+      // 时间格式化
+      timeFormatter (row, column, cellValue, index) {
+        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
-      // 删除
-      deleteProduct () {
-        if (this.checkedList.length === 0) {
-          this.$message({
-            message: '请选择至少一项产品记录！',
-            type: 'warning'
-          })
-          return false
-        } else {
-          deleteProduct().then(res => {
-            this.productList = res.data.productList
-          })
-        }
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
       },
-      // 修改
-      handleEdit (index, row) {
-        // 到编辑页面
-        // this.$router.push({path: '/commodityAdd', query: {pId: row.goods_id}})
-        this.$router.push({path: '/addPublishProduct', query: {pId: '1111'}})
-      },
-      // 明细
-      handleDetail (index, row) {
-        // 到详情页面
-        // this.$router.push({path: '/commodityDetail', query: {pId: row.goods_id}})
-        this.$router.push({path: '/publishProductDetail', query: {pId: '111'}})
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }
@@ -240,7 +187,7 @@
     padding-left: 10px;
     line-height: 45px;
   }
-  .searchProduct {
+  .searchData {
     margin-top: 10px;
   }
   .publishTime {
