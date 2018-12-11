@@ -4,7 +4,7 @@
  * @Description:登录
  */
 import {http} from '../api/http'
-
+import {getToken} from './auth'
 // export const uploadInfo = () => {
 //   return {
 //     url: baseURL,
@@ -31,6 +31,15 @@ export const loginManufacturer = params => {
 }
 
 /**
+ * 商家登录
+ * @param params loginName 用户名, password 密码
+ * @returns {*}
+ */
+export const loginVender = params => {
+  return http.post('/vender/passport/login', params).then(res => res.data)
+}
+
+/**
  * 退出登录
  * @param params cookie中携带 adminToken 参数
  * @returns {*}
@@ -43,13 +52,24 @@ export const logoutManufacturer = params => {
   return http.post('/manufacturer/passport/logout', params).then(res => res.data)
 }
 
+export const logoutVender = params => {
+  return http.post('/vender/passport/logout', params).then(res => res.data)
+}
+
 /**
  * 根据ID查询管理员信息
- * @param params  cookie中携带adminToken参数
+ * @param params  cookie中携带token参数
  * @returns {*}
  */
-export const getUserInfoById = params => {
-  return http.get('/admin/passport/info', params).then(res => res.data)
+export const getUserInfo = params => {
+  let tokenName = getToken('userType')
+  if (tokenName === 'adminToken') {
+    return http.get('/admin/passport/info', params).then(res => res.data)
+  } else if (tokenName === 'manufacturerToken') {
+    return http.get('/manufacturer/passport/info', params).then(res => res.data)
+  } else {
+    return http.get('/vender/passport/info', params).then(res => res.data)
+  }
 }
 
 /**

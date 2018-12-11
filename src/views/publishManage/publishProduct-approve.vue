@@ -22,55 +22,54 @@
         width="40">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="skuId"
         label="产品编号（SKU）"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuName"
         align="center"
         label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="brand"
         align="center"
         label="产品品牌">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="saleProperty"
         align="center"
         label="规格">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="model"
         align="center"
         label="型号">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="manufacturerName"
         align="center"
         label="厂家">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="createTime"
         header-align="center"
         align="right"
+        :formatter="timeFormatter"
         label="发布时间">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="publishNum"
         align="center"
+        :formatter="numFormatter"
         label="发布数量">
-        <template slot-scope="scope">
-          <!--<i class="el-icon-time"></i>-->
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
       </el-table-column>
       <el-table-column
         prop="address"
         header-align="center"
         align="right"
+        :formatter="numFormatter"
         label="现存数量">
       </el-table-column>
       <el-table-column
@@ -127,7 +126,7 @@
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
-        productList: [{name: 'SKU', publishId: 2000}], // 产品列表
+        productList: [], // 产品列表
         checkedList: [], // CheckBox选择的数据
         status: null, // 状态 1 通过 2 未通过
         approveIdList: [], // 发布编号数组
@@ -197,6 +196,14 @@
         // 到详情页面
         // this.$router.push({path: '/publishProductDetail', query: {publishId: row.publishId}})
         this.$router.push({path: '/publishProductDetail', query: {publishId: 2000}})
+      },
+      // 时间格式化
+      timeFormatter (row, column, cellValue, index) {
+        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
+      },
+      // 数量格式化
+      numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
       },
       // 处理分页
       handleSizeChange (val) {

@@ -18,6 +18,7 @@
           <el-select placeholder="请选择身份类型" class="userType" v-model='userType'>
               <el-option label="管理员" value="1"></el-option>
               <el-option label="厂商" value="2"></el-option>
+              <el-option label="商家" value="3"></el-option>
               <!--<el-option label="渠道" value="3"></el-option>-->
           </el-select>
         </el-form-item>
@@ -30,7 +31,7 @@
   </div>
 </template>
 <script>
-import { loginAdmin, loginManufacturer } from '../api/login.js'
+import { loginAdmin, loginManufacturer, loginVender } from '../api/login.js'
 import { saveToken } from '../api/auth.js'
 const qs = require('querystring')
 export default {
@@ -56,11 +57,6 @@ export default {
     loginSubmit () {
       this.$refs['loginForm'].validate(valid => {
         if (valid) {
-          // 表单数据
-          // let params = {
-          //   loginName: this.loginForm.loginName,
-          //   password: this.loginForm.password
-          // }
           if (!this.userType) {
             this.$message({
               message: '请选择身份类型！',
@@ -89,12 +85,32 @@ export default {
                   })
                 }
               })
-            } else {
+            } else if (this.userType === '2') {
               loginManufacturer(qs.stringify(this.loginForm)).then(res => {
                 if (res.code === 1) {
                   // 路由跳转
                   saveToken('manufacturerToken', res.data, 'h24')
                   saveToken('userType', 'manufacturerToken', 'h24')
+                  this.$router.push({path: '/'})
+                  // 给出登陆成功的提示消息
+                  this.$message({
+                    type: 'success',
+                    message: '登陆成功!'
+                  })
+                } else {
+                  // 登录失败
+                  this.$message({
+                    message: '用户名或者密码错误！',
+                    type: 'error'
+                  })
+                }
+              })
+            } else {
+              loginVender(qs.stringify(this.loginForm)).then(res => {
+                if (res.code === 1) {
+                  // 路由跳转
+                  saveToken('venderToken', res.data, 'h24')
+                  saveToken('userType', 'venderToken', 'h24')
                   this.$router.push({path: '/'})
                   // 给出登陆成功的提示消息
                   this.$message({

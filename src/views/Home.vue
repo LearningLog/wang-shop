@@ -224,7 +224,7 @@
 <script>
 // import { getMenus } from '../api/index.js'
 import {getToken, removeToken} from '../api/auth.js'
-import { logoutAdmin, logoutManufacturer, modifyPassword } from '../api/login.js'
+import { logoutAdmin, logoutManufacturer, logoutVender, modifyPassword } from '../api/login.js'
 import { getActiveMenu } from '../api/leftMenuConfig.js'
 export default {
   created () {
@@ -346,13 +346,33 @@ export default {
               })
             }
           })
-        } else {
+        } else if (getToken('userType') === 'manufacturerToken') {
           logoutManufacturer({manufacturerToken: getToken('manufacturerToken')}).then(res => {
-            debugger
             if (res.code === 1) {
               // 1. 删除本地存储中的用户登陆信息
               // 清除token
               removeToken('manufacturerToken')
+              removeToken('userType')
+              // 跳转到登录页面
+              this.$router.push({path: 'login'})
+              // 提示用户退出成功
+              this.$message({
+                type: 'success',
+                message: '退出成功!'
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '退出失败!'
+              })
+            }
+          })
+        } else {
+          logoutVender({venderToken: getToken('venderToken')}).then(res => {
+            if (res.code === 1) {
+              // 1. 删除本地存储中的用户登陆信息
+              // 清除token
+              removeToken('venderToken')
               removeToken('userType')
               // 跳转到登录页面
               this.$router.push({path: 'login'})

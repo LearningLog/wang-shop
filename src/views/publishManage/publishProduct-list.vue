@@ -94,7 +94,7 @@
       <el-table-column
         prop="createTime"
         align="center"
-        :formatter="createTimeFormatter"
+        :formatter="timeFormatter"
         label="发布时间">
       </el-table-column>
       <el-table-column
@@ -245,8 +245,8 @@
         this.$router.push({path: '/publishProductDetail', query: {publishId: 2000}})
       }
     },
-    // 发布时间格式化
-    createTimeFormatter (row, column, cellValue, index) {
+    // 时间格式化
+    timeFormatter (row, column, cellValue, index) {
       return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
     },
     // 数量格式化
