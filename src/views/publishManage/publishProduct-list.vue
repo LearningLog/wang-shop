@@ -161,7 +161,7 @@
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
-        publishTime: '', // 发布时间
+        publishTime: [], // 发布时间
         stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
         productList: [{skuId: 2000}], // 产品列表
         btnDisabled: false, // 是否禁用按钮

@@ -5,9 +5,13 @@
  */
 import {http} from '../api/http'
 
-// 获取列表
-export const getProductList = params => {
-  return http.get('getProductList', params).then(res => res.data)
+// 获取总库存列表
+export const getTotalList = params => {
+  return http.get('/admin/platorm/stock/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
+}
+// 获取明细列表
+export const getDetailList = params => {
+  return http.get('/admin/platorm/stock/detail/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
 }
 // 新增||编辑产品
 export const editProduct = params => {

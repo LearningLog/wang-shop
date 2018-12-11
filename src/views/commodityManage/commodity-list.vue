@@ -111,7 +111,7 @@
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :page-size="searchData.pageSize"
+        :page-size="pageSize"
         layout="total, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
@@ -120,6 +120,7 @@
 </template>
 <script>
   import { getProductList, deleteProduct } from '../../api/commodityManage.js'
+  const qs = require('querystring')
   export default {
     created () {
       this.initData()
@@ -127,16 +128,16 @@
     data () {
       return {
         searchData: { // 搜索数据
-          pageSize: 10, // 每页条数
-          pageNum: 1, // 当前第几页
           skuName: '', // 产品名称
           skuId: '' // 产品编号
         },
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
         productList: [], // 产品列表
         btnDisabled: false, // 是否禁用按钮
-        checkedList: [], // CheckBox选择的数据
-        total: 0, // 总页数
-        currentSize: 0 // 当前页数据条数
+        checkedList: [] // CheckBox选择的数据
       }
     },
     methods: {
@@ -145,7 +146,7 @@
         this.initData()
       },
       initData () {
-        getProductList(this.searchData).then(res => {
+        getProductList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
           if (res.code === 1 && res.data) {
             this.productList = res.data.list
             this.total = res.data.total
@@ -156,8 +157,6 @@
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          pageSize: 10, // 每页条数
-          pageNum: 1, // 当前第几页
           skuName: '', // 产品名称
           skuId: '' // 产品编号
         }
@@ -185,7 +184,7 @@
           deleteProduct(skuIdList).then(res => {
             if (res.code === 1) {
               if ((this.currentSize - len) === 0) { // 如果当前页数据已删完，则去往上一页
-                this.searchData.pageNum = this.searchData.pageNum - 1
+                this.pageNum = this.pageNum - 1
               }
               this.initData()
             }
@@ -231,11 +230,11 @@
       },
       // 处理分页
       handleSizeChange (val) {
-        this.searchData.pageSize = val
+        this.pageSize = val
         this.initData()
       },
       handleCurrentChange (val) {
-        this.searchData.pageNum = val
+        this.pageNum = val
         this.initData()
       }
     }
