@@ -67,7 +67,7 @@
   </div>
 </template>
 <script>
-  // import { productDetail } from '../../api/inventoryManage.js'
+  // import { productDetail } from '../../api/stockManage.js'
   export default {
     created () {
       this.productId = this.$route.query.pId

@@ -24,12 +24,12 @@ import publishProductList from '@/views/publishManage/publishProduct-list'
 import addPublishProduct from '@/views/publishManage/publishProduct-add'
 import publishProductDetail from '@/views/publishManage/publishProduct-detail'
 import publishProductApprove from '@/views/publishManage/publishProduct-approve'
-import totalInventoryList from '@/views/totalInventoryManage/totalInventory-list'
-import totalInventoryDetail from '@/views/totalInventoryManage/totalInventory-detail'
-import inventoryList from '@/views/inventoryManage/inventory-list'
-import inventoryAdd from '@/views/inventoryManage/inventory-add'
-import godownEntry from '@/views/inventoryManage/godownEntry'
-import inventoryDetail from '@/views/inventoryManage/inventory-detail'
+import totalStockList from '@/views/totalStockManage/totalStock-list'
+import totalStockDetail from '@/views/totalStockManage/totalStock-detail'
+import stockList from '@/views/stockManage/stock-list'
+import stockAdd from '@/views/stockManage/stock-add'
+import godownEntry from '@/views/stockManage/godownEntry'
+import stockDetail from '@/views/stockManage/stock-detail'
 import manufacturerList from '@/views/manufacturerManage/manufacturer-list'
 import manufacturerAdd from '@/views/manufacturerManage/manufacturer-add'
 import orderFormList from '@/views/orderFormManage/orderForm-list'
@@ -95,8 +95,8 @@ const router = new Router({
       name: '总库存管理',
       component: Home,
       children: [
-        {path: '/totalInventoryList', component: totalInventoryList, name: 'totalInventoryList'},
-        {path: '/totalInventoryDetail', component: totalInventoryDetail, name: 'totalInventoryDetail'}
+        {path: '/totalStockList', component: totalStockList, name: 'totalStockList'},
+        {path: '/totalStockDetail', component: totalStockDetail, name: 'totalStockDetail'}
       ]
     },
     {
@@ -104,10 +104,10 @@ const router = new Router({
       name: '库存管理',
       component: Home,
       children: [
-        {path: '/inventoryList', component: inventoryList, name: 'inventoryList'},
-        {path: '/inventoryAdd', component: inventoryAdd, name: 'inventoryAdd'},
+        {path: '/stockList', component: stockList, name: 'stockList'},
+        {path: '/stockAdd', component: stockAdd, name: 'stockAdd'},
         {path: '/godownEntry', component: godownEntry, name: 'godownEntry'},
-        {path: '/inventoryDetail', component: inventoryDetail, name: 'inventoryDetail'}
+        {path: '/stockDetail', component: stockDetail, name: 'stockDetail'}
       ]
     },
     {

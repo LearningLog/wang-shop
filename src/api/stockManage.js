@@ -1,0 +1,15 @@
+/**
+ * @author: YanHuaKang
+ * @2018/11/24
+ * @Description:库存管理
+ */
+import {http} from '../api/http'
+
+// 获取库存列表
+export const getStockList = params => {
+  return http.get('/admin/platorm/stock/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
+}
+// 获取入库单列表
+export const getDetailList = params => {
+  return http.get('/admin/platorm/stock/detail/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
+}

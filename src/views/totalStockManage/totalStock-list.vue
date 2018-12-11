@@ -100,7 +100,7 @@
   </div>
 </template>
 <script>
-  import { getTotalList } from '../../api/totalInventoryManage.js'
+  import { getTotalList } from '../../api/totalStockManage.js'
   const qs = require('querystring')
 
   export default {

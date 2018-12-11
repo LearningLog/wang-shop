@@ -120,7 +120,7 @@
   </div>
 </template>
 <script>
-  import { getProductList, deleteProduct } from '../../api/inventoryManage.js'
+  import { getProductList, deleteProduct } from '../../api/stockManage.js'
   export default {
     created () {
       // getProductList().then(res => {

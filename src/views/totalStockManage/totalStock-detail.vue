@@ -109,7 +109,7 @@
   </div>
 </template>
 <script>
-  import { getDetailList } from '../../api/totalInventoryManage.js'
+  import { getDetailList } from '../../api/totalStockManage.js'
   const qs = require('querystring')
   export default {
     created () {
