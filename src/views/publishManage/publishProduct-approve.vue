@@ -107,8 +107,8 @@
       center>
       <span>是否通过审核？</span>
       <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="noAgree">不通过</el-button>
-    <el-button type="primary" @click="agree">通 过</el-button>
+    <el-button type="primary" size="small" @click="noAgree">不通过</el-button>
+    <el-button type="primary" size="small" @click="agree">通 过</el-button>
   </span>
     </el-dialog>
   </div>

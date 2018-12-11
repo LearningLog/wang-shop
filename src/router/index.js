@@ -43,6 +43,7 @@ import splitAccountList from '@/views/splitAccountManage/splitAccount-list'
 import splitAccountDetail from '@/views/splitAccountManage/splitAccount-detail'
 import clientList from '@/views/clientManage/client-list'
 import customerSalesOrderDetail from '@/views/clientManage/customerSalesOrder-detail'
+import myOrderForm from '@/views/accountManage/myOrderForm'
 import myMarketDocList from '@/views/accountManage/myMarketDoc-list'
 import myCoinsList from '@/views/accountManage/myCoins-list'
 import myBeansList from '@/views/accountManage/myBeans-list'
@@ -166,6 +167,7 @@ const router = new Router({
       name: '账户管理',
       component: Home,
       children: [
+        {path: '/myOrderForm', component: myOrderForm, name: 'myOrderForm'},
         {path: '/myMarketDocList', component: myMarketDocList, name: 'myMarketDocList'},
         {path: '/myCoinsList', component: myCoinsList, name: 'myCoinsList'},
         {path: '/myBeansList', component: myBeansList, name: 'myBeansList'}

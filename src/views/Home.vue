@@ -2,7 +2,7 @@
   <el-container>
     <el-aside :style='{width:"auto"}'>
       <div class="logo"></div>
-      <el-scrollbar style="height: 100%;">
+      <el-scrollbar style="height: 94%;">
         <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
           <!--<el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>-->
             <!--<template slot="title">-->
@@ -163,6 +163,10 @@
               <i class="el-icon-location"></i>
               <span slot="title">账户管理</span>
             </template>
+            <el-menu-item index="/myOrderForm ">
+              <i class="el-icon-menu"></i>
+              <span>我的订单</span>
+            </el-menu-item>
             <el-menu-item index="/myMarketDocList">
               <i class="el-icon-menu"></i>
               <span>我的销售单</span>

@@ -176,18 +176,26 @@
           })
           return false
         } else {
-          let skuIdList = this.checkedList.map(function (item) {
-            return item.skuId
-          })
-          let len = skuIdList.length
-          skuIdList = skuIdList.join(',')
-          deleteProduct(skuIdList).then(res => {
-            if (res.code === 1) {
-              if ((this.currentSize - len) === 0) { // 如果当前页数据已删完，则去往上一页
-                this.pageNum = this.pageNum - 1
+          this.$confirm('确认删除吗吗?', '删除提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => { // 点击确认执行 resolve 函数
+            let skuIdList = this.checkedList.map(function (item) {
+              return item.skuId
+            })
+            let len = skuIdList.length
+            skuIdList = skuIdList.join(',')
+            deleteProduct(skuIdList).then(res => {
+              if (res.code === 1) {
+                if ((this.currentSize - len) === 0) { // 如果当前页数据已删完，则去往上一页
+                  this.pageNum = this.pageNum - 1
+                }
+                this.initData()
               }
-              this.initData()
-            }
+            })
+          }).catch(() => {
+            // 点击取消的处理
           })
         }
       },

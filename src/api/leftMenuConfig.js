@@ -7,7 +7,7 @@
 let menuConfig = [
   ['/', '/main'],
   ['/commodityList', '/commodityAdd', '/commodityEdit', '/commodityDetail'],
-  ['/publishProductList', '/addPublishProduct', '/editPublishProduct', '/publishProductApprove'],
+  ['/publishProductList', '/addPublishProduct', '/editPublishProduct', '/publishProductApprove', '/publishProductDetail'],
   ['/totalStockList', '/totalStockDetail'],
   ['/stockList', '/stockAdd', '/godownEntry', '/stockDetail'],
   ['/manufacturerList', '/manufacturerAdd', '/manufacturerEdit'],
@@ -15,7 +15,7 @@ let menuConfig = [
   ['/marketList', '/marketDetail'],
   ['/splitAccountList', '/splitAccountDetail'],
   ['/clientList', '/customerSalesOrderDetail'],
-  ['/myMarketDocList', '/myCoinsList', '/myBeansList']
+  ['/myOrderForm', '/myMarketDocList', '/myCoinsList', '/myBeansList']
 ]
 export const getActiveMenu = path => {
   for (let i = 0, len = menuConfig.length; i < len; i++) {
