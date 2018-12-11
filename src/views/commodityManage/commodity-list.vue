@@ -69,13 +69,13 @@
         prop="originalPrice"
         header-align="center"
         align="right"
-        :formatter="unitPriceFormatter"
+        :formatter="priceFormatter"
         label="单价">
       </el-table-column>
       <el-table-column
         prop="createTime"
         align="center"
-        :formatter="createTimeFormatter"
+        :formatter="timeFormatter"
         width="140"
         label="创建时间">
       </el-table-column>
@@ -198,7 +198,7 @@
       // 修改
       handleEdit (index, row) {
       // 到编辑页面
-        this.$router.push({path: '/commodityAdd', query: {skuId: row.skuId}})
+        this.$router.push({path: '/commodityEdit', query: {skuId: row.skuId}})
       },
       // 明细
       handleDetail (index, row) {
@@ -210,12 +210,12 @@
         // 到发布商品页面
         this.$router.push({path: '/addPublishProduct', query: {skuId: row.skuId}})
       },
-      // 单价格式化
-      unitPriceFormatter (row, column, cellValue, index) {
+      // 单价、数量格式化
+      priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
       },
-      // 创建时间格式化
-      createTimeFormatter (row, column, cellValue, index) {
+      // 时间格式化
+      timeFormatter (row, column, cellValue, index) {
         return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       statusFormatter (row, column, cellValue, index) {

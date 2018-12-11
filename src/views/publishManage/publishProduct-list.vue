@@ -235,8 +235,8 @@
       // 修改
       handleEdit (index, row) {
         // 到编辑页面
-        // this.$router.push({path: '/addPublishProduct', query: {publishId: row.publishId}})
-        this.$router.push({path: '/addPublishProduct', query: {publishId: 2000}})
+        // this.$router.push({path: '/editPublishProduct', query: {publishId: row.publishId}})
+        this.$router.push({path: '/editPublishProduct', query: {publishId: 2000}})
       },
       // 明细
       handleDetail (index, row) {

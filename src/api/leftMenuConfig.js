@@ -6,11 +6,11 @@
 // 路由地址对应左侧导航的index
 let menuConfig = [
   ['/', '/main'],
-  ['/commodityList', '/commodityAdd', '/commodityDetail'],
-  ['/publishProductList', '/addPublishProduct', '/publishProductApprove'],
+  ['/commodityList', '/commodityAdd', '/commodityEdit', '/commodityDetail'],
+  ['/publishProductList', '/addPublishProduct', '/editPublishProduct', '/publishProductApprove'],
   ['/totalStockList', '/totalStockDetail'],
   ['/stockList', '/stockAdd', '/godownEntry', '/stockDetail'],
-  ['/manufacturerList', '/manufacturerAdd'],
+  ['/manufacturerList', '/manufacturerAdd', '/manufacturerEdit'],
   ['/orderFormList', '/orderFormDetail'],
   ['/marketList', '/marketDetail'],
   ['/splitAccountList', '/splitAccountDetail'],
@@ -27,4 +27,5 @@ export const getActiveMenu = path => {
       }
     }
   }
+  return []
 }

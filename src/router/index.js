@@ -19,9 +19,11 @@ import Order from '@/views/order/Order'
 import Report from '@/views/report/Report'
 import commodityList from '@/views/commodityManage/commodity-list'
 import commodityAdd from '@/views/commodityManage/commodity-add'
+import commodityEdit from '@/views/commodityManage/commodity-edit'
 import commodityDetail from '@/views/commodityManage/commodity-detail'
 import publishProductList from '@/views/publishManage/publishProduct-list'
 import addPublishProduct from '@/views/publishManage/publishProduct-add'
+import editPublishProduct from '@/views/publishManage/publishProduct-edit'
 import publishProductDetail from '@/views/publishManage/publishProduct-detail'
 import publishProductApprove from '@/views/publishManage/publishProduct-approve'
 import totalStockList from '@/views/totalStockManage/totalStock-list'
@@ -32,6 +34,7 @@ import godownEntry from '@/views/stockManage/godownEntry'
 import stockDetail from '@/views/stockManage/stock-detail'
 import manufacturerList from '@/views/manufacturerManage/manufacturer-list'
 import manufacturerAdd from '@/views/manufacturerManage/manufacturer-add'
+import manufacturerEdit from '@/views/manufacturerManage/manufacturer-edit'
 import orderFormList from '@/views/orderFormManage/orderForm-list'
 import orderFormDetail from '@/views/orderFormManage/orderForm-detail'
 import marketList from '@/views/marketManage/market-list'
@@ -76,6 +79,7 @@ const router = new Router({
       children: [
         {path: '/commodityList', component: commodityList, name: 'commodityList'},
         {path: '/commodityAdd', component: commodityAdd, name: 'commodityAdd'},
+        {path: '/commodityEdit', component: commodityEdit, name: 'commodityEdit'},
         {path: '/commodityDetail', component: commodityDetail, name: 'commodityDetail'}
       ]
     },
@@ -86,6 +90,7 @@ const router = new Router({
       children: [
         {path: '/publishProductList', component: publishProductList, name: 'publishProductList'},
         {path: '/addPublishProduct', component: addPublishProduct, name: 'addPublishProduct'},
+        {path: '/editPublishProduct', component: editPublishProduct, name: 'editPublishProduct'},
         {path: '/publishProductDetail', component: publishProductDetail, name: 'publishProductDetail'},
         {path: '/publishProductApprove', component: publishProductApprove, name: 'publishProductApprove'}
       ]
@@ -116,7 +121,8 @@ const router = new Router({
       component: Home,
       children: [
         {path: '/manufacturerList', component: manufacturerList, name: 'manufacturerList'},
-        {path: '/manufacturerAdd', component: manufacturerAdd, name: 'manufacturerAdd'}
+        {path: '/manufacturerAdd', component: manufacturerAdd, name: 'manufacturerAdd'},
+        {path: '/manufacturerEdit', component: manufacturerEdit, name: 'manufacturerEdit'}
       ]
     },
     {

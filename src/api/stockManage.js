@@ -13,3 +13,11 @@ export const getStockList = params => {
 export const getGodownEntryList = params => {
   return http.get('/admin/venderStockQuery/vendersku/page/list/' + params.pageNum + '/' + params.pageSize + '/' + params.venderId + '?' + params.params).then(res => res.data)
 }
+// 获取入库单列表
+export const productDetail = params => {
+  return http.get('/admin/venderStockQuery/vendersku/page/list/' + params.pageNum + '/' + params.pageSize + '/' + params.venderId + '?' + params.params).then(res => res.data)
+}
+// 获取入库单列表
+export const editProduct = params => {
+  return http.get('/admin/venderStockQuery/vendersku/page/list/' + params.pageNum + '/' + params.pageSize + '/' + params.venderId + '?' + params.params).then(res => res.data)
+}
