@@ -8,12 +8,13 @@
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
       <el-form-item label="销售订单编号:">
-        <el-input v-model="searchData.orderFormCode" placeholder="请输入销售订单编号"></el-input>
+        <el-input v-model="searchData.orderId" placeholder="请输入销售订单编号"></el-input>
       </el-form-item>
       <el-form-item label="订单日期:">
         <el-date-picker
           class="orderFormTime"
-          v-model="searchData.orderFormTime"
+          v-model="orderFormTime"
+          value-format="timestamp"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -21,10 +22,10 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="客户姓名:">
-        <el-input v-model="searchData.customerName" placeholder="请输入客户姓名"></el-input>
+        <el-input v-model="searchData.userName" placeholder="请输入客户姓名"></el-input>
       </el-form-item>
       <el-form-item label="手机号:">
-        <el-input v-model="searchData.customerPhone" placeholder="请输入手机号"></el-input>
+        <el-input v-model="searchData.userPhone" placeholder="请输入手机号"></el-input>
       </el-form-item>
     </el-form>
     <!--查询按钮-->
@@ -32,38 +33,25 @@
       <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
       <el-button type="primary" size="mini" @click="reset">重置</el-button>
     </div>
-    <!--操作按钮-->
-    <div class="fr operBtn">
-      <!--<el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>-->
-      <el-button type="danger" size="mini" @click="remove" :disabled="btnDisabled">删除</el-button>
-    </div>
     <!--表格-->
     <el-table
       :data="orderFormList"
       stripe
       border
-      ref="checkedList"
-      @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
-        type="selection"
-        label="选择"
-        align="center"
-        width="40">
-      </el-table-column>
-      <el-table-column
-        prop="name"
+        prop="orderId"
         label="销售订单编号"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="orderCreateTime"
         align="center"
         label="销售日期">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="orderFeeAmount"
         align="center"
         label="销售金额">
       </el-table-column>
@@ -73,17 +61,17 @@
         label="产品数量">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="userName"
         align="center"
         label="客户姓名">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="userPhone"
         align="center"
         label="手机号">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="orderStatus"
         align="center"
         label="状态">
       </el-table-column>
@@ -99,79 +87,93 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getOrderFormList, deleteOrderForm } from '../../api/marketManage.js'
+  import { getOrderFormList } from '../../api/marketManage.js'
+  const qs = require('querystring')
   export default {
     created () {
-      // getOrderFormList(this.searchData).then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.orderFormList = res.data.orderFormList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
+      this.initData()
     },
     data () {
       return {
         searchData: { // 搜索数据
-          orderFormCode: '', // 销售订单编号
-          orderFormTime: [], // 订单日期
-          businessCode: '', // 客户姓名
-          customerName: '', // 商户名称
-          customerPhone: '' // 手机号
+          orderId: '', // 销售订单编号
+          orderStartTime: '', // 订单开始时间
+          orderEndTime: '', // 订单结束时间
+          userName: '', // 客户姓名
+          userPhone: '' // 手机号
         },
-        orderFormList: [{}], // 产品列表
-        btnDisabled: false, // 是否禁用按钮
-        checkedList: [] // CheckBox选择的数据
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        orderFormTime: [], // 订单日期
+        orderFormList: [] // 订单列表
       }
     },
     methods: {
       // 搜索
       onSearch () {
-        console.log(this.searchData)
-        getOrderFormList(this.searchData).then(res => {
-          if (res.meta.status === 200) {
-            this.orderFormList = res.data.orderFormList
+        this.initData()
+      },
+      initData () {
+        getOrderFormList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1 && res.data) {
+            this.orderFormList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       },
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          orderFormCode: '', // 销售订单编号
-          orderFormTime: [], // 订单日期
-          businessCode: '', // 客户姓名
-          customerName: '', // 商户名称
-          customerPhone: '' // 手机号
+          orderId: '', // 销售订单编号
+          orderStartTime: '', // 订单开始时间
+          orderEndTime: '', // 订单结束时间
+          userName: '', // 客户姓名
+          userPhone: '' // 手机号
         }
         this.onSearch()
       },
-      // 选中数据
-      handleSelectionChange (row) {
-        this.checkedList = row
-      },
-      // 删除
-      remove () {
-        if (this.checkedList.length === 0) {
-          this.$message({
-            message: '请选择至少一项产品记录！',
-            type: 'warning'
-          })
-          return false
-        } else {
-          deleteOrderForm(this.checkedList).then(res => {
-            if (res.meta.status === 200) {
-              this.orderFormList = res.data.orderFormList
-            }
-          })
-        }
+      // 获取订单时间
+      orderFormTimeChange (date) {
+        this.searchData.startTime = date[0]
+        this.searchData.endTime = date[1]
       },
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        //   this.$router.push({path: '/marketDetail', query: {pId: row.goods_id}})
-        this.$router.push({path: '/marketDetail', query: {pId: '11111'}})
+        this.$router.push({path: '/marketDetail', query: {orderId: row.orderId}})
+      },
+      // 单价、数量格式化
+      numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 时间格式化
+      timeFormatter (row, column, cellValue, index) {
+        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }
