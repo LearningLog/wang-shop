@@ -17,6 +17,7 @@
         <el-date-picker
           class="operateTime"
           v-model="operateTime"
+          value-format="timestamp"
           type="daterange"
           @change="operateTimeTimeChange"
           range-separator="至"
