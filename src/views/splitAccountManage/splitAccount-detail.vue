@@ -7,7 +7,7 @@
   </el-breadcrumb>
   <!--表格-->
   <el-table
-    :data="orderFormList"
+    :data="splitAccountDetailList"
     stripe
     border
     style="width: 100%">
@@ -18,51 +18,55 @@
     width="50">
   </el-table-column>
   <el-table-column
-    prop="name"
+    prop="shareBillId"
     label="销售单编号"
     align="center"
     width="140">
   </el-table-column>
   <el-table-column
-    prop="name"
+    prop="orderTimeStr"
     label="销售日期"
     align="center"
     width="140">
   </el-table-column>
   <el-table-column
-    prop="name"
+    prop="skuId"
     label="产品编号"
     align="center"
     width="140">
   </el-table-column>
   <el-table-column
-    prop="name"
+    prop="skuName"
     label="产品名称"
     align="center"
     width="140">
   </el-table-column>
   <el-table-column
-    prop="address"
+    prop="venderId"
     align="center"
     label="商户编号">
   </el-table-column>
   <el-table-column
-    prop="name"
+    prop="venderName"
     label="商户名称"
     align="center">
   </el-table-column>
   <el-table-column
-    prop="address"
-    align="center"
+    prop="shareAcount"
+    header-align="cenetr"
+    align="right"
+    :formatter="numFormatter"
     label="分账金额">
   </el-table-column>
   <el-table-column
-    prop="address"
-    align="center"
+    prop="shareRate"
+    header-align="cenetr"
+    align="right"
+    :formatter="rateFormatter"
     label="分账费率">
   </el-table-column>
   <el-table-column
-    prop="address"
+    prop="status"
     align="center"
     label="分账状态">
   </el-table-column>
@@ -70,21 +74,30 @@
   </div>
   </template>
   <script>
-import { getOrderFormDetail } from '../../api/splitAccountManage.js'
+import { getOrderFormDetailList } from '../../api/splitAccountManage.js'
 export default {
   created () {
-    this.productId = this.$route.query.pId
-    if (this.productId) {
-      getOrderFormDetail(this.productId).then(res => {
-        if (res.meta.status === 200) {
-          this.productList = res.data.productList
+    this.shareBillId = this.$route.query.shareBillId
+    if (this.shareBillId) {
+      getOrderFormDetailList(this.shareBillId).then(res => {
+        if (res.code === 1) {
+          this.splitAccountDetailList = res.data
         }
       })
     }
   },
   data () {
     return {
-      orderFormList: [{}] // 产品列表
+      splitAccountDetailList: [] // 产品列表
+    }
+  },
+  methods: {
+    // 单价、数量格式化
+    numFormatter (row, column, cellValue, index) {
+      return this.$accounting.format(cellValue, '2')
+    },
+    rateFormatter (row, column, cellValue, index) {
+      return this.$accounting.format(cellValue, '4')
     }
   }
 }

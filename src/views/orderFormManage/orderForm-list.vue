@@ -15,7 +15,7 @@
           class="orderFormTime"
           v-model="orderFormTime"
           @change="orderFormTimeChange"
-          value-format="timestamp"
+          value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -55,7 +55,6 @@
       <el-table-column
         prop="orderTime"
         align="center"
-        :formatter="timeFormatter"
         label="订单日期">
       </el-table-column>
       <el-table-column
@@ -172,6 +171,7 @@
           manufacturerName: '', // 厂商名称
           manufacturerId: '' // 厂商编号
         }
+        this.orderFormTime = [] // 订单日期
         this.onSearch()
       },
       // 获取订单时间
@@ -187,10 +187,6 @@
       // 单价、数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
-      },
-      // 时间格式化
-      timeFormatter (row, column, cellValue, index) {
-        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       // 处理分页
       handleSizeChange (val) {

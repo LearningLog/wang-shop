@@ -18,45 +18,47 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="skuId"
         label="产品编号"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="skuName"
         label="产品名称"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="venderId"
         align="center"
         label="商户编号">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="venderName"
         label="商户名称"
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="brand"
         align="center"
         label="产品品牌">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="saleProperty"
         align="center"
         label="规格">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="model"
         align="center"
         label="型号">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="skuBuyPrice"
+        header-align="center"
+        align="right"
+        :formatter="numFormatter"
         label="价格">
       </el-table-column>
     </el-table>
@@ -78,9 +80,11 @@
     created () {
       this.orderId = this.$route.query.orderId
       if (this.orderId) {
-        getOrderFormDetailList(this.orderId).then(res => {
+        getOrderFormDetailList({pageSize: this.pageSize, pageNum: this.pageNum, params: this.orderId}).then(res => {
           if (res.code === 1) {
             this.list = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       }
@@ -94,14 +98,10 @@
         list: [] // 列表
       }
     },
-    method: {
+    methods: {
       // 单价、数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
-      },
-      // 时间格式化
-      timeFormatter (row, column, cellValue, index) {
-        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       // 处理分页
       handleSizeChange (val) {

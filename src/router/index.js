@@ -29,7 +29,6 @@ import publishProductApprove from '@/views/publishManage/publishProduct-approve'
 import totalStockList from '@/views/totalStockManage/totalStock-list'
 import totalStockDetail from '@/views/totalStockManage/totalStock-detail'
 import stockList from '@/views/stockManage/stock-list'
-import stockAdd from '@/views/stockManage/stock-add'
 import godownEntry from '@/views/stockManage/godownEntry'
 import stockDetail from '@/views/stockManage/stock-detail'
 import manufacturerList from '@/views/manufacturerManage/manufacturer-list'
@@ -111,7 +110,6 @@ const router = new Router({
       component: Home,
       children: [
         {path: '/stockList', component: stockList, name: 'stockList'},
-        {path: '/stockAdd', component: stockAdd, name: 'stockAdd'},
         {path: '/godownEntry', component: godownEntry, name: 'godownEntry'},
         {path: '/stockDetail', component: stockDetail, name: 'stockDetail'}
       ]

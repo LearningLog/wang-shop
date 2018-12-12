@@ -14,7 +14,7 @@
         <el-date-picker
           class="orderFormTime"
           v-model="orderFormTime"
-          value-format="timestamp"
+          value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -52,12 +52,16 @@
       </el-table-column>
       <el-table-column
         prop="orderFeeAmount"
-        align="center"
+        header-align="center"
+        align="right"
+        :formatter="numFormatter"
         label="销售金额">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="skuBuyNum"
+        header-align="center"
+        align="right"
+        :formatter="numFormatter"
         label="产品数量">
       </el-table-column>
       <el-table-column
@@ -109,7 +113,7 @@
     data () {
       return {
         searchData: { // 搜索数据
-          orderId: '', // 销售订单编号
+          // orderId: '', // 销售订单编号
           orderStartTime: '', // 订单开始时间
           orderEndTime: '', // 订单结束时间
           userName: '', // 客户姓名
@@ -161,10 +165,6 @@
       // 单价、数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
-      },
-      // 时间格式化
-      timeFormatter (row, column, cellValue, index) {
-        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       // 处理分页
       handleSizeChange (val) {

@@ -86,7 +86,6 @@
       <el-table-column
         prop="createTime"
         align="center"
-        :formatter="timeFormatter"
         label="创建时间">
       </el-table-column>
       <el-table-column
@@ -140,13 +139,15 @@
         this.initData()
       },
       initData () {
-        getGodownEntryList({pageSize: this.pageSize, pageNum: this.pageNum, venderId: this.venderId, params: qs.stringify((this.searchData))}).then(res => {
-          if (res.code === 1 && res.data) {
-            this.productList = res.data.list
-            this.total = res.data.total
-            this.currentSize = res.data.size
-          }
-        })
+        if (this.venderId) {
+          getGodownEntryList({pageSize: this.pageSize, pageNum: this.pageNum, venderId: this.venderId, params: qs.stringify((this.searchData))}).then(res => {
+            if (res.code === 1 && res.data) {
+              this.productList = res.data.list
+              this.total = res.data.total
+              this.currentSize = res.data.size
+            }
+          })
+        }
       },
       // 重置
       reset () {
@@ -162,10 +163,6 @@
       // 单价、数量格式化
       priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
-      },
-      // 时间格式化
-      timeFormatter (row, column, cellValue, index) {
-        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       // 处理分页
       handleSizeChange (val) {

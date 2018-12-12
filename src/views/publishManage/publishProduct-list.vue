@@ -17,7 +17,7 @@
         <el-date-picker
           class="publishTime"
           v-model="publishTime"
-          value-format="timestamp"
+          value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
           @change="publishTimeChange"
           range-separator="至"
@@ -63,6 +63,7 @@
       <el-table-column
         prop="skuId"
         label="产品编号（SKU）"
+        :formatter="numFormatter"
         align="center"
         width="140">
       </el-table-column>
@@ -94,7 +95,6 @@
       <el-table-column
         prop="createTime"
         align="center"
-        :formatter="timeFormatter"
         label="发布时间">
       </el-table-column>
       <el-table-column
@@ -105,7 +105,7 @@
         label="发布数量">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="usableStock"
         header-align="center"
         align="right"
         :formatter="numFormatter"
@@ -153,8 +153,8 @@
         searchData: {// 搜索数据
           skuName: '', // 产品名称
           skuId: '', // 产品编号
-          startTime: '', // 开始日期
-          endTime: '', // 结束日期
+          // startTime: '', // 开始日期
+          // endTime: '', // 结束日期
           status: '' // 状态
         },
         pageSize: 10, // 每页条数
@@ -163,8 +163,7 @@
         currentSize: 0, // 当前页数据条数
         publishTime: [], // 发布时间
         stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
-        productList: [{skuId: 2000}], // 产品列表
-        btnDisabled: false, // 是否禁用按钮
+        productList: [], // 产品列表
         checkedList: [] // CheckBox选择的数据
       }
     },
@@ -191,6 +190,7 @@
           endTime: '', // 结束日期
           status: '' // 状态
         }
+        this.publishTime = [] // 发布时间
         this.initData()
       },
       // 获取发布时间
@@ -250,24 +250,20 @@
         // 到详情页面
         // this.$router.push({path: '/publishProductDetail', query: {publishId: row.publishId}})
         this.$router.push({path: '/publishProductDetail', query: {publishId: 2000}})
+      },
+      // 数量格式化
+      numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
-    },
-    // 时间格式化
-    timeFormatter (row, column, cellValue, index) {
-      return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
-    },
-    // 数量格式化
-    numFormatter (row, column, cellValue, index) {
-      return this.$accounting.format(cellValue, '2')
-    },
-    // 处理分页
-    handleSizeChange (val) {
-      this.pageSize = val
-      this.initData()
-    },
-    handleCurrentChange (val) {
-      this.pageNum = val
-      this.initData()
     }
   }
 </script>

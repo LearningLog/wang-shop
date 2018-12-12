@@ -11,5 +11,5 @@ export const getOrderFormList = params => {
 }
 // 获取订单详情列表
 export const getOrderFormDetailList = params => {
-  return http.get('/admin/userorder/sku/page/list/' + params.pageNum + '/' + params.pageSize + '?orderId=' + params).then(res => res.data)
+  return http.get('/admin/userorder/sku/page/list/' + params.pageNum + '/' + params.pageSize + '?orderId=' + params.params).then(res => res.data)
 }

@@ -56,17 +56,17 @@
         prop="createTime"
         header-align="center"
         align="right"
-        :formatter="timeFormatter"
         label="发布时间">
       </el-table-column>
       <el-table-column
         prop="publishNum"
-        align="center"
+        header-align="center"
+        align="right"
         :formatter="numFormatter"
         label="发布数量">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="usableStock"
         header-align="center"
         align="right"
         :formatter="numFormatter"
@@ -196,10 +196,6 @@
         // 到详情页面
         // this.$router.push({path: '/publishProductDetail', query: {publishId: row.publishId}})
         this.$router.push({path: '/publishProductDetail', query: {publishId: 2000}})
-      },
-      // 时间格式化
-      timeFormatter (row, column, cellValue, index) {
-        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {

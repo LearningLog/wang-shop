@@ -17,9 +17,9 @@
         <el-date-picker
           class="operateTime"
           v-model="operateTime"
-          value-format="timestamp"
+          value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
-          @change="operateTimeTimeChange"
+          @change="timeChange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
@@ -81,7 +81,6 @@
         prop="createTime"
         header-align="center"
         align="right"
-        :formatter="timeFormatter"
         label="操作时间">
       </el-table-column>
       <el-table-column
@@ -185,10 +184,11 @@
           // endTime: '', // 结束时间
           // operateType: '' // 操作类型
         }
+        this.operateTime = [] // 发布时间
         this.onSearch()
       },
       // 获取发布时间
-      operateTimeTimeChange (date) {
+      timeChange (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
       },
@@ -205,10 +205,6 @@
       // 单价、数量格式化
       priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
-      },
-      // 时间格式化
-      timeFormatter (row, column, cellValue, index) {
-        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       // 处理分页
       handleSizeChange (val) {

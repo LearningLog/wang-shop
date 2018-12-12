@@ -62,7 +62,7 @@
         label="厂商">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="originalPrice"
         header-align="center"
         align="right"
         :formatter="priceFormatter"
@@ -149,15 +149,11 @@
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        this.$router.push({path: '/totalInventoryDetail', query: {skuId: row.skuId}})
+        this.$router.push({path: '/totalStockDetail', query: {skuId: row.skuId}})
       },
       // 单价、数量格式化
       priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
-      },
-      // 时间格式化
-      timeFormatter (row, column, cellValue, index) {
-        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       // 处理分页
       handleSizeChange (val) {

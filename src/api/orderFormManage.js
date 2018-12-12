@@ -11,5 +11,5 @@ export const getOrderFormList = params => {
 }
 // 获取列表
 export const getOrderFormDetailList = params => {
-  return http.get('/admin/venderOrderQuery/toDetail//' + params.params).then(res => res.data)
+  return http.get('/admin/venderOrderQuery/toDetail/' + params).then(res => res.data)
 }

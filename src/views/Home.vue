@@ -73,10 +73,6 @@
               <i class="el-icon-menu"></i>
               <span>库存列表</span>
             </el-menu-item>
-            <el-menu-item index="/stockAdd">
-              <i class="el-icon-menu"></i>
-              <span>新增库存</span>
-            </el-menu-item>
             <el-menu-item index="/godownEntry">
               <i class="el-icon-menu"></i>
               <span>入库单</span>
@@ -122,10 +118,6 @@
               <i class="el-icon-menu"></i>
               <span>销售列表</span>
             </el-menu-item>
-            <el-menu-item index="/marketDetail">
-              <i class="el-icon-menu"></i>
-              <span>销售明细</span>
-            </el-menu-item>
           </el-submenu>
           <!--分账管理-->
           <el-submenu index="8">
@@ -136,10 +128,6 @@
             <el-menu-item index="/splitAccountList">
               <i class="el-icon-menu"></i>
               <span>分账列表</span>
-            </el-menu-item>
-            <el-menu-item index="/splitAccountDetail">
-              <i class="el-icon-menu"></i>
-              <span>分账明细</span>
             </el-menu-item>
           </el-submenu>
           <!--客户端管理-->

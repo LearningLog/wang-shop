@@ -8,26 +8,28 @@
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
       <el-form-item label="分账订单编号:">
-        <el-input v-model="searchData.splitAccountCode" placeholder="请输入分账订单编号"></el-input>
+        <el-input v-model="searchData.shareBilId" placeholder="请输入分账订单编号"></el-input>
       </el-form-item>
       <el-form-item label="分账类型:">
-        <el-input v-model="searchData.splitAccountCode" placeholder="请输入分账类型"></el-input>
+        <el-input v-model="searchData.shareType" placeholder="请输入分账类型"></el-input>
       </el-form-item>
       <el-form-item label="分账日期:">
         <el-date-picker
           class="splitAccountTime"
-          v-model="searchData.splitAccountTime"
+          v-model="splitAccountTime"
           type="daterange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          @change="timeChange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="商户编号:">
-        <el-input v-model="searchData.customerCode" placeholder="请输入商户编号"></el-input>
+        <el-input v-model="searchData.venderId" placeholder="请输入商户编号"></el-input>
       </el-form-item>
       <el-form-item label="商户名称:">
-        <el-input v-model="searchData.customerName" placeholder="请输入商户名称"></el-input>
+        <el-input v-model="searchData.venderName" placeholder="请输入商户名称"></el-input>
       </el-form-item>
     </el-form>
     <!--查询按钮-->
@@ -35,73 +37,64 @@
       <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
       <el-button type="primary" size="mini" @click="reset">重置</el-button>
     </div>
-    <!--操作按钮-->
-    <div class="fr operBtn">
-      <!--<el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>-->
-      <el-button type="danger" size="mini" @click="remove" :disabled="btnDisabled">删除</el-button>
-    </div>
     <!--表格-->
     <el-table
       :data="splitAccountList"
       stripe
       border
-      ref="checkedList"
-      @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
-        type="selection"
-        label="选择"
-        align="center"
-        width="40">
-      </el-table-column>
-      <el-table-column
-        prop="name"
+        prop="shareBillId"
         label="分账订单编号"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="shareTimeStr"
         align="center"
         label="分账日期">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="shareStartTime"
         align="center"
         label="分账开始日期">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="shareEndTime"
         align="center"
         label="分账结束日期">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="venderId"
         align="center"
         label="商户编号">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="venderName"
         align="center"
         label="商户名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="shareType"
         align="center"
         label="分账类型">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="shareAccount"
+        header-align="cenetr"
+        align="right"
+        :formatter="numFormatter"
         label="分账金额">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="shareRate"
+        header-align="cenetr"
+        align="right"
+        :formatter="rateFormatter"
         label="分账费率">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="status"
         align="center"
         label="状态">
       </el-table-column>
@@ -117,79 +110,95 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getSplitAccountList, deleteSplitAccount } from '../../api/splitAccountManage.js'
+  import { getSplitAccountList } from '../../api/splitAccountManage.js'
+  const qs = require('querystring')
   export default {
     created () {
-      // getSplitAccountList(this.searchData).then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.splitAccountList = res.data.splitAccountList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
+      this.initData()
     },
     data () {
       return {
         searchData: { // 搜索数据
-          splitAccountCode: '', // 销售订单编号
-          splitAccountTime: [], // 订单日期
-          businessCode: '', // 客户姓名
-          customerCode: '', // 商户编号,
-          customerName: '' // 商户名称
+          shareBilId: '', // 销售订单编号
+          shareType: '', // 分账类型,
+          // startShareTime: '', // 分账开始日期
+          // endShareTime: '', // 分账截止日期
+          venderName: '', // 客户姓名
+          venderId: '' // 商户编号
         },
-        splitAccountList: [{}], // 产品列表
-        btnDisabled: false, // 是否禁用按钮
-        checkedList: [] // CheckBox选择的数据
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        splitAccountTime: [], // 分账日期
+        splitAccountList: [] // 产品列表
       }
     },
     methods: {
       // 搜索
       onSearch () {
-        console.log(this.searchData)
-        getSplitAccountList(this.searchData).then(res => {
-          if (res.meta.status === 200) {
-            this.splitAccountList = res.data.splitAccountList
+        this.initData()
+      },
+      initData () {
+        getSplitAccountList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1 && res.data) {
+            this.splitAccountList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       },
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          splitAccountCode: '', // 销售订单编号
-          splitAccountTime: [], // 订单日期
-          businessCode: '', // 客户姓名
-          customerCode: '', // 商户编号,
-          customerName: '' // 商户名称
+          shareBilId: '', // 销售订单编号
+          shareType: '', // 分账类型,
+          startShareTime: '', // 分账开始日期
+          endShareTime: '', // 分账截止日期
+          venderName: '', // 客户姓名
+          venderId: '' // 商户编号
         }
+        this.splitAccountTime = []
         this.onSearch()
       },
-      // 选中数据
-      handleSelectionChange (row) {
-        this.checkedList = row
-      },
-      // 删除
-      remove () {
-        if (this.checkedList.length === 0) {
-          this.$message({
-            message: '请选择至少一项产品记录！',
-            type: 'warning'
-          })
-          return false
-        } else {
-          deleteSplitAccount(this.checkedList).then(res => {
-            if (res.meta.status === 200) {
-              this.splitAccountList = res.data.splitAccountList
-            }
-          })
-        }
+      // 获取发布时间
+      timeChange (date) {
+        this.searchData.startShareTime = date[0]
+        this.searchData.endShareTime = date[1]
       },
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        //   this.$router.push({path: '/splitAccountDetail', query: {pId: row.goods_id}})
-        this.$router.push({path: '/splitAccountDetail', query: {pId: '11111'}})
+        this.$router.push({path: '/splitAccountDetail', query: {shareBillId: row.shareBillId}})
+      },
+      // 单价、数量格式化
+      numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      rateFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '4')
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }

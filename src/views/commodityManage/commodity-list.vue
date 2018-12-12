@@ -75,7 +75,6 @@
       <el-table-column
         prop="createTime"
         align="center"
-        :formatter="timeFormatter"
         width="140"
         label="创建时间">
       </el-table-column>
@@ -221,10 +220,6 @@
       // 单价、数量格式化
       priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
-      },
-      // 时间格式化
-      timeFormatter (row, column, cellValue, index) {
-        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm')
       },
       statusFormatter (row, column, cellValue, index) {
         switch (cellValue) {

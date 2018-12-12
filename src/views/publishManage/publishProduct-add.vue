@@ -101,15 +101,12 @@
       publishProduct () {
         this.$refs['product'].validate((valid) => {
           if (valid) {
-            debugger
-            if (this.skuId) { // 新增
-              publishProductAdd(this.product).then(res => {
-                if (res.code === 1) {
-                  // 到列表页面
-                  this.$router.push({path: '/publishProductList'})
-                }
-              })
-            }
+            publishProductAdd(this.product).then(res => {
+              if (res.code === 1) {
+                // 到列表页面
+                this.$router.push({path: '/publishProductList'})
+              }
+            })
           } else {
             return false
           }
