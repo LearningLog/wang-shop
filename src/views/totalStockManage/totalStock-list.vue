@@ -149,7 +149,7 @@
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        this.$router.push({path: '/totalStockDetail', query: {skuId: row.skuId}})
+        this.$router.push({path: '/stockDetail', query: {skuId: row.skuId, source: 1}})
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {

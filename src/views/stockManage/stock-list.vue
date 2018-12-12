@@ -156,7 +156,7 @@
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        this.$router.push({path: '/godownEntry', query: {venderId: row.venderId}})
+        this.$router.push({path: '/stockDetail', query: {skuId: row.skuId, source: 2}})
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {

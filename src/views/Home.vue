@@ -58,10 +58,6 @@
               <i class="el-icon-menu"></i>
               <span>总库存列表</span>
             </el-menu-item>
-            <el-menu-item index="/totalStockDetail">
-              <i class="el-icon-menu"></i>
-              <span>总库存明细</span>
-            </el-menu-item>
           </el-submenu>
           <!--库存管理-->
           <el-submenu index="4">
@@ -102,10 +98,6 @@
             <el-menu-item index="/orderFormList">
               <i class="el-icon-menu"></i>
               <span>订单列表</span>
-            </el-menu-item>
-            <el-menu-item index="/orderFormDetail">
-              <i class="el-icon-menu"></i>
-              <span>订单明细</span>
             </el-menu-item>
           </el-submenu>
           <!--销售管理-->
@@ -151,7 +143,7 @@
               <i class="el-icon-location"></i>
               <span slot="title">账户管理</span>
             </template>
-            <el-menu-item index="/myOrderForm ">
+            <el-menu-item index="/myOrderForm">
               <i class="el-icon-menu"></i>
               <span>我的订单</span>
             </el-menu-item>
@@ -168,7 +160,6 @@
               <span>我的孖豆</span>
             </el-menu-item>
           </el-submenu>
-
         </el-menu>
       </el-scrollbar>
     </el-aside>
@@ -258,9 +249,14 @@ export default {
     }
   },
   methods: {
+    // 打开当前所在菜单
     showActiveLeftMenu (path) {
-      this.currentMenu = getActiveMenu(path) // default-openeds 默认打开的全菜单的index数组
-      this.defaultActive = getActiveMenu(path).length ? path : '' // default-active 默认激活的当前index菜单（或子菜单）
+      let list = getActiveMenu(path)
+      let len = list.length
+      if (len > 0) { // 得到的数组的长度大于0，说明找到了对应的菜单，应跳转菜单；如果长度为0，说明没有找到对应的菜单，则不跳菜单
+        this.currentMenu = list // default-openeds 默认打开的全菜单的index数组
+        this.defaultActive = len ? path : '' // default-active 默认激活的当前index菜单（或子菜单）
+      }
     },
     handleOpen (key, keyPath) {
       // console.log(key, keyPath)
