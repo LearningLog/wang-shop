@@ -188,18 +188,16 @@
       // 修改
       handleEdit (index, row) {
         // 到编辑页面
-        // this.$router.push({path: '/addPublishProduct', query: {publishId: row.publishId}})
-        this.$router.push({path: '/addPublishProduct', query: {publishId: 2000}})
+        this.$router.push({path: '/addPublishProduct', query: {publishId: row.publishId}})
       },
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        // this.$router.push({path: '/publishProductDetail', query: {publishId: row.publishId}})
-        this.$router.push({path: '/publishProductDetail', query: {publishId: 2000}})
+        this.$router.push({path: '/publishProductDetail', query: {publishId: row.publishId}})
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+        return this.$accounting.format(cellValue, '0')
       },
       // 处理分页
       handleSizeChange (val) {

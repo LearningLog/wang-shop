@@ -45,7 +45,7 @@
         prop="skuBuyPrice"
         header-align="center"
         align="right"
-        :formatter="numFormatter"
+        :formatter="priceFormatter"
         label="产品单价">
       </el-table-column>
       <el-table-column
@@ -62,14 +62,14 @@
         prop="amount"
         header-align="center"
         align="right"
-        :formatter="numFormatter"
+        :formatter="priceFormatter"
         label="总金额">
       </el-table-column>
       <el-table-column
         prop="address"
         header-align="center"
         align="right"
-        :formatter="numFormatter"
+        :formatter="priceFormatter"
         label="订单金额">
       </el-table-column>
     </el-table>
@@ -107,9 +107,13 @@
         orderFormList: [] // 产品列表
       }
     },
-    menthod: {
-      // 单价、数量格式化
+    methods: {
+      // 数量格式化
       numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '0')
+      },
+      // 金额格式化
+      priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
       },
       // 处理分页

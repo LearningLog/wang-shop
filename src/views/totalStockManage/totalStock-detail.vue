@@ -87,7 +87,7 @@
         prop="skuNum"
         header-align="center"
         align="right"
-        :formatter="priceFormatter"
+        :formatter="numFormatter"
         label="操作数量">
       </el-table-column>
       <el-table-column
@@ -203,8 +203,8 @@
         this.$router.push({path: '/commodityDetail', query: {skuId: row.skuId}})
       },
       // 单价、数量格式化
-      priceFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+      numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '0')
       },
       // 处理分页
       handleSizeChange (val) {

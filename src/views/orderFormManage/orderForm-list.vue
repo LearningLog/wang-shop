@@ -81,7 +81,7 @@
         prop="orderFeeAmount"
         header-align="center"
         align="right"
-        :formatter="numFormatter"
+        :formatter="priceFormatter"
         label="订单金额">
       </el-table-column>
       <el-table-column
@@ -184,8 +184,12 @@
         // 到详情页面
         this.$router.push({path: '/orderFormDetail', query: {orderId: row.orderId}})
       },
-      // 单价、数量格式化
+      // 数量格式化
       numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '0')
+      },
+      // 金额格式化
+      priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
       },
       // 处理分页
