@@ -7,80 +7,120 @@
     </el-breadcrumb>
     <!--表格-->
     <el-table
-      :data="orderFormList"
+      :data="sealsList"
       stripe
       border
       style="width: 100%">
       <el-table-column
-        prop="name"
+        prop="orderId"
         label="销售单编号"
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="userId"
         align="center"
         label="客户编号">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="userName"
         align="center"
         label="客户名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="venderName"
         align="center"
         label="商家名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuId"
         align="center"
         label="产品编码">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuName"
         align="center"
         label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuBuyNum"
         header-align="center"
         align="right"
+        :formatter="numFormatter"
         label="产品数量">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuBuyPrice"
         align="center"
+        :formatter="priceFormatter"
         label="销售单金额">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="createTime"
         label="销售日期"
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="channel"
         label="支付渠道"
         align="center">
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getOrderFormDetail } from '../../api/clientManage.js'
+  import { getSalesList } from '../../api/clientManage.js'
+  const qs = require('querystring')
+
   export default {
     created () {
-      this.productId = this.$route.query.pId
-      if (this.productId) {
-        getOrderFormDetail(this.productId).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
+      this.userId = this.$route.query.userId
+      if (this.userId) {
+        getSalesList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify({userId: this.userId})}).then(res => {
+          if (res.code === 1) {
+            this.sealsList = res.data.list ? res.data.list : []
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       }
     },
     data () {
       return {
-        orderFormList: [{address: '哈哈哈哈'}] // 客户销售单列表
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        userId: null, // C用户编号
+        sealsList: [] // 客户销售单列表
+      }
+    },
+    methods: {
+      // 数量格式化
+      numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '0')
+      },
+      // 金额格式化
+      priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }
@@ -92,14 +132,5 @@
     font-size: 15px;
     padding-left: 10px;
     line-height: 45px;
-  }
-  .productForm {
-    margin-top: 10px;
-  }
-  /*.productForm input {*/
-  /*margin-right: 150px !important;*/
-  /*}*/
-  .vender {
-    width: 200px;
   }
 </style>

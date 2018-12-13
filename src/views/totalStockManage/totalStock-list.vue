@@ -2,82 +2,78 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>销售管理</el-breadcrumb-item>
-      <el-breadcrumb-item>销售列表</el-breadcrumb-item>
+      <el-breadcrumb-item>总库存管理</el-breadcrumb-item>
+      <el-breadcrumb-item>总库存列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
-      <el-form-item label="销售订单编号:">
-        <el-input v-model="searchData.orderId" placeholder="请输入销售订单编号"></el-input>
+      <el-form-item label="产品名称:">
+        <el-input v-model="searchData.skuName" placeholder="请输入产品名称"></el-input>
       </el-form-item>
-      <el-form-item label="订单日期:">
-        <el-date-picker
-          class="orderFormTime"
-          v-model="orderFormTime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
+      <el-form-item label="产品编号:">
+        <el-input v-model="searchData.skuId" placeholder="请输入产品编号"></el-input>
       </el-form-item>
-      <el-form-item label="客户姓名:">
-        <el-input v-model="searchData.userName" placeholder="请输入客户姓名"></el-input>
+      <el-form-item label="厂家:">
+        <el-input v-model="searchData.manufacturerId" placeholder="请输入厂家"></el-input>
       </el-form-item>
-      <el-form-item label="手机号:">
-        <el-input v-model="searchData.userPhone" placeholder="请输入手机号"></el-input>
+      <el-form-item label="品牌:">
+        <el-input v-model="searchData.brand" placeholder="请输入品牌"></el-input>
       </el-form-item>
+      <div>
+        <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
+        <el-button type="primary" size="mini" @click="reset">重置</el-button>
+      </div>
     </el-form>
-    <!--查询按钮-->
-    <div class="fl">
-      <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
-      <el-button type="primary" size="mini" @click="reset">重置</el-button>
-    </div>
-    <!--表格-->
     <el-table
-      :data="orderFormList"
+      :data="productList"
       stripe
       border
+      ref="checkedList"
       style="width: 100%">
       <el-table-column
-        prop="orderId"
-        label="销售订单编号"
+        prop="skuId"
+        label="产品编号（SKU）"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="orderCreateTime"
+        prop="skuName"
         align="center"
-        label="销售日期">
+        label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="orderFeeAmount"
+        prop="brand"
+        align="center"
+        label="产品品牌">
+      </el-table-column>
+      <el-table-column
+        prop="saleProperty"
+        align="center"
+        label="规格">
+      </el-table-column>
+      <el-table-column
+        prop="model"
+        align="center"
+        label="型号">
+      </el-table-column>
+      <el-table-column
+        prop="manufacturerName"
+        align="center"
+        label="厂商">
+      </el-table-column>
+      <el-table-column
+        prop="originalPrice"
         header-align="center"
         align="right"
         :formatter="priceFormatter"
-        label="销售金额">
+        label="单价">
       </el-table-column>
       <el-table-column
-        prop="skuBuyNum"
+        prop="totalStock"
         header-align="center"
         align="right"
         :formatter="numFormatter"
-        label="产品数量">
-      </el-table-column>
-      <el-table-column
-        prop="userName"
-        align="center"
-        label="客户姓名">
-      </el-table-column>
-      <el-table-column
-        prop="userPhone"
-        align="center"
-        label="手机号">
-      </el-table-column>
-      <el-table-column
-        prop="orderStatus"
-        align="center"
-        label="状态">
+        label="库存数量">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -104,27 +100,26 @@
   </div>
 </template>
 <script>
-  import { getOrderFormList } from '../../api/marketManage.js'
+  import { getTotalList } from '../../api/totalStockManage.js'
   const qs = require('querystring')
+
   export default {
     created () {
       this.initData()
     },
     data () {
       return {
-        searchData: { // 搜索数据
-          // orderId: '', // 销售订单编号
-          orderStartTime: '', // 订单开始时间
-          orderEndTime: '', // 订单结束时间
-          userName: '', // 客户姓名
-          userPhone: '' // 手机号
+        searchData: {// 搜索数据
+          skuName: '', // 产品名称
+          skuId: '', // 产品编号
+          manufacturerId: '', // 厂家
+          brand: '' // 品牌
         },
         pageSize: 10, // 每页条数
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
-        orderFormTime: [], // 订单日期
-        orderFormList: [] // 订单列表
+        productList: [] // 产品列表
       }
     },
     methods: {
@@ -133,9 +128,9 @@
         this.initData()
       },
       initData () {
-        getOrderFormList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+        getTotalList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
           if (res.code === 1 && res.data) {
-            this.orderFormList = res.data.list
+            this.productList = res.data.list
             this.total = res.data.total
             this.currentSize = res.data.size
           }
@@ -144,23 +139,17 @@
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          orderId: '', // 销售订单编号
-          orderStartTime: '', // 订单开始时间
-          orderEndTime: '', // 订单结束时间
-          userName: '', // 客户姓名
-          userPhone: '' // 手机号
+          skuName: '', // 产品名称
+          skuId: '', // 产品编号
+          manufacturerId: '', // 厂家
+          brand: '' // 品牌
         }
         this.onSearch()
-      },
-      // 获取订单时间
-      orderFormTimeChange (date) {
-        this.searchData.startTime = date[0]
-        this.searchData.endTime = date[1]
       },
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        this.$router.push({path: '/marketDetail', query: {orderId: row.orderId}})
+        this.$router.push({path: '/stockDetail', query: {skuId: row.skuId, source: 1}})
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {
@@ -192,8 +181,5 @@
   }
   .searchData {
     margin-top: 10px;
-  }
-  .orderFormTime {
-    width:220px;
   }
 </style>

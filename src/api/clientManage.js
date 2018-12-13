@@ -5,23 +5,11 @@
  */
 import {http} from '../api/http'
 
-// 获取列表
-export const getCustomerList = params => {
-  return http.get('getCustomerList', params).then(res => res.data)
+// C端用户列表
+export const getclientList = params => {
+  return http.get('/admin/user/pagelist/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
 }
-// 新增||编辑产品
-export const saveProduct = params => {
-  return http.post('saveProduct', params).then(res => res.data)
-}
-// 删除产品
-export const deleteCustomer = params => {
-  return http.get('deleteCustomer', params).then(res => res.data)
-}
-// 上传图片
-export const uploadInfo = () => {
-  return http.get('/upload').then(res => res.data)
-}
-// 产品详情
-export const getOrderFormDetail = params => {
-  return http.get('getOrderFormDetail', params).then(res => res.data)
+// C端销售单列表
+export const getSalesList = params => {
+  return http.get('/admin/userorder/sku/user/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
 }

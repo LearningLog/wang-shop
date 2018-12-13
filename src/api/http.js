@@ -5,11 +5,30 @@
  */
 import axios from 'axios'
 import router from '@/router/index'
+import { Message, Loading } from 'element-ui'
 import {getToken} from './auth'
-
+const baseURL = 'http://39.105.158.244:8001'
 export const http = axios.create({
-  baseURL: 'http://localhost:8888/api/private/v1/'
+  baseURL: baseURL
+  // baseURL: 'http://localhost:8888/api/private/v1/'
 })
+
+export const uploadInfo = () => {
+  return {
+    url: baseURL,
+    token: getToken(getToken('userType'))
+  }
+}
+// loading遮罩层
+export const loading = (close) => {
+  let loadingInstance = Loading.service({
+    lock: true,
+    text: 'Loading',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0)'
+  })
+  if (close) loadingInstance.close()
+}
 
 // 添加请求拦截器
 // 拦截器的本身就是一个方法
@@ -19,12 +38,11 @@ export const http = axios.create({
 // 当你使用 axios 发起请求的时候，那么就会先经过这个拦截器然后再发出请求
 // 也就是说在请求拦截器内部的请求还没有发出去
 // 我们可以在这里定制请求之前的行为
-axios.interceptors.request.use(function (config) {
-  let token = localStorage.getItem('mytoken')
+http.interceptors.request.use(function (config) {
+  loading()
   // 如果本次请求的不是 /login 接口，则我们就加入请求头
-  if (config.url !== '/login') {
-    config.headers['Authorization'] = getToken()
-    config.headers['Authorization'] = token
+  if (config.url !== '/admin/passport/login' && config.url !== '/manufacturer/passport/login') {
+    config.headers.Authorization = getToken(getToken('userType'))
   }
 
   // return config 就好比 next() 允许通过
@@ -40,14 +58,14 @@ axios.interceptors.request.use(function (config) {
 // 例如需要对每个接口进行 403 权限认证判断
 // 如果本地响应的数据是 403 ，则我们提示用户：你没有权限执行该操作
 http.interceptors.response.use(function (response) {
-  const {meta} = response.data
-  if (meta.status === 403) {
-    this.$message({
+  loading('close')
+  const res = response.data
+  if (res.code === 403) {
+    Message({
       message: '你没有权限执行该操作！',
       type: 'error'
     })
-    // return false
-  } else if (meta.status === 401) {
+  } else if (res.code === 401) {
     // 如果用户长时间未操作导致 token 失效或者有人恶意伪造 token
     // 我们也不允许他进入我的系统界面
     // 所以我们这里通过对 401 统一拦截跳转到登录页
@@ -61,6 +79,17 @@ http.interceptors.response.use(function (response) {
       query: {
         redirect: window.location.hash
       }
+    })
+  } else if (res.code === 2000) {
+    Message({
+      message: res.message,
+      type: 'warning'
+    })
+    // return false
+  } else if (res.code === 3001) {
+    Message({
+      message: res.message,
+      type: 'warning'
     })
   }
 

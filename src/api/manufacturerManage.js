@@ -7,17 +7,21 @@ import {http} from '../api/http'
 
 // 获取列表
 export const getManufacturerList = params => {
-  return http.get('getManufacturerList', params).then(res => res.data)
+  return http.get('/admin/manufacturer/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
 }
-// 新增||编辑产品
-export const saveManufacturer = params => {
-  return http.post('saveManufacturer', params).then(res => res.data)
+// 新增厂商
+export const addManufacturer = params => {
+  return http.post('/admin/manufacturer/saveManufacturer', params).then(res => res.data)
 }
-// 删除产品
-export const deleteManufacturer = params => {
-  return http.get('deleteManufacturer', params).then(res => res.data)
+// 编辑厂商
+export const editManufacturer = params => {
+  return http.post('/admin/manufacturer/saveManufacturer', params).then(res => res.data)
 }
-// 产品详情
+// 删除厂商
+export const deleteManufacturers = params => {
+  return http.get('/admin/manufacturer/delManufacturer?ids=' + params).then(res => res.data)
+}
+// 厂商详情
 export const getManufacturerDetail = params => {
-  return http.get('getManufacturerDetail', params).then(res => res.data)
+  return http.get('/admin/manufacturer/toEdit/' + params).then(res => res.data)
 }

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import {getToken} from '../api/auth'
 // 功能组件
 // @ 是 src 路径的别名，webpack 配置的
 import Login from '@/views/Login'
@@ -19,18 +19,21 @@ import Order from '@/views/order/Order'
 import Report from '@/views/report/Report'
 import commodityList from '@/views/commodityManage/commodity-list'
 import commodityAdd from '@/views/commodityManage/commodity-add'
+import commodityEdit from '@/views/commodityManage/commodity-edit'
 import commodityDetail from '@/views/commodityManage/commodity-detail'
 import publishProductList from '@/views/publishManage/publishProduct-list'
 import addPublishProduct from '@/views/publishManage/publishProduct-add'
+import editPublishProduct from '@/views/publishManage/publishProduct-edit'
+import publishProductDetail from '@/views/publishManage/publishProduct-detail'
 import publishProductApprove from '@/views/publishManage/publishProduct-approve'
-import totalInventoryList from '@/views/totalInventoryManage/totalInventory-list'
-import totalInventoryDetail from '@/views/totalInventoryManage/totalInventory-detail'
-import inventoryList from '@/views/inventoryManage/inventory-list'
-import inventoryAdd from '@/views/inventoryManage/inventory-add'
-import godownEntry from '@/views/inventoryManage/godownEntry'
-import inventoryDetail from '@/views/inventoryManage/inventory-detail'
+import totalStockList from '@/views/totalStockManage/totalStock-list'
+import totalStockDetail from '@/views/totalStockManage/totalStock-detail'
+import stockList from '@/views/stockManage/stock-list'
+import godownEntry from '@/views/stockManage/godownEntry'
+import stockDetail from '@/views/stockManage/stock-detail'
 import manufacturerList from '@/views/manufacturerManage/manufacturer-list'
 import manufacturerAdd from '@/views/manufacturerManage/manufacturer-add'
+import manufacturerEdit from '@/views/manufacturerManage/manufacturer-edit'
 import orderFormList from '@/views/orderFormManage/orderForm-list'
 import orderFormDetail from '@/views/orderFormManage/orderForm-detail'
 import marketList from '@/views/marketManage/market-list'
@@ -39,6 +42,7 @@ import splitAccountList from '@/views/splitAccountManage/splitAccount-list'
 import splitAccountDetail from '@/views/splitAccountManage/splitAccount-detail'
 import clientList from '@/views/clientManage/client-list'
 import customerSalesOrderDetail from '@/views/clientManage/customerSalesOrder-detail'
+import myOrderForm from '@/views/accountManage/myOrderForm'
 import myMarketDocList from '@/views/accountManage/myMarketDoc-list'
 import myCoinsList from '@/views/accountManage/myCoins-list'
 import myBeansList from '@/views/accountManage/myBeans-list'
@@ -75,6 +79,7 @@ const router = new Router({
       children: [
         {path: '/commodityList', component: commodityList, name: 'commodityList'},
         {path: '/commodityAdd', component: commodityAdd, name: 'commodityAdd'},
+        {path: '/commodityEdit', component: commodityEdit, name: 'commodityEdit'},
         {path: '/commodityDetail', component: commodityDetail, name: 'commodityDetail'}
       ]
     },
@@ -85,6 +90,8 @@ const router = new Router({
       children: [
         {path: '/publishProductList', component: publishProductList, name: 'publishProductList'},
         {path: '/addPublishProduct', component: addPublishProduct, name: 'addPublishProduct'},
+        {path: '/editPublishProduct', component: editPublishProduct, name: 'editPublishProduct'},
+        {path: '/publishProductDetail', component: publishProductDetail, name: 'publishProductDetail'},
         {path: '/publishProductApprove', component: publishProductApprove, name: 'publishProductApprove'}
       ]
     },
@@ -93,8 +100,8 @@ const router = new Router({
       name: '总库存管理',
       component: Home,
       children: [
-        {path: '/totalInventoryList', component: totalInventoryList, name: 'totalInventoryList'},
-        {path: '/totalInventoryDetail', component: totalInventoryDetail, name: 'totalInventoryDetail'}
+        {path: '/totalStockList', component: totalStockList, name: 'totalStockList'},
+        {path: '/totalStockDetail', component: totalStockDetail, name: 'totalStockDetail'}
       ]
     },
     {
@@ -102,10 +109,9 @@ const router = new Router({
       name: '库存管理',
       component: Home,
       children: [
-        {path: '/inventoryList', component: inventoryList, name: 'inventoryList'},
-        {path: '/inventoryAdd', component: inventoryAdd, name: 'inventoryAdd'},
+        {path: '/stockList', component: stockList, name: 'stockList'},
         {path: '/godownEntry', component: godownEntry, name: 'godownEntry'},
-        {path: '/inventoryDetail', component: inventoryDetail, name: 'inventoryDetail'}
+        {path: '/stockDetail', component: stockDetail, name: 'stockDetail'}
       ]
     },
     {
@@ -114,7 +120,8 @@ const router = new Router({
       component: Home,
       children: [
         {path: '/manufacturerList', component: manufacturerList, name: 'manufacturerList'},
-        {path: '/manufacturerAdd', component: manufacturerAdd, name: 'manufacturerAdd'}
+        {path: '/manufacturerAdd', component: manufacturerAdd, name: 'manufacturerAdd'},
+        {path: '/manufacturerEdit', component: manufacturerEdit, name: 'manufacturerEdit'}
       ]
     },
     {
@@ -158,6 +165,7 @@ const router = new Router({
       name: '账户管理',
       component: Home,
       children: [
+        {path: '/myOrderForm', component: myOrderForm, name: 'myOrderForm'},
         {path: '/myMarketDocList', component: myMarketDocList, name: 'myMarketDocList'},
         {path: '/myCoinsList', component: myCoinsList, name: 'myCoinsList'},
         {path: '/myBeansList', component: myBeansList, name: 'myBeansList'}
@@ -238,27 +246,7 @@ const router = new Router({
 //    to 我要去哪里
 //    from 我从哪儿来的
 //    next 用来放行的
-// router.beforeEach((to, from, next) => {
-//   let user = localStorage.getItem('mytoken')
-//   if (user) {
-//     next()
-//   } else {
-//     if (to.path !== '/login') {
-//       next({path: '/login'})
-//     } else {
-//       next()
-//     }
-//   }
-// })
-
-// 1. 添加路由拦截器（导航钩子、守卫）
-//    接下来所有的视图导航都必须经过这道关卡
-//    一旦进入这道关卡，你得告诉路由守卫，
-//    to 我要去哪里
-//    from 我从哪儿来的
-//    next 用来放行的
 router.beforeEach((to, from, next) => {
-  let user = localStorage.getItem('mytoken')
   // 2.
   // 拿到当前请求的视图路径标识
   // 2.1 如果是登陆组件，则直接放行通过
@@ -269,7 +257,7 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     // 检查是否具有当前登陆的用户信息状态
-    if (!user) { // 无令牌，则让其登陆去
+    if (!getToken(getToken('userType'))) { // 无令牌，则让其登陆去
       next({
         path: '/login'
       })

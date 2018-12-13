@@ -59,20 +59,36 @@
         label="详细说明">
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getOrderFormDetail } from '../../api/accountManage.js'
+  import { getMyBeansAmount, getMyBeansList } from '../../api/accountManage.js'
   export default {
     created () {
-      this.productId = this.$route.query.pId
-      if (this.productId) {
-        getOrderFormDetail(this.productId).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
-          }
-        })
-      }
+      getMyBeansAmount().then(res => {
+        if (res.code === 1 && res.data) {
+          this.productList = res.data.list
+          this.total = res.data.total
+          this.currentSize = res.data.size
+        }
+      })
+      getMyBeansList().then(res => {
+        if (res.code === 1 && res.data) {
+          this.productList = res.data.list
+          this.total = res.data.total
+          this.currentSize = res.data.size
+        }
+      })
     },
     data () {
       return {
@@ -82,7 +98,27 @@
           expenses: '', // 支出
           withdrawDeposit: '' // 提现
         },
-        orderFormList: [{address: '哈哈哈哈'}] // 客户销售单列表
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        myBeansAmount: {}, // 我的孖豆金额
+        myBeansList: [{address: '哈哈哈哈'}] // 客户销售单列表
+      }
+    },
+    methods: {
+      // 金额格式化
+      priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }

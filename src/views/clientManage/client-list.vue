@@ -8,10 +8,10 @@
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
       <el-form-item label="客户编号:">
-        <el-input v-model="searchData.customerCode" placeholder="请输入客户编号"></el-input>
+        <el-input v-model="searchData.userId" placeholder="请输入客户编号"></el-input>
       </el-form-item>
       <el-form-item label="客户标识:">
-        <el-input v-model="searchData.customerIdentif" placeholder="请输入客户标识"></el-input>
+        <el-input v-model="searchData.unique" placeholder="请输入客户标识"></el-input>
       </el-form-item>
       <!--查询按钮-->
       <el-form-item>
@@ -19,58 +19,45 @@
         <el-button type="primary" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
-    <!--操作按钮-->
-    <div class="fr operBtn">
-      <!--<el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>-->
-      <el-button type="danger" size="mini" @click="remove" :disabled="btnDisabled">删除</el-button>
-    </div>
     <!--表格-->
     <el-table
       :data="customerList"
       stripe
       border
-      ref="checkedList"
-      @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
-        type="selection"
-        label="选择"
-        align="center"
-        width="40">
-      </el-table-column>
-      <el-table-column
-        prop="name"
+        prop="userId"
         label="客户编号"
         align="center"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="userName"
         align="center"
         label="客户名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="channel"
         align="center"
         label="渠道">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="unique"
         align="center"
         label="唯一标识">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="tel"
         align="center"
         label="联系电话">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="createTime"
         align="center"
         label="创建日期">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="venderName"
         align="center"
         label="商户名称">
       </el-table-column>
@@ -86,73 +73,73 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getCustomerList, deleteCustomer } from '../../api/clientManage.js'
+  import { getclientList } from '../../api/clientManage.js'
+  const qs = require('querystring')
   export default {
     created () {
-      // getCustomerList(this.searchData).then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.customerList = res.data.customerList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
+      this.initData()
     },
     data () {
       return {
         searchData: { // 搜索数据
-          customerCode: '', // 客户编号
-          customerIdentif: '' // 客户标识
+          userId: '', // 客户编号
+          unique: '' // 客户标识
         },
-        customerList: [{}], // 客户列表
-        btnDisabled: false, // 是否禁用按钮
-        checkedList: [] // CheckBox选择的数据
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        customerList: [] // 客户列表
       }
     },
     methods: {
       // 搜索
       onSearch () {
-        console.log(this.searchData)
-        getCustomerList(this.searchData).then(res => {
-          if (res.meta.status === 200) {
-            this.customerList = res.data.customerList
+        this.initData()
+      },
+      initData () {
+        getclientList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1 && res.data) {
+            this.customerList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       },
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          customerCode: '', // 客户编号
-          customerIdentif: '' // 客户标识
+          userId: '', // 客户编号
+          unique: '' // 客户标识
         }
         this.onSearch()
-      },
-      // 选中数据
-      handleSelectionChange (row) {
-        this.checkedList = row
-      },
-      // 删除
-      remove () {
-        if (this.checkedList.length === 0) {
-          this.$message({
-            message: '请选择至少一项产品记录！',
-            type: 'warning'
-          })
-          return false
-        } else {
-          deleteCustomer(this.checkedList).then(res => {
-            if (res.meta.status === 200) {
-              this.customerList = res.data.customerList
-            }
-          })
-        }
       },
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        //   this.$router.push({path: '/customerSalesOrderDetail', query: {pId: row.goods_id}})
-        this.$router.push({path: '/customerSalesOrderDetail', query: {pId: '11111'}})
+        this.$router.push({path: '/customerSalesOrderDetail', query: {userId: row.userId}})
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }

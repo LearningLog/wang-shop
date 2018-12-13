@@ -58,7 +58,7 @@ export default {
   .el-input__prefix {
     left: 10px;
   }
-  .username .el-input__inner, .password .el-input__inner {
+  .loginName .el-input__inner, .password .el-input__inner {
     float: left;
     background: none;
     outline: none;
@@ -68,7 +68,7 @@ export default {
     padding: 10px 16px;
     border: none;
     border-left: 2px solid #fff;
-    width: 96%;
+    width: 88%;
     display: inline-block;
     margin-left: 40px;
     border-radius: 0px;
