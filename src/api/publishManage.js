@@ -33,3 +33,7 @@ export const getPublishList = params => {
 export const approve = params => {
   return http.post('/admin/sku/publish/approve', params).then(res => res.data)
 }
+// 获取商品发布状态
+export const getPublishStatus = params => {
+  return http.get('/admin/common/sku/publish/status/list/').then(res => res.data)
+}

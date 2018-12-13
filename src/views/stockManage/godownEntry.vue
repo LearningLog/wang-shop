@@ -42,7 +42,7 @@
       border
       style="width: 100%">
       <el-table-column
-        prop="orderId"
+        prop="venderOrderId"
         label="订单编号"
         align="center">
       </el-table-column>
@@ -84,14 +84,14 @@
         label="单价">
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="createTimeStr"
         align="center"
         label="创建时间">
       </el-table-column>
       <el-table-column
         prop="orderStatus"
         header-align="center"
-        align="cenetr"
+        align="center"
         label="状态">
       </el-table-column>
     </el-table>

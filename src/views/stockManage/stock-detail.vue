@@ -30,9 +30,9 @@
         <el-select class="operateType" v-model="searchData.operateType" placeholder="请选择操作类型">
           <el-option
             v-for="item in operateTypeList"
-            :key="item.id"
-            :label="item.title"
-            :value="item.id">
+            :key="item.code"
+            :label="item.desc"
+            :value="item.code">
           </el-option>
         </el-select>
       </el-form-item>
@@ -92,7 +92,7 @@
         label="操作数量">
       </el-table-column>
       <el-table-column
-        prop="operateType"
+        prop="operateTypeDesc"
         label="操作类型"
         align="center">
       </el-table-column>
@@ -110,13 +110,18 @@
   </div>
 </template>
 <script>
-  import { getDetailList } from '../../api/totalStockManage.js'
+  import { getDetailList, getStockDetailOperationType } from '../../api/stockManage.js'
   const qs = require('querystring')
   export default {
     created () {
       this.searchData.skuId = this.$route.query.skuId
       this.skuId = this.$route.query.skuId
       this.source = this.$route.query.source
+      getStockDetailOperationType().then(res => {
+        if (res.code === 1 && res.data) {
+          this.operateTypeList = res.data
+        }
+      })
       this.initData()
     },
     data () {
@@ -162,7 +167,7 @@
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
         operateTime: [], // 发布时间
-        operateTypeList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 操作类型下拉数据
+        operateTypeList: [], // 操作类型下拉数据
         productList: [] // 产品列表
       }
     },
@@ -182,7 +187,6 @@
       },
       // 重置
       reset () {
-        debugger
         this.searchData = { // 搜索数据
           skuId: this.skuId, // 商品编号
           skuName: '' // 产品名称

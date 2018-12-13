@@ -66,7 +66,7 @@
         label="总金额">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="amount"
         header-align="center"
         align="right"
         :formatter="priceFormatter"

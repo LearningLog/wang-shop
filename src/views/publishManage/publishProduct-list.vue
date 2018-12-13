@@ -29,9 +29,9 @@
         <el-select v-model="searchData.status" placeholder="请选择状态">
           <el-option
             v-for="item in stateList"
-            :key="item.id"
-            :label="item.title"
-            :value="item.id">
+            :key="item.code"
+            :label="item.desc"
+            :value="item.code">
           </el-option>
         </el-select>
       </el-form-item>
@@ -141,7 +141,7 @@
   </div>
 </template>
 <script>
-  import { getProductList, deleteProduct } from '../../api/publishManage.js'
+  import { getProductList, deleteProduct, getPublishStatus } from '../../api/publishManage.js'
   const qs = require('querystring')
 
   export default {
@@ -162,13 +162,18 @@
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
         publishTime: [], // 发布时间
-        stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
+        stateList: [], // 状态下拉数据
         productList: [], // 产品列表
         checkedList: [] // CheckBox选择的数据
       }
     },
     methods: {
       initData () {
+        getPublishStatus().then(res => {
+          if (res.code === 1) {
+            this.stateList = res.data
+          }
+        })
         getProductList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
           if (res.code === 1) {
             this.productList = res.data.list

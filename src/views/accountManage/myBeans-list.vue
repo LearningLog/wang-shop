@@ -72,13 +72,23 @@
   </div>
 </template>
 <script>
-  // import { getMyBeansAmount, getMyBeansList } from '../../api/accountManage.js'
-  // import { getUserInfo } from '../../api/login.js'
+  import { getMyBeansAmount, getMyBeansList } from '../../api/accountManage.js'
   export default {
     created () {
-      // getUserInfo().then(res => {
-      // debugger
-      // })
+      getMyBeansAmount().then(res => {
+        if (res.code === 1 && res.data) {
+          this.productList = res.data.list
+          this.total = res.data.total
+          this.currentSize = res.data.size
+        }
+      })
+      getMyBeansList().then(res => {
+        if (res.code === 1 && res.data) {
+          this.productList = res.data.list
+          this.total = res.data.total
+          this.currentSize = res.data.size
+        }
+      })
     },
     data () {
       return {

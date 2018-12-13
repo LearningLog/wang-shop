@@ -9,7 +9,3 @@ import {http} from '../api/http'
 export const getTotalList = params => {
   return http.get('/admin/platorm/stock/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
 }
-// 获取明细列表
-export const getDetailList = params => {
-  return http.get('/admin/platorm/stock/detail/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
-}

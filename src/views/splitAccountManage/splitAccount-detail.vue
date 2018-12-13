@@ -71,6 +71,16 @@
     label="分账状态">
   </el-table-column>
   </el-table>
+  <div class="page fr">
+    <el-pagination
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :page-size="pageSize"
+      layout="total, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
+  </div>
   </div>
   </template>
   <script>
@@ -81,13 +91,19 @@ export default {
     if (this.shareBillId) {
       getOrderFormDetailList(this.shareBillId).then(res => {
         if (res.code === 1) {
-          this.splitAccountDetailList = res.data
+          this.splitAccountDetailList = res.data.list
+          this.total = res.data.total
+          this.currentSize = res.data.size
         }
       })
     }
   },
   data () {
     return {
+      pageSize: 10, // 每页条数
+      pageNum: 1, // 当前第几页
+      total: 0, // 总页数
+      currentSize: 0, // 当前页数据条数
       splitAccountDetailList: [] // 产品列表
     }
   },
@@ -98,6 +114,15 @@ export default {
     },
     rateFormatter (row, column, cellValue, index) {
       return this.$accounting.format(cellValue, '4')
+    },
+    // 处理分页
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.initData()
+    },
+    handleCurrentChange (val) {
+      this.pageNum = val
+      this.initData()
     }
   }
 }

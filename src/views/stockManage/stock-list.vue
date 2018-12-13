@@ -86,12 +86,17 @@
       <el-table-column
         fixed="right"
         label="操作"
+        width="160"
         align="center">
         <template slot-scope="scope">
           <el-button
             type="success"
             size="mini"
             @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            @click="godownEntry(scope.$index, scope.row)">入库单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -157,6 +162,11 @@
       handleDetail (index, row) {
         // 到详情页面
         this.$router.push({path: '/stockDetail', query: {skuId: row.skuId, source: 2}})
+      },
+      // 入库单
+      godownEntry (index, row) {
+        // 到详情页面
+        this.$router.push({path: '/godownEntry', query: {venderId: row.venderId}})
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {

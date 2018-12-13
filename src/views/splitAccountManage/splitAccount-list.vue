@@ -55,16 +55,6 @@
         label="分账日期">
       </el-table-column>
       <el-table-column
-        prop="shareStartTime"
-        align="center"
-        label="分账开始日期">
-      </el-table-column>
-      <el-table-column
-        prop="shareEndTime"
-        align="center"
-        label="分账结束日期">
-      </el-table-column>
-      <el-table-column
         prop="venderId"
         align="center"
         label="商户编号">
