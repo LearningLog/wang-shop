@@ -39,10 +39,6 @@
               <i class="el-icon-menu"></i>
               <span>商品发布列表</span>
             </el-menu-item>
-            <el-menu-item index="/addPublishProduct">
-              <i class="el-icon-menu"></i>
-              <span>新增发布</span>
-            </el-menu-item>
             <el-menu-item index="/publishProductApprove">
               <i class="el-icon-menu"></i>
               <span>发布审核</span>
