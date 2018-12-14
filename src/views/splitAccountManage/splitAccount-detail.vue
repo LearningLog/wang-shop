@@ -85,18 +85,11 @@
   </template>
   <script>
 import { getOrderFormDetailList } from '../../api/splitAccountManage.js'
+const qs = require('querystring')
 export default {
   created () {
     this.shareBillId = this.$route.query.shareBillId
-    if (this.shareBillId) {
-      getOrderFormDetailList(this.shareBillId).then(res => {
-        if (res.code === 1) {
-          this.splitAccountDetailList = res.data.list
-          this.total = res.data.total
-          this.currentSize = res.data.size
-        }
-      })
-    }
+    this.initData()
   },
   data () {
     return {
@@ -108,6 +101,17 @@ export default {
     }
   },
   methods: {
+    initData () {
+      if (this.shareBillId) {
+        getOrderFormDetailList({shareBillId: this.shareBillId, params: qs.stringify(({pageSize: this.pageSize, pageNum: this.pageNum}))}).then(res => {
+          if (res.code === 1) {
+            this.splitAccountDetailList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
+          }
+        })
+      }
+    },
     // 单价、数量格式化
     numFormatter (row, column, cellValue, index) {
       return this.$accounting.format(cellValue, '2')

@@ -65,12 +65,8 @@
               <i class="el-icon-menu"></i>
               <span>库存列表</span>
             </el-menu-item>
-            <el-menu-item index="/godownEntry">
-              <i class="el-icon-menu"></i>
-              <span>入库单</span>
-            </el-menu-item>
           </el-submenu>
-          <!--库存管理-->
+          <!--厂商管理-->
           <el-submenu index="5">
             <template slot="title">
               <i class="el-icon-location"></i>

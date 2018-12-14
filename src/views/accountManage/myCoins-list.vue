@@ -66,17 +66,17 @@
   </div>
 </template>
 <script>
-  import { getOrderFormDetail } from '../../api/accountManage.js'
+  // import { getOrderFormDetail } from '../../api/accountManage.js'
   export default {
     created () {
       this.productId = this.$route.query.pId
-      if (this.productId) {
-        getOrderFormDetail(this.productId).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
-          }
-        })
-      }
+      // if (this.productId) {
+      //   getOrderFormDetail(this.productId).then(res => {
+      //     if (res.meta.status === 200) {
+      //       this.productList = res.data.productList
+      //     }
+      //   })
+      // }
     },
     data () {
       return {

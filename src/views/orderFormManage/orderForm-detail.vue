@@ -90,13 +90,7 @@
   export default {
     created () {
       this.orderId = this.$route.query.orderId
-      if (this.orderId) {
-        getOrderFormDetailList(this.orderId).then(res => {
-          if (res.code === 1) {
-            this.orderFormList = res.data
-          }
-        })
-      }
+      this.initData()
     },
     data () {
       return {
@@ -108,6 +102,15 @@
       }
     },
     methods: {
+      initData () {
+        if (this.orderId) {
+          getOrderFormDetailList(this.orderId).then(res => {
+            if (res.code === 1) {
+              this.orderFormList = res.data
+            }
+          })
+        }
+      },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '0')

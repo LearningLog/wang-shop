@@ -98,7 +98,6 @@
       publishProduct () {
         this.$refs['product'].validate((valid) => {
           if (valid) {
-            debugger
             if (this.publishId) { // 修改
               publishProductEdit(this.product).then(res => {
                 if (res.code === 1) {

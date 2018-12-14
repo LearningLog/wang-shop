@@ -102,7 +102,7 @@
   </div>
 </template>
 <script>
-  import { getSalesFormList, deleteSalesForm } from '../../api/accountManage.js'
+  // import { getSalesFormList, deleteSalesForm } from '../../api/accountManage.js'
   export default {
     created () {
       // getSalesFormList(this.searchData).then(res => {
@@ -128,11 +128,11 @@
       // 搜索
       onSearch () {
         console.log(this.searchData)
-        getSalesFormList(this.searchData).then(res => {
-          if (res.meta.status === 200) {
-            this.salesFormList = res.data.salesFormList
-          }
-        })
+        // getSalesFormList(this.searchData).then(res => {
+        //   if (res.meta.status === 200) {
+        //     this.salesFormList = res.data.salesFormList
+        //   }
+        // })
       },
       // 重置
       reset () {
@@ -156,11 +156,11 @@
           })
           return false
         } else {
-          deleteSalesForm(this.checkedList).then(res => {
-            if (res.meta.status === 200) {
-              this.salesFormList = res.data.salesFormList
-            }
-          })
+          // deleteSalesForm(this.checkedList).then(res => {
+          //   if (res.meta.status === 200) {
+          //     this.salesFormList = res.data.salesFormList
+          //   }
+          // })
         }
       },
       // 明细

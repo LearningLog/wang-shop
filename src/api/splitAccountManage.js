@@ -11,5 +11,5 @@ export const getSplitAccountList = params => {
 }
 // 产品详情
 export const getOrderFormDetailList = params => {
-  return http.get('/admin/sharebillquery/toBillDetail/' + params).then(res => res.data)
+  return http.get('/admin/sharebillquery/toBillDetail/' + params.shareBillId + '?' + params.params).then(res => res.data)
 }

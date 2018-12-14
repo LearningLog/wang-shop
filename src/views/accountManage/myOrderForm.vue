@@ -216,7 +216,6 @@
               'logisticsTimeStr': null
             }]
             for (let i = 0, len1 = list.length; i < len1; i++) {
-              debugger
               let item1 = list[i]
               this.orderFormList.push(item1)
               for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {

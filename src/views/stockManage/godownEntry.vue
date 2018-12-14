@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>库存管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/stockList' }">库存管理</el-breadcrumb-item>
       <el-breadcrumb-item>入库单</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
@@ -129,7 +129,7 @@
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
         venderId: null, // 商家id
-        stateList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 状态下拉数据
+        stateList: [], // 状态下拉数据
         productList: [] // 产品列表
       }
     },
@@ -139,15 +139,13 @@
         this.initData()
       },
       initData () {
-        if (this.venderId) {
-          getGodownEntryList({pageSize: this.pageSize, pageNum: this.pageNum, venderId: this.venderId, params: qs.stringify((this.searchData))}).then(res => {
-            if (res.code === 1 && res.data) {
-              this.productList = res.data.list
-              this.total = res.data.total
-              this.currentSize = res.data.size
-            }
-          })
-        }
+        getGodownEntryList({pageSize: this.pageSize, pageNum: this.pageNum, venderId: this.venderId, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1 && res.data) {
+            this.productList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
+          }
+        })
       },
       // 重置
       reset () {

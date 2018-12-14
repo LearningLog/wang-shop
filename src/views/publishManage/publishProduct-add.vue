@@ -57,7 +57,8 @@
   export default {
     created () {
       this.skuId = this.$route.query.skuId
-      if (this.product.skuId) {
+      this.product.skuId = this.skuId
+      if (this.skuId) {
         this.initData()
       }
     },
@@ -91,7 +92,7 @@
     },
     methods: {
       initData () {
-        getProductDetail(this.product.skuId).then(res => {
+        getProductDetail(this.skuId).then(res => {
           if (res.code === 1) {
             this.product = res.data
           }

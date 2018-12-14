@@ -79,15 +79,7 @@
   export default {
     created () {
       this.orderId = this.$route.query.orderId
-      if (this.orderId) {
-        getOrderFormDetailList({pageSize: this.pageSize, pageNum: this.pageNum, params: this.orderId}).then(res => {
-          if (res.code === 1) {
-            this.list = res.data.list
-            this.total = res.data.total
-            this.currentSize = res.data.size
-          }
-        })
-      }
+      this.initData()
     },
     data () {
       return {
@@ -99,6 +91,17 @@
       }
     },
     methods: {
+      initData () {
+        if (this.orderId) {
+          getOrderFormDetailList({pageSize: this.pageSize, pageNum: this.pageNum, params: this.orderId}).then(res => {
+            if (res.code === 1) {
+              this.list = res.data.list
+              this.total = res.data.total
+              this.currentSize = res.data.size
+            }
+          })
+        }
+      },
       // 单价、数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')

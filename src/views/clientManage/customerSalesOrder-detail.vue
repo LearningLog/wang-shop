@@ -84,15 +84,7 @@
   export default {
     created () {
       this.userId = this.$route.query.userId
-      if (this.userId) {
-        getSalesList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify({userId: this.userId})}).then(res => {
-          if (res.code === 1) {
-            this.sealsList = res.data.list ? res.data.list : []
-            this.total = res.data.total
-            this.currentSize = res.data.size
-          }
-        })
-      }
+      this.initData()
     },
     data () {
       return {
@@ -105,6 +97,17 @@
       }
     },
     methods: {
+      initData () {
+        if (this.userId) {
+          getSalesList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify({userId: this.userId})}).then(res => {
+            if (res.code === 1) {
+              this.sealsList = res.data.list ? res.data.list : []
+              this.total = res.data.total
+              this.currentSize = res.data.size
+            }
+          })
+        }
+      },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '0')
