@@ -42,6 +42,7 @@
 </template>
 <script>
   import { getManufacturerDetail, editManufacturer } from '../../api/manufacturerManage.js'
+  import {onNumValid, validatePhone} from '../../api/util.js'
   export default {
     created () {
       this.manufacturerId = this.$route.query.id
@@ -50,6 +51,28 @@
       }
     },
     data () {
+      let _this = this
+      var tel = (rule, value, callback) => {
+        value = parseInt(onNumValid(value, 0))
+        if (value) {
+          _this.manufacturer.tel = value
+        } else {
+          _this.manufacturer.tel = ''
+        }
+        if (!value) {
+          return callback(new Error('请输入联系电话'))
+        }
+        if (!Number.isInteger(value)) {
+          this.manufacturer.tel = ''
+          callback(new Error('请输入数字值'))
+        } else {
+          if (!validatePhone(value)) {
+            callback(new Error('格式不正确'))
+          } else {
+            callback()
+          }
+        }
+      }
       return {
         manufacturerId: '', // 厂商编号
         manufacturer: {// 表单数据
@@ -73,7 +96,7 @@
             { required: true, message: '请输入联系人', trigger: 'blur' }
           ],
           tel: [
-            { required: true, message: '请输入联系电话', trigger: 'blur' }
+            { required: true, validator: tel, trigger: 'blur' }
           ],
           registerAddress: [
             { required: true, message: '请输入注册地址', trigger: 'blur' }

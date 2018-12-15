@@ -6,7 +6,7 @@
       <el-breadcrumb-item>编辑发布</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
-    <el-form inline :rules="rules" ref="product" :model="product" label-width="140px" size="small" class="productForm">
+    <el-form inline :rules="rules" ref="product" status-icon :model="product" label-width="140px" size="small" class="productForm">
       <el-col span="12">
         <el-form-item label="产品编号（SKU）">
           <el-input v-model="product.skuId" disabled></el-input>
@@ -21,7 +21,7 @@
           <el-input v-model="product.originalPrice" disabled></el-input>
         </el-form-item>
         <el-form-item label="发布数量" prop="publishNum">
-          <el-input v-model="product.publishNum"></el-input>
+          <el-input v-model="product.publishNum" @blur="numBlur(product.publishNum, 0, 'publishNum')"></el-input>
         </el-form-item>
         <el-form-item label="创建时间">
           <el-input v-model="product.createTime" disabled></el-input>
@@ -53,6 +53,7 @@
 </template>
 <script>
   import { getPublishDetail, publishProductEdit } from '../../api/publishManage.js'
+  import {onNumValid} from '../../api/util.js'
   export default {
     created () {
       this.skuId = this.$route.query.skuId
@@ -61,6 +62,12 @@
         getPublishDetail(this.publishId).then(res => {
           if (res.code === 1) {
             this.product = res.data
+            this.product.publishNum = this.$accounting.format(this.product.publishNum.toString(), 0)
+            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 2)
+            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 2)
+            this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
+            this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
+            this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 4)
           }
         })
       }
@@ -99,6 +106,7 @@
         this.$refs['product'].validate((valid) => {
           if (valid) {
             if (this.publishId) { // 修改
+              this.product.publishNum = this.product.publishNum.toString().replace(/,/g, '')
               publishProductEdit(this.product).then(res => {
                 if (res.code === 1) {
                   // 到列表页面
@@ -115,6 +123,11 @@
       reset () {
         this.product.publishNum = '' // 发布数量
         this.$refs['product'].resetFields()
+      },
+      // 数字输入框失去焦点时
+      numBlur (value, num, name) {
+        value = onNumValid(value, num)
+        this.product[name] = value || value === 0 ? this.$accounting.format(value, num) : ''
       }
     }
   }

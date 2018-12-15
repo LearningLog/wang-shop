@@ -6,10 +6,10 @@
     <el-form :rules='rules' :model='loginForm' ref='loginForm' class='container'>
       <!--<div class="userInfo">-->
         <el-form-item prop="loginName">
-          <el-input prefix-icon="myicon myicon-user" class="loginName" style="BACKGROUND-COLOR: transparent;" v-model='loginForm.loginName' placeholder='账号'></el-input>
+          <el-input prefix-icon="myicon myicon-user" class="loginName" style="BACKGROUND-COLOR: transparent;" v-model='loginForm.loginName' autocomplete="off" placeholder='账号'></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type='password' prefix-icon="myicon myicon-key" class="password" style="BACKGROUND-COLOR: transparent;" v-model='loginForm.password' placeholder='密码'></el-input>
+          <el-input type='password' prefix-icon="myicon myicon-key" class="password" style="BACKGROUND-COLOR: transparent;" v-model='loginForm.password' autocomplete="off" placeholder='密码'></el-input>
         </el-form-item>
         <el-form-item>
           <div class="input-group-prepend">
@@ -19,12 +19,11 @@
               <el-option label="管理员" value="1"></el-option>
               <el-option label="厂商" value="2"></el-option>
               <el-option label="商家" value="3"></el-option>
-              <!--<el-option label="渠道" value="3"></el-option>-->
           </el-select>
         </el-form-item>
         <!-- <el-checkbox>记住密码</el-checkbox> -->
         <el-form-item>
-          <el-button type='primary' class='btn' @click='loginSubmit'>登录</el-button>
+          <button type='primary' class='btn' @click='loginSubmit'>登录</button>
         </el-form-item>
       <!--</div>-->
     </el-form>

@@ -6,7 +6,7 @@
       <el-breadcrumb-item>新增发布</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
-    <el-form inline :rules="rules" ref="product" :model="product" label-width="140px" size="small" class="productForm">
+    <el-form inline :rules="rules" ref="product" status-icon :model="product" label-width="140px" size="small" class="productForm">
       <el-col span="12">
         <el-form-item label="产品编号（SKU）">
           <el-input v-model="product.skuId" disabled></el-input>
@@ -21,7 +21,7 @@
           <el-input v-model="product.originalPrice" disabled></el-input>
         </el-form-item>
         <el-form-item label="发布数量" prop="publishNum">
-          <el-input v-model="product.publishNum"></el-input>
+          <el-input v-model="product.publishNum" @blur="numBlur(product.publishNum, 0, 'publishNum')"></el-input>
         </el-form-item>
         <el-form-item label="创建时间">
           <el-input v-model="product.createTime" disabled></el-input>
@@ -54,6 +54,7 @@
 <script>
   import { publishProductAdd } from '../../api/publishManage.js'
   import { getProductDetail } from '../../api/commodityManage.js'
+  import {onNumValid} from '../../api/util.js'
   export default {
     created () {
       this.skuId = this.$route.query.skuId
@@ -95,6 +96,11 @@
         getProductDetail(this.skuId).then(res => {
           if (res.code === 1) {
             this.product = res.data
+            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 2)
+            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 2)
+            this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
+            this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
+            this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 4)
           }
         })
       },
@@ -120,6 +126,11 @@
           this.initData()
         }
         this.$refs['product'].resetFields()
+      },
+      // 数字输入框失去焦点时
+      numBlur (value, num, name) {
+        value = onNumValid(value, num)
+        this.product[name] = value || value === 0 ? this.$accounting.format(value, num) : ''
       }
     }
   }

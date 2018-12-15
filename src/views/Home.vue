@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside :style='{width:"200px"}'>
+    <el-aside :style='{width:"auto"}'>
       <div class="logo"></div>
       <el-scrollbar style="height: 100%;">
         <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
@@ -434,9 +434,8 @@ export default {
   }
   .logo {
     height:60px;
-    background-image: url(../assets/logo.jpg);
+    background: url(../assets/logo.jpg);
     background-size:contain;
-    background-color: #fff;
   }
   .stitle {
     position: absolute;

@@ -43,7 +43,7 @@
     </div>
     <!--操作按钮-->
     <div class="fr operBtn">
-      <el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>
+      <!--<el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>-->
       <el-button type="danger" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
     </div>
     <!--表格-->

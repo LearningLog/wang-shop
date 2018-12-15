@@ -98,6 +98,8 @@
       <el-table-column
         prop="address"
         label="支付渠道"
+        min-width="100"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
@@ -110,6 +112,8 @@
       <el-table-column
         prop="address"
         label="分润金额"
+        min-width="100"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
