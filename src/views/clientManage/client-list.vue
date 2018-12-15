@@ -15,8 +15,8 @@
       </el-form-item>
       <!--查询按钮-->
       <el-form-item>
-        <el-button type="primary" @click="onSearch">查询</el-button>
-        <el-button type="primary" @click="reset">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSearch">查询</el-button>
+        <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <!--表格-->
@@ -24,41 +24,58 @@
       :data="customerList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         prop="userId"
         label="客户编号"
         align="center"
-        width="140">
+        min-width="100"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="userName"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="客户名称">
       </el-table-column>
       <el-table-column
         prop="channel"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="渠道">
       </el-table-column>
       <el-table-column
         prop="unique"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="唯一标识">
       </el-table-column>
       <el-table-column
         prop="tel"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="联系电话">
       </el-table-column>
       <el-table-column
         prop="createTime"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="创建日期">
       </el-table-column>
       <el-table-column
         prop="venderName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="商户名称">
       </el-table-column>
       <el-table-column

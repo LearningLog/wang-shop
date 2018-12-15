@@ -103,4 +103,12 @@ export default {
   .operBtn {
     margin-right: 14px;
   }
+  /*myOrderForm.vue 右侧单元格样式*/
+  .orderInfo .el-form-item, .orderInfo .el-form-item__label, .orderInfo .el-form-item__content {
+    line-height: 26px !important;
+    margin-bottom: 0px !important;
+  }
+  .orderInfo .el-form-item__content {
+    text-align: left;
+  }
 </style>

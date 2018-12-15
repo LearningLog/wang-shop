@@ -30,30 +30,39 @@
     </el-form>
     <!--查询按钮-->
     <div class="fl">
-      <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
-      <el-button type="primary" size="mini" @click="reset">重置</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
     </div>
     <!--表格-->
     <el-table
       :data="orderFormList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         prop="orderId"
         label="销售订单编号"
         align="center"
-        width="140">
+        min-width="100"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="orderCreateTime"
         align="center"
+        min-width="160"
+        show-overflow-tooltip
         label="销售日期">
       </el-table-column>
       <el-table-column
         prop="orderFeeAmount"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="priceFormatter"
         label="销售金额">
       </el-table-column>
@@ -61,22 +70,30 @@
         prop="skuBuyNum"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="numFormatter"
         label="产品数量">
       </el-table-column>
       <el-table-column
         prop="userName"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="客户姓名">
       </el-table-column>
       <el-table-column
         prop="userPhone"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="手机号">
       </el-table-column>
       <el-table-column
         prop="orderStatus"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="状态">
       </el-table-column>
       <el-table-column

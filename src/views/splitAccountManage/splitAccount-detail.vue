@@ -10,6 +10,10 @@
     :data="splitAccountDetailList"
     stripe
     border
+    :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
     style="width: 100%">
   <el-table-column
     label="序号"
@@ -21,34 +25,42 @@
     prop="shareBillId"
     label="销售单编号"
     align="center"
-    width="140">
+    min-width="120"
+    show-overflow-tooltip>
   </el-table-column>
   <el-table-column
     prop="orderTimeStr"
     label="销售日期"
     align="center"
-    width="140">
+    min-width="150"
+    show-overflow-tooltip>
   </el-table-column>
   <el-table-column
     prop="skuId"
     label="产品编号"
     align="center"
-    width="140">
+    min-width="100"
+    show-overflow-tooltip>
   </el-table-column>
   <el-table-column
     prop="skuName"
     label="产品名称"
     align="center"
-    width="140">
+    min-width="150"
+    show-overflow-tooltip>
   </el-table-column>
   <el-table-column
     prop="venderId"
     align="center"
+    min-width="100"
+    show-overflow-tooltip
     label="商户编号">
   </el-table-column>
   <el-table-column
     prop="venderName"
     label="商户名称"
+    min-width="150"
+    show-overflow-tooltip
     align="center">
   </el-table-column>
   <el-table-column
@@ -56,6 +68,8 @@
     header-align="cenetr"
     align="right"
     :formatter="numFormatter"
+    min-width="100"
+    show-overflow-tooltip
     label="分账金额">
   </el-table-column>
   <el-table-column
@@ -63,11 +77,15 @@
     header-align="cenetr"
     align="right"
     :formatter="rateFormatter"
+    min-width="100"
+    show-overflow-tooltip
     label="分账费率">
   </el-table-column>
   <el-table-column
     prop="status"
     align="center"
+    min-width="100"
+    show-overflow-tooltip
     label="分账状态">
   </el-table-column>
   </el-table>

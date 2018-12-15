@@ -8,17 +8,17 @@
     <el-form>
       <el-col span="8">
         <el-form-item label="余额：">
-          <div>{{incomeExpenses.remainder}}</div>
+          <div>{{amountRecord.balance}}</div>
         </el-form-item>
       </el-col>
       <el-col span="8">
         <el-form-item label="收入：">
-          <div>{{incomeExpenses.income}}</div>
+          <div>{{amountRecord.income}}</div>
         </el-form-item>
       </el-col>
       <el-col span="8">
         <el-form-item label="支出：">
-          <div>{{incomeExpenses.expenses}}</div>
+          <div>{{amountRecord.payOut}}</div>
         </el-form-item>
       </el-col>
     </el-form>
@@ -27,35 +27,51 @@
       :data="orderFormList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         prop="name"
         label="业务日期"
+        min-width="150"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="业务类型">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label=业务金额>
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="孖豆余额">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="业务操作">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="200"
+        show-overflow-tooltip
         label="详细说明">
       </el-table-column>
     </el-table>
@@ -73,40 +89,42 @@
 </template>
 <script>
   import { getMyBeansAmount, getMyBeansList } from '../../api/accountManage.js'
+  const qs = require('querystring')
   export default {
     created () {
-      getMyBeansAmount().then(res => {
-        if (res.code === 1 && res.data) {
-          this.productList = res.data.list
-          this.total = res.data.total
-          this.currentSize = res.data.size
-        }
-      })
-      getMyBeansList().then(res => {
-        if (res.code === 1 && res.data) {
-          this.productList = res.data.list
-          this.total = res.data.total
-          this.currentSize = res.data.size
-        }
-      })
+      this.initData()
     },
     data () {
       return {
-        incomeExpenses: {
-          remainder: '', // 余额
+        venderId: null, // 商家编号
+        myBeansAmount: {
+          balance: '', // 余额
           income: '', // 收入
-          expenses: '', // 支出
-          withdrawDeposit: '' // 提现
+          payOut: '' // 支出
         },
         pageSize: 10, // 每页条数
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
-        myBeansAmount: {}, // 我的孖豆金额
         myBeansList: [{address: '哈哈哈哈'}] // 客户销售单列表
       }
     },
     methods: {
+      initData () {
+        getMyBeansAmount().then(res => {
+          if (res.code === 1 && res.data) {
+            this.myBeansAmount = res.data
+            this.venderId = res.data.venderId
+            getMyBeansList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify({venderId: this.venderId})}).then(res => {
+              if (res.code === 1 && res.data) {
+                this.myBeansList = res.data.list
+                this.total = res.data.total
+                this.currentSize = res.data.size
+              }
+            })
+          }
+        })
+      },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')

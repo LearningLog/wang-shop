@@ -34,45 +34,60 @@
     </el-form>
     <!--查询按钮-->
     <div class="fl">
-      <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
-      <el-button type="primary" size="mini" @click="reset">重置</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
     </div>
     <!--表格-->
     <el-table
       :data="splitAccountList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         prop="shareBillId"
         label="分账订单编号"
         align="center"
-        width="140">
+        min-width="120"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="shareTimeStr"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="分账日期">
       </el-table-column>
       <el-table-column
         prop="venderId"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="商户编号">
       </el-table-column>
       <el-table-column
         prop="venderName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="商户名称">
       </el-table-column>
       <el-table-column
         prop="shareType"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="分账类型">
       </el-table-column>
       <el-table-column
         prop="shareAccount"
         header-align="cenetr"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="numFormatter"
         label="分账金额">
       </el-table-column>
@@ -80,12 +95,16 @@
         prop="shareRate"
         header-align="cenetr"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="rateFormatter"
         label="分账费率">
       </el-table-column>
       <el-table-column
         prop="status"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="状态">
       </el-table-column>
       <el-table-column

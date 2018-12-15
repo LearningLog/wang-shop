@@ -10,6 +10,10 @@
       :data="orderFormList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         label="序号"
@@ -20,48 +24,62 @@
       <el-table-column
         prop="brand"
         label="产品品牌"
+        min-width="150"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
         prop="skuId"
         label="产品编号"
         align="center"
-        width="140">
+        min-width="100"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="skuName"
         label="产品名称"
         align="center"
-        width="140">
+        min-width="150"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="skuBuyNum"
         header-align="center"
         align="right"
         :formatter="numFormatter"
+        min-width="100"
+        show-overflow-tooltip
         label="产品数量">
       </el-table-column>
       <el-table-column
         prop="skuBuyPrice"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="priceFormatter"
         label="产品单价">
       </el-table-column>
       <el-table-column
         prop="saleProperty"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="产品规格">
       </el-table-column>
       <el-table-column
         prop="model"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="产品型号">
       </el-table-column>
       <el-table-column
         prop="amount"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="priceFormatter"
         label="总金额">
       </el-table-column>
@@ -69,6 +87,8 @@
         prop="amount"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="priceFormatter"
         label="订单金额">
       </el-table-column>
@@ -107,6 +127,8 @@
           getOrderFormDetailList(this.orderId).then(res => {
             if (res.code === 1) {
               this.orderFormList = res.data
+              this.total = res.data.total
+              this.currentSize = res.data.size
             }
           })
         }

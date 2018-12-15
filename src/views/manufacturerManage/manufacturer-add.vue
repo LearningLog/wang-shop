@@ -82,6 +82,10 @@
           if (valid) {
             addManufacturer(this.manufacturer).then(res => {
               if (res.code === 1) {
+                this.$message({
+                  type: 'success',
+                  message: '保存成功!'
+                })
                 // 到列表页
                 this.$router.push({path: '/manufacturerList'})
               }

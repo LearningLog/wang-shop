@@ -64,7 +64,7 @@
             :on-preview="handlePreview"
             :file-list="product.skuImageList"
             list-type="picture">
-            <el-button size="small" type="primary">点击上传</el-button>
+            <el-button size="small" type="primary">上传<i class="el-icon-upload el-icon--right"></i></el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png/gif/jepg/jpeg文件</div>
           </el-upload>
         </el-form-item>

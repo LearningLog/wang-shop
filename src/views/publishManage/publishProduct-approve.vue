@@ -11,11 +11,15 @@
       :data="productList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       ref="checkedList"
       @selection-change="handleSelectionChange"
-      max-height="500"
       style="width: 100%">
       <el-table-column
+        fixed="lefr"
         type="selection"
         label="选择"
         align="center"
@@ -23,45 +27,59 @@
       </el-table-column>
       <el-table-column
         prop="skuId"
-        label="产品编号（SKU）"
+        label="产品编号(SKU)"
         align="center"
-        width="140">
+        width="120">
       </el-table-column>
       <el-table-column
         prop="skuName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="产品名称">
       </el-table-column>
       <el-table-column
         prop="brand"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="产品品牌">
       </el-table-column>
       <el-table-column
         prop="saleProperty"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="规格">
       </el-table-column>
       <el-table-column
         prop="model"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="型号">
       </el-table-column>
       <el-table-column
         prop="manufacturerName"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="厂家">
       </el-table-column>
       <el-table-column
         prop="createTime"
         header-align="center"
         align="right"
+        min-width="160"
+        show-overflow-tooltip
         label="发布时间">
       </el-table-column>
       <el-table-column
         prop="publishNum"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="numFormatter"
         label="发布数量">
       </el-table-column>
@@ -69,6 +87,8 @@
         prop="usableStock"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="numFormatter"
         label="现存数量">
       </el-table-column>

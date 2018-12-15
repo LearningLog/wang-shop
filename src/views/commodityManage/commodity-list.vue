@@ -14,8 +14,8 @@
         <el-input v-model="searchData.skuId" placeholder="请输入产品编号"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSearch">查询</el-button>
-        <el-button type="primary" @click="reset">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSearch">查询</el-button>
+        <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>
@@ -25,10 +25,15 @@
       :data="productList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       ref="checkedList"
       @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
+        fixed="left"
         type="selection"
         label="选择"
         align="center"
@@ -36,46 +41,59 @@
       </el-table-column>
       <el-table-column
         prop="skuId"
-        label="产品编号（SKU）"
+        label="产品编号(SKU)"
         align="center"
-        width="140">
+        min-width="120"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="skuName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="产品名称">
       </el-table-column>
       <el-table-column
         prop="brand"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="产品品牌">
       </el-table-column>
       <el-table-column
         prop="saleProperty"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="规格">
       </el-table-column>
       <el-table-column
         prop="model"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="型号">
       </el-table-column>
       <el-table-column
         prop="manufacturerName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="厂商">
       </el-table-column>
       <el-table-column
         prop="originalPrice"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="priceFormatter"
         label="单价">
       </el-table-column>
       <el-table-column
         prop="createTime"
         align="center"
-        width="140"
+        min-width="160"
         label="创建时间">
       </el-table-column>
       <el-table-column

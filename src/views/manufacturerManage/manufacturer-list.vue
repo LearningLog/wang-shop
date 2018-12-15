@@ -14,8 +14,8 @@
         <el-input v-model="searchData.id" placeholder="请输入厂商编号"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSearch">查询</el-button>
-        <el-button type="primary" @click="reset">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSearch">查询</el-button>
+        <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>
@@ -25,10 +25,15 @@
       :data="productList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       ref="checkedList"
       @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
+        fixed="left"
         type="selection"
         label="选择"
         align="center"
@@ -38,31 +43,42 @@
         prop="manufacturerId"
         label="厂商编号"
         align="center"
-        width="140">
+        min-width="100"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="manufacturerName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="厂商名称">
       </el-table-column>
       <el-table-column
         prop="brand"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="品牌">
       </el-table-column>
       <el-table-column
         prop="registerAddress"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="注册地址">
       </el-table-column>
       <el-table-column
         prop="tel"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="联系电话">
       </el-table-column>
       <el-table-column
         prop="contact"
         align="center"
+        min-width="70"
+        show-overflow-tooltip
         label="联系人">
       </el-table-column>
       <el-table-column

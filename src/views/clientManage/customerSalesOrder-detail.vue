@@ -10,58 +10,82 @@
       :data="sealsList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         prop="orderId"
         label="销售单编号"
+        min-width="100"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
         prop="userId"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="客户编号">
       </el-table-column>
       <el-table-column
         prop="userName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="客户名称">
       </el-table-column>
       <el-table-column
         prop="venderName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="商家名称">
       </el-table-column>
       <el-table-column
         prop="skuId"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="产品编码">
       </el-table-column>
       <el-table-column
         prop="skuName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="产品名称">
       </el-table-column>
       <el-table-column
         prop="skuBuyNum"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="numFormatter"
         label="产品数量">
       </el-table-column>
       <el-table-column
         prop="skuBuyPrice"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="priceFormatter"
         label="销售单金额">
       </el-table-column>
       <el-table-column
         prop="createTime"
         label="销售日期"
+        min-width="150"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
         prop="channel"
         label="支付渠道"
+        min-width="100"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
     </el-table>

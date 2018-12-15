@@ -80,12 +80,16 @@ http.interceptors.response.use(function (response) {
         redirect: window.location.hash
       }
     })
+  } else if (res.code === 1000) {
+    Message({
+      message: res.message,
+      type: 'error'
+    })
   } else if (res.code === 2000) {
     Message({
       message: res.message,
       type: 'warning'
     })
-    // return false
   } else if (res.code === 3001) {
     Message({
       message: res.message,

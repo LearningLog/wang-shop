@@ -37,50 +37,67 @@
     </el-form>
     <!--查询按钮-->
     <div class="fl">
-      <el-button type="primary" size="mini" @click="onSearch">查询</el-button>
-      <el-button type="primary" size="mini" @click="reset">重置</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
     </div>
     <!--表格-->
     <el-table
       :data="orderFormList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         prop="orderId"
         label="订单编号"
         align="center"
-        width="140">
+        min-width="120"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="orderTime"
+        prop="orderTimeStr"
         align="center"
+        min-width="130"
+        show-overflow-tooltip
         label="订单日期">
       </el-table-column>
       <el-table-column
         prop="manufacturerId"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="商户编号">
       </el-table-column>
       <el-table-column
         prop="manufacturerName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="商户名称">
       </el-table-column>
       <el-table-column
         prop="venderId"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="厂商编号">
       </el-table-column>
       <el-table-column
         prop="venderName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="厂商名称">
       </el-table-column>
       <el-table-column
         prop="orderFeeAmount"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="priceFormatter"
         label="订单金额">
       </el-table-column>
@@ -88,12 +105,16 @@
         prop="buynum"
         header-align="center"
         align="right"
+        min-width="100"
+        show-overflow-tooltip
         :formatter="numFormatter"
         label="产品数量">
       </el-table-column>
       <el-table-column
         prop="orderStatus"
         align="center"
+        min-width="80"
+        show-overflow-tooltip
         label="状态">
       </el-table-column>
       <el-table-column

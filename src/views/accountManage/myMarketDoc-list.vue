@@ -41,41 +41,58 @@
       :data="salesFormList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         prop="name"
         label="销售单编号"
         align="center"
-        width="140">
+        min-width="100"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="客户名称">
       </el-table-column>
       <el-table-column
         prop="address"
+        min-width="100"
+        show-overflow-tooltip
         align="center"
         label="产品编码">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="产品名称">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="产品数量">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="销售单金额">
       </el-table-column>
       <el-table-column
         prop="address"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="销售日期">
       </el-table-column>
       <el-table-column
@@ -86,6 +103,8 @@
       <el-table-column
         prop="address"
         label="分润比例"
+        min-width="100"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
@@ -96,6 +115,8 @@
       <el-table-column
         prop="address"
         label="分润状态"
+        min-width="100"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
     </el-table>
