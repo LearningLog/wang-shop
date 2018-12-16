@@ -8,17 +8,17 @@
     <el-form>
       <el-col span="8">
         <el-form-item label="余额：">
-          <div>{{amountRecord.balance}}</div>
+          <div>{{myBeansAmount.balance}}</div>
         </el-form-item>
       </el-col>
       <el-col span="8">
         <el-form-item label="收入：">
-          <div>{{amountRecord.income}}</div>
+          <div>{{myBeansAmount.income}}</div>
         </el-form-item>
       </el-col>
       <el-col span="8">
         <el-form-item label="支出：">
-          <div>{{amountRecord.payOut}}</div>
+          <div>{{myBeansAmount.payOut}}</div>
         </el-form-item>
       </el-col>
     </el-form>

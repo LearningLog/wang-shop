@@ -115,9 +115,9 @@
           skuImageList: [], // 商品图片
           skuImage: '', // 商品图片地址
           increaseNum: null, // 递增数量
-          minPurchaseNum: null, // 起定数量
-          createTime: '2018-12-02 07:06:27', // 创建时间
-          updateTime: '2018-12-02 07:06:30'
+          minPurchaseNum: null // 起定数量
+          // createTime: '2018-12-02 07:06:27', // 创建时间
+          // updateTime: '2018-12-02 07:06:30'
         },
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
@@ -212,7 +212,6 @@
         var formData = new FormData()
         formData.append('file', file.raw)
         uploadSingle(formData).then(res => {
-          debugger
           if (res.data) this.product.skuImage = res.data
         })
       },

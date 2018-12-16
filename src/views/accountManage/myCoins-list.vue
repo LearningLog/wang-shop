@@ -9,20 +9,20 @@
     <el-form>
       <el-col span="8">
         <el-form-item label="余额：">
-          <div>{{incomeExpenses.remainder}}</div>
+          <div>{{myCoinsAmount.balance}}</div>
         </el-form-item>
         <el-form-item label="提现：">
-          <div>{{incomeExpenses.withdrawDeposit}}</div>
+          <div>{{myCoinsAmount.withdrawDeposit}}</div>
         </el-form-item>
       </el-col>
       <el-col span="8">
         <el-form-item label="收入：">
-          <div>{{incomeExpenses.income}}</div>
+          <div>{{myCoinsAmount.income}}</div>
         </el-form-item>
       </el-col>
       <el-col span="8">
         <el-form-item label="支出：">
-          <div>{{incomeExpenses.expenses}}</div>
+          <div>{{myCoinsAmount.payOut}}</div>
         </el-form-item>
       </el-col>
     </el-form>
@@ -93,8 +93,6 @@
 </template>
 <script>
   import { getMyCoinsAmount, getMyCoinsList } from '../../api/accountManage.js'
-  import {getToken} from '../../api/auth.js'
-  const qs = require('querystring')
 
   export default {
     created () {
@@ -117,62 +115,21 @@
     },
     methods: {
       initData () {
-        if (getToken('userType') === 'adminToken') {
-          getMyCoinsAmount(qs.stringify({adminToken: getToken('adminToken')})).then(res => {
-            if (res.code === 1) {
-              this.myCoinsAmount = res.data
-            }
-          })
-          getMyCoinsList({
-            pageSize: this.pageSize,
-            pageNum: this.pageNum,
-            params: qs.stringify({adminToken: getToken('adminToken')})
-          }).then(res => {
-            if (res.code === 1 && res.data) {
-              this.myCoinsList = res.data.list
-              this.total = res.data.total
-              this.currentSize = res.data.size
-            }
-          })
-        } else if (getToken('userType') === 'manufacturerToken') {
-          if (getToken('userType') === 'manufacturerToken') {
-            getMyCoinsAmount(qs.stringify({manufacturerToken: getToken('manufacturerToken')})).then(res => {
-              if (res.code === 1) {
-                this.myCoinsAmount = res.data
-              }
-            })
-            getMyCoinsList({
-              pageSize: this.pageSize,
-              pageNum: this.pageNum,
-              params: qs.stringify({manufacturerToken: getToken('manufacturerToken')})
-            }).then(res => {
-              if (res.code === 1 && res.data) {
-                this.myCoinsList = res.data.list
-                this.total = res.data.total
-                this.currentSize = res.data.size
-              }
-            })
+        getMyCoinsAmount().then(res => {
+          if (res.code === 1) {
+            this.myCoinsAmount = res.data
           }
-        } else if (getToken('userType') === 'venderToken') {
-          if (getToken('userType') === 'venderToken') {
-            getMyCoinsAmount(qs.stringify({venderToken: getToken('venderToken')})).then(res => {
-              if (res.code === 1) {
-                this.myCoinsAmount = res.data
-              }
-            })
-            getMyCoinsList({
-              pageSize: this.pageSize,
-              pageNum: this.pageNum,
-              params: qs.stringify({venderToken: getToken('venderToken')})
-            }).then(res => {
-              if (res.code === 1 && res.data) {
-                this.myCoinsList = res.data.list
-                this.total = res.data.total
-                this.currentSize = res.data.size
-              }
-            })
+        })
+        getMyCoinsList({
+          pageSize: this.pageSize,
+          pageNum: this.pageNum
+        }).then(res => {
+          if (res.code === 1 && res.data) {
+            this.myCoinsList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
-        }
+        })
       },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {

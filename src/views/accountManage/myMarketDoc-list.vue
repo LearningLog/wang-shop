@@ -8,20 +8,22 @@
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
       <el-form-item label="销售单编号:">
-        <el-input v-model="searchData.salesFormCode" placeholder="请输入销售单编号"></el-input>
+        <el-input v-model="searchData.orderId" placeholder="请输入销售单编号"></el-input>
       </el-form-item>
       <el-form-item label="销售日期:">
         <el-date-picker
           class="salesTime"
           v-model="searchData.salesTime"
+          value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
+          @change="publishTimeChange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="结算状态:">
-        <el-select v-model="searchData.status" placeholder="请选择结算状态">
+        <el-select v-model="searchData.shareStatus" placeholder="请选择结算状态">
           <el-option
             v-for="item in settleStatusList"
             :key="item.id"
@@ -124,75 +126,83 @@
         align="center">
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  // import { getSalesFormList, deleteSalesForm } from '../../api/accountManage.js'
+  import { getSalesFormList } from '../../api/accountManage.js'
+  const qs = require('querystring')
   export default {
     created () {
-      // getSalesFormList(this.searchData).then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.salesFormList = res.data.salesFormList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
+      this.iniData()
     },
     data () {
       return {
         searchData: { // 搜索数据
-          salesFormCode: '', // 销售单编号
-          salesTime: [], // 销售日期
-          status: '' // 销售日期
+          orderId: '', // 销售单编号
+          // startTime: '', // 开始时间
+          // endTime: '', // 结束时间
+          shareStatus: '' // 销售日期
         },
-        salesFormList: [{address: '哈哈哈哈哈'}], // 销售单列表
-        btnDisabled: false, // 是否禁用按钮
+        salesTime: [], // 销售日期
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        salesFormList: [], // 销售单列表
         settleStatusList: [{title: '已结算', id: 1}] // 结算下拉数据
       }
     },
     methods: {
+      iniData () {
+        getSalesFormList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify(this.searchData)}).then(res => {
+          if (res.code === 1) {
+            this.salesFormList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
+          }
+        })
+      },
       // 搜索
       onSearch () {
-        console.log(this.searchData)
-        // getSalesFormList(this.searchData).then(res => {
-        //   if (res.meta.status === 200) {
-        //     this.salesFormList = res.data.salesFormList
-        //   }
-        // })
+        this.onSearch()
       },
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          salesFormCode: '', // 销售单编号
-          salesTime: [], // 销售日期
-          status: '' // 销售日期
+          orderId: '', // 销售单编号
+          // startTime: '', // 开始时间
+          // endTime: '', // 结束时间
+          shareStatus: '' // 销售日期
         }
         this.onSearch()
       },
-      // 选中数据
-      handleSelectionChange (row) {
-        this.checkedList = row
+      // 获取发布时间
+      publishTimeChange (date) {
+        this.searchData.startTime = date[0]
+        this.searchData.endTime = date[1]
       },
-      // 删除
-      remove () {
-        if (this.checkedList.length === 0) {
-          this.$message({
-            message: '请选择至少一项产品记录！',
-            type: 'warning'
-          })
-          return false
-        } else {
-          // deleteSalesForm(this.checkedList).then(res => {
-          //   if (res.meta.status === 200) {
-          //     this.salesFormList = res.data.salesFormList
-          //   }
-          // })
-        }
+      // 金额格式化
+      priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
       },
-      // 明细
-      handleDetail (index, row) {
-        // 到详情页面
-        //   this.$router.push({path: '/salesFormSalesOrderDetail', query: {pId: row.goods_id}})
-        this.$router.push({path: '/salesFormSalesOrderDetail', query: {pId: '11111'}})
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }

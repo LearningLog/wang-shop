@@ -85,14 +85,19 @@ export default {
     line-height: 40px;
     vertical-align: middle;
   }
+  /*顶部固定按钮*/
   .operfixed {
     position: fixed;
     bottom: 10px;
-    left: 100px;
+    left: 0px;
     right: 0px;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+  }
+  /*菜单*/
+  .asideBar .el-scrollbar__wrap {
+    overflow-x: hidden;
   }
   .fl {
       float: left;

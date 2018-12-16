@@ -99,9 +99,9 @@
           skuImageList: [], // 商品图片
           skuImage: '', // 商品图片地址
           increaseNum: null, // 递增数量
-          minPurchaseNum: null, // 起定数量
-          createTime: '2018-12-02 07:06:27', // 创建时间
-          updateTime: '2018-12-02 07:06:30'
+          minPurchaseNum: null // 起定数量
+          // createTime: '2018-12-02 07:06:27', // 创建时间
+          // updateTime: '2018-12-02 07:06:30'
         },
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
@@ -176,7 +176,7 @@
       // 重置
       reset () {
         this.product = {
-          skuId: '11', // 产品编号,
+          skuId: '', // 产品编号,
           brand: '', // 产品品牌
           skuName: '', // 产品名称
           manufacturerName: '', // 厂家

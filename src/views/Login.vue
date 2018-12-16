@@ -30,119 +30,118 @@
   </div>
 </template>
 <script>
-import { loginAdmin, loginManufacturer, loginVender } from '../api/login.js'
-import { saveToken } from '../api/auth.js'
-const qs = require('querystring')
-export default {
-  data () {
-    return {
-      loginForm: { // 登录表单
-        loginName: '', // 用户名
-        password: '' // 密码
-      },
-      userType: '', // 身份类型
-      cooiekName: '', // cooike键名
-      rules: {
-        loginName: [
-          { required: true, message: '请输入账号', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ]
+  import { loginAdmin, loginManufacturer, loginVender } from '../api/login.js'
+  import { saveToken } from '../api/auth.js'
+  const qs = require('querystring')
+  export default {
+    data () {
+      return {
+        loginForm: { // 登录表单
+          loginName: '', // 用户名
+          password: '' // 密码
+        },
+        userType: '', // 身份类型
+        cooiekName: '', // cooike键名
+        rules: {
+          loginName: [
+            { required: true, message: '请输入账号', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' }
+          ]
+        }
       }
-    }
-  },
-  methods: {
-    loginSubmit () {
-      this.$refs['loginForm'].validate(valid => {
-        if (valid) {
-          if (!this.userType) {
-            this.$message({
-              message: '请选择身份类型！',
-              type: 'warning'
-            })
-          } else {
-            // 调用后台接口
-            if (this.userType === '1') {
-              console.log(qs.stringify(this.loginForm))
-              loginAdmin(qs.stringify(this.loginForm)).then(res => {
-                if (res.code === 1) {
-                  // 路由跳转
-                  saveToken('adminToken', res.data, 'h24')
-                  saveToken('userType', 'adminToken', 'h24')
-                  this.$router.push({path: '/'})
-                  // 给出登陆成功的提示消息
-                  this.$message({
-                    type: 'success',
-                    message: '登陆成功!'
-                  })
-                } else {
-                  // 登录失败
-                  this.$message({
-                    message: '用户名或者密码错误！',
-                    type: 'error'
-                  })
-                }
-              })
-            } else if (this.userType === '2') {
-              loginManufacturer(qs.stringify(this.loginForm)).then(res => {
-                if (res.code === 1) {
-                  // 路由跳转
-                  saveToken('manufacturerToken', res.data, 'h24')
-                  saveToken('userType', 'manufacturerToken', 'h24')
-                  this.$router.push({path: '/'})
-                  // 给出登陆成功的提示消息
-                  this.$message({
-                    type: 'success',
-                    message: '登陆成功!'
-                  })
-                } else {
-                  // 登录失败
-                  this.$message({
-                    message: '用户名或者密码错误！',
-                    type: 'error'
-                  })
-                }
+    },
+    methods: {
+      loginSubmit () {
+        this.$refs['loginForm'].validate(valid => {
+          if (valid) {
+            if (!this.userType) {
+              this.$message({
+                message: '请选择身份类型！',
+                type: 'warning'
               })
             } else {
-              loginVender(qs.stringify(this.loginForm)).then(res => {
-                if (res.code === 1) {
-                  // 路由跳转
-                  saveToken('venderToken', res.data, 'h24')
-                  saveToken('userType', 'venderToken', 'h24')
-                  this.$router.push({path: '/'})
-                  // 给出登陆成功的提示消息
-                  this.$message({
-                    type: 'success',
-                    message: '登陆成功!'
-                  })
-                } else {
-                  // 登录失败
-                  this.$message({
-                    message: '用户名或者密码错误！',
-                    type: 'error'
-                  })
-                }
-              })
+              // 调用后台接口
+              if (this.userType === '1') {
+                loginAdmin(qs.stringify(this.loginForm)).then(res => {
+                  if (res.code === 1) {
+                    // 路由跳转
+                    saveToken('adminToken', res.data, 'h24')
+                    saveToken('userType', 'adminToken', 'h24')
+                    this.$router.push({path: '/'})
+                    // 给出登陆成功的提示消息
+                    this.$message({
+                      type: 'success',
+                      message: '登陆成功!'
+                    })
+                  } else {
+                    // 登录失败
+                    this.$message({
+                      message: '用户名或者密码错误！',
+                      type: 'error'
+                    })
+                  }
+                })
+              } else if (this.userType === '2') {
+                loginManufacturer(qs.stringify(this.loginForm)).then(res => {
+                  if (res.code === 1) {
+                    // 路由跳转
+                    saveToken('manufacturerToken', res.data, 'h24')
+                    saveToken('userType', 'manufacturerToken', 'h24')
+                    this.$router.push({path: '/'})
+                    // 给出登陆成功的提示消息
+                    this.$message({
+                      type: 'success',
+                      message: '登陆成功!'
+                    })
+                  } else {
+                    // 登录失败
+                    this.$message({
+                      message: '用户名或者密码错误！',
+                      type: 'error'
+                    })
+                  }
+                })
+              } else {
+                loginVender(qs.stringify(this.loginForm)).then(res => {
+                  if (res.code === 1) {
+                    // 路由跳转
+                    saveToken('venderToken', res.data, 'h24')
+                    saveToken('userType', 'venderToken', 'h24')
+                    this.$router.push({path: '/'})
+                    // 给出登陆成功的提示消息
+                    this.$message({
+                      type: 'success',
+                      message: '登陆成功!'
+                    })
+                  } else {
+                    // 登录失败
+                    this.$message({
+                      message: '用户名或者密码错误！',
+                      type: 'error'
+                    })
+                  }
+                })
+              }
             }
           }
+        })
+      }
+    },
+    watch: {
+      userType: function (q, w) {
+        switch (this.userType) {
+          case '1':
+            this.cooiekName = 'adminToken'
+            break
+          case '2':
+            this.cooiekName = 'manufacturerToken'
+            break
         }
-      })
-    }
-  },
-  watch: {
-    userType: function (q, w) {
-      switch (this.userType) {
-        case '1':
-          this.cooiekName = 'adminToken'
-          break
-        case '2':
-          this.cooiekName = 'manufacturerToken'
-          break
       }
     }
   }
-}
 </script>
 <style scoped>
   .info {
@@ -194,8 +193,8 @@ export default {
   }
   .userType {
     float: left;
-    padding-left: 98px;
-    width: 310px;
+    margin-left: 98px;
+    /*width: 310px;*/
   }
   .input-group-prepend {
     margin-right: -1px;
