@@ -96,11 +96,8 @@
         getProductDetail(this.skuId).then(res => {
           if (res.code === 1) {
             this.product = res.data
-            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 2)
-            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 2)
-            this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
-            this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
-            this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 4)
+            this.product.originalPrice = parseInt(this.$accounting.format(this.product.originalPrice.toString(), 0))
+            this.product.salePrice = parseInt(this.$accounting.format(this.product.salePrice.toString(), 0))
           }
         })
       },
@@ -108,7 +105,8 @@
       publishProduct () {
         this.$refs['product'].validate((valid) => {
           if (valid) {
-            publishProductAdd(this.product).then(res => {
+            let publishNum = parseInt(this.product.publishNum.toString().replace(/,/g, ''))
+            publishProductAdd({publishNum: publishNum}).then(res => {
               if (res.code === 1) {
                 // 到列表页面
                 this.$router.push({path: '/publishProductList'})

@@ -63,11 +63,8 @@
           if (res.code === 1) {
             this.product = res.data
             this.product.publishNum = this.$accounting.format(this.product.publishNum.toString(), 0)
-            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 2)
-            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 2)
-            this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
-            this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
-            this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 4)
+            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 0)
+            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 0)
           }
         })
       }
@@ -106,8 +103,11 @@
         this.$refs['product'].validate((valid) => {
           if (valid) {
             if (this.publishId) { // 修改
-              this.product.publishNum = this.product.publishNum.toString().replace(/,/g, '')
-              publishProductEdit(this.product).then(res => {
+              let data = this.product
+              data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, ''))
+              data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, ''))
+              data.publishNum = parseInt(data.publishNum.toString().replace(/,/g, ''))
+              publishProductEdit(data).then(res => {
                 if (res.code === 1) {
                   // 到列表页面
                   this.$router.push({path: '/publishProductList'})

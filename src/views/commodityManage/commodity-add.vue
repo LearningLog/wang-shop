@@ -18,10 +18,10 @@
           <el-input v-model="product.saleProperty"></el-input>
         </el-form-item>
         <el-form-item label="单价" prop="originalPrice">
-          <el-input v-model="product.originalPrice" @blur="numBlur(product.originalPrice, 2, 'originalPrice')"></el-input>
+          <el-input v-model="product.originalPrice" @blur="numBlur(product.originalPrice, 0, 'originalPrice')"></el-input>
         </el-form-item>
         <el-form-item label="分润比例" prop="fraction">
-          <el-input v-model="product.fraction" @blur="numBlur(product.fraction, 4, 'fraction')"></el-input>
+          <el-input v-model="product.fraction" @blur="numBlur(product.fraction, 2, 'fraction')"></el-input>
         </el-form-item>
         <el-form-item label="起定数量" prop="minPurchaseNum">
           <el-input v-model="product.minPurchaseNum" @blur="numBlur(product.minPurchaseNum, 0, 'minPurchaseNum')"></el-input>
@@ -40,7 +40,7 @@
           <el-input v-model="product.model"></el-input>
         </el-form-item>
         <el-form-item label="售价" prop="salePrice">
-          <el-input v-model="product.salePrice" @blur="numBlur(product.salePrice, 2, 'salePrice')"></el-input>
+          <el-input v-model="product.salePrice" @blur="numBlur(product.salePrice, 0, 'salePrice')"></el-input>
         </el-form-item>
         <el-form-item label="递增数量" prop="increaseNum">
           <el-input v-model="product.increaseNum" @blur="numBlur(product.increaseNum, 0, 'increaseNum')"></el-input>
@@ -153,11 +153,11 @@
               return false
             }
             let data = this.product
-            data.originalPrice = data.originalPrice.toString().replace(/,/g, '')
-            data.salePrice = data.salePrice.toString().replace(/,/g, '')
-            data.increaseNum = data.increaseNum.toString().replace(/,/g, '')
+            data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, ''))
+            data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, ''))
+            data.increaseNum = parseInt(data.increaseNum.toString().replace(/,/g, ''))
             data.minPurchaseNum = data.minPurchaseNum.toString().replace(/,/g, '')
-            data.fraction = data.fraction.toString().replace(/,/g, '')
+            data.fraction = parseFloat(data.fraction.toString().replace(/,/g, ''))
             addProduct(data).then(res => {
               if (res.code === 1) {
                 this.$message({
@@ -240,11 +240,6 @@
           return item.id === val
         })
         this.product.manufacturerName = obj.title
-      },
-      // 数字输入框获取焦点时
-      numFocus (value, name) {
-        value = value === undefined ? '' : value.toString()
-        this.product[name] = value.replace(/,/g, '')
       },
       // 数字输入框失去焦点时
       numBlur (value, num, name) {

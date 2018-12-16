@@ -18,10 +18,10 @@
           <el-input v-model="product.saleProperty"></el-input>
         </el-form-item>
         <el-form-item label="单价" prop="originalPrice">
-          <el-input v-model="product.originalPrice" @blur="numBlur(product.originalPrice, 2, 'originalPrice')"></el-input>
+          <el-input v-model="product.originalPrice" @blur="numBlur(product.originalPrice, 0, 'originalPrice')"></el-input>
         </el-form-item>
         <el-form-item label="分润比例" prop="fraction">
-          <el-input v-model="product.fraction" @blur="numBlur(product.fraction, 4, 'fraction')"></el-input>
+          <el-input v-model="product.fraction" @blur="numBlur(product.fraction, 2, 'fraction')"></el-input>
         </el-form-item>
         <el-form-item label="起定数量" prop="minPurchaseNum">
           <el-input v-model="product.minPurchaseNum" @blur="numBlur(product.minPurchaseNum, 0, 'minPurchaseNum')"></el-input>
@@ -40,7 +40,7 @@
           <el-input v-model="product.model"></el-input>
         </el-form-item>
         <el-form-item label="售价" prop="salePrice">
-          <el-input v-model="product.salePrice" @blur="numBlur(product.salePrice, 2, 'salePrice')"></el-input>
+          <el-input v-model="product.salePrice" @blur="numBlur(product.salePrice, 0, 'salePrice')"></el-input>
         </el-form-item>
         <el-form-item label="递增数量" prop="increaseNum">
           <el-input v-model="product.increaseNum" @blur="numBlur(product.increaseNum, 0, 'increaseNum')"></el-input>
@@ -87,11 +87,11 @@
         getProductDetail(this.skuId).then(res => {
           if (res.code === 1) {
             this.product = res.data
-            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 2)
-            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 2)
+            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 0)
+            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 0)
             this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
             this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
-            this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 4)
+            this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 2)
             this.product.skuImageList = [{url: res.data.skuImage, name: res.data.skuId}]
           }
         })
@@ -169,11 +169,11 @@
               return false
             }
             let data = this.product
-            data.originalPrice = data.originalPrice.toString().replace(/,/g, '')
-            data.salePrice = data.salePrice.toString().replace(/,/g, '')
-            data.increaseNum = data.increaseNum.toString().replace(/,/g, '')
+            data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, ''))
+            data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, ''))
+            data.increaseNum = parseInt(data.increaseNum.toString().replace(/,/g, ''))
             data.minPurchaseNum = data.minPurchaseNum.toString().replace(/,/g, '')
-            data.fraction = data.fraction.toString().replace(/,/g, '')
+            data.fraction = parseFloat(data.fraction.toString().replace(/,/g, ''))
             if (this.skuId) {
               updateProduct(data).then(res => {
                 if (res.code === 1) {
@@ -212,6 +212,7 @@
         var formData = new FormData()
         formData.append('file', file.raw)
         uploadSingle(formData).then(res => {
+          debugger
           if (res.data) this.product.skuImage = res.data
         })
       },
