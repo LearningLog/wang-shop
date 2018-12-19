@@ -6,7 +6,7 @@
         <i @click="toggleFlag" class="myicon myicon-menu btnsize"></i>
         <div class="stitle">孖孖后台管理系统</div>
         <div class="userEdit">
-          <el-button class="modify" type="primary" size="mini" @click='modifyDialog = true'>修改密码</el-button>
+          <!--<el-button class="modify" type="primary" size="mini" @click='modifyDialog = true'>修改密码</el-button>-->
           <el-button class="logoutbtn" type="warning" size="mini" @click='handleLogout'>退出</el-button>
         </div>
       </div>
@@ -15,7 +15,7 @@
       <el-aside :style='{width:"auto"}'>
         <!--<div class="logo"></div>-->
         <el-scrollbar class="asideBar" style="height: 100%;">
-          <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+          <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-if="userType === 'adminToken'">
             <!--<el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>-->
             <!--<template slot="title">-->
             <!--<i class="el-icon-location"></i>-->
@@ -26,6 +26,7 @@
             <!--<span>{{tag.authName}}</span>-->
             <!--</el-menu-item>-->
             <!--</el-submenu>-->
+            <!--管理员-->
             <!--商品管理-->
             <el-submenu index="1">
               <template slot="title">
@@ -136,11 +137,10 @@
                 <i class="el-icon-menu"></i>
                 <span>客户列表</span>
               </el-menu-item>
-              <el-menu-item index="/customerSalesOrderDetail">
-                <i class="el-icon-menu"></i>
-                <span>客户销售单</span>
-              </el-menu-item>
             </el-submenu>
+          </el-menu>
+            <!--厂商-->
+          <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'manufacturerToken'">
             <!--账户管理-->
             <el-submenu index="10">
               <template slot="title">
@@ -149,7 +149,21 @@
               </template>
               <el-menu-item index="/myOrderForm">
                 <i class="el-icon-menu"></i>
-                <span>我的订单</span>
+                <span>我的孖孖</span>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+            <!--商家-->
+            <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'venderToken'">
+            <!--账户管理-->
+            <el-submenu index="10">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span slot="title">账户管理</span>
+              </template>
+              <el-menu-item index="/myOrderForm">
+                <i class="el-icon-menu"></i>
+                <span>我的孖孖</span>
               </el-menu-item>
               <el-menu-item index="/myMarketDocList">
                 <i class="el-icon-menu"></i>
@@ -201,7 +215,7 @@
 <script>
 // import { getMenus } from '../api/index.js'
   import {getToken, removeToken} from '../api/auth.js'
-  import { logoutAdmin, logoutManufacturer, logoutVender, modifyPassword } from '../api/login.js'
+  import { logoutAdmin, logoutManufacturer, logoutVender, modifyPassword, getUserInfo } from '../api/login.js'
   import { getActiveMenu } from '../api/leftMenuConfig.js'
   export default {
     created () {
@@ -212,6 +226,22 @@
       //     this.menuData = res.data
       //   }
       // })
+      getUserInfo(getToken('userType')).then(res => {
+        if (res.code === 1) {
+          this.userType = getToken('userType')
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.message
+          })
+          this.$router.push({
+            path: '/login',
+            query: {
+              redirect: window.location.hash
+            }
+          })
+        }
+      })
     },
     mounted () {
       this.showActiveLeftMenu(this.$route.path)
@@ -223,6 +253,7 @@
         isCollapse: false, // 是否关闭菜单
         uniqueFlag: true,
         menuData: [], // 菜单
+        userType: '', // 登录身份类型
         modifyDialog: false, // 是否显示修改密码对话框
         userInfo: {
           formerPsd: '', // 原密码

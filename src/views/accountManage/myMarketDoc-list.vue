@@ -49,77 +49,84 @@
         'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
-        prop="name"
+        prop="orderId"
         label="销售单编号"
         align="center"
         min-width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="userName"
         align="center"
         min-width="150"
         show-overflow-tooltip
         label="客户名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuId"
         min-width="100"
         show-overflow-tooltip
         align="center"
         label="产品编码">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuName"
         align="center"
         min-width="150"
         show-overflow-tooltip
         label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="skuBuyNum"
+        header-align="center"
+        align="right"
         min-width="100"
         show-overflow-tooltip
+        :formatter="numFormatter"
         label="产品数量">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="skuBuyPrice"
+        header-align="center"
+        align="right"
         min-width="100"
+        :formatter="priceFormatter"
         show-overflow-tooltip
         label="销售单金额">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="createTime"
         align="center"
         min-width="150"
         show-overflow-tooltip
         label="销售日期">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="payType"
         label="支付渠道"
         min-width="100"
         show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="fraction"
         label="分润比例"
+        header-align="center"
+        align="right"
         min-width="100"
-        show-overflow-tooltip
-        align="center">
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="skuBuyPrice"
         label="分润金额"
         min-width="100"
-        show-overflow-tooltip
-        align="center">
+        header-align="center"
+        align="right"
+        :formatter="priceFormatter"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="orderItemStatus"
         label="分润状态"
         min-width="100"
         show-overflow-tooltip
@@ -143,6 +150,11 @@
   const qs = require('querystring')
   export default {
     created () {
+      // getShareBillState().then(res => {
+      //   if (res.code === 1) {
+      //     this.settleStatusList = res.data
+      //   }
+      // })
       this.iniData()
     },
     data () {
@@ -159,7 +171,7 @@
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
         salesFormList: [], // 销售单列表
-        settleStatusList: [{title: '已结算', id: 1}] // 结算下拉数据
+        settleStatusList: [] // 结算下拉数据
       }
     },
     methods: {
@@ -174,7 +186,7 @@
       },
       // 搜索
       onSearch () {
-        this.onSearch()
+        this.iniData()
       },
       // 重置
       reset () {
@@ -184,7 +196,7 @@
           // endTime: '', // 结束时间
           shareStatus: '' // 销售日期
         }
-        this.onSearch()
+        this.iniData()
       },
       // 获取发布时间
       publishTimeChange (date) {
@@ -193,6 +205,10 @@
       },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 数量格式化
+      numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
       },
       // 处理分页

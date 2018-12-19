@@ -12,14 +12,16 @@
           <el-input type='password' prefix-icon="myicon myicon-key" class="password" style="BACKGROUND-COLOR: transparent;" v-model='loginForm.password' autocomplete="off" placeholder='密码'></el-input>
         </el-form-item>
         <el-form-item>
-          <div class="input-group-prepend">
-            <label class="input-group-text">身份类型</label>
-          </div>
-          <el-select placeholder="请选择身份类型" class="userType" v-model='userType'>
+          <!--<div class="input-group-prepend">-->
+            <!--<label class="input-group-text">身份类型</label>-->
+          <!--</div>-->
+          <div class="type">
+            <el-select placeholder="请选择身份类型" class="userType" v-model='userType'>
               <el-option label="管理员" value="1"></el-option>
               <el-option label="厂商" value="2"></el-option>
               <el-option label="商家" value="3"></el-option>
-          </el-select>
+            </el-select>
+          </div>
         </el-form-item>
         <!-- <el-checkbox>记住密码</el-checkbox> -->
         <el-form-item>
@@ -186,16 +188,22 @@
     width: 300px;
     padding: 100px 50px;
   }
-  .loginName, .password, .userType {
+  .loginName, .password, .type {
     background: rgba(255, 255, 255, 0.32);
     /*margin-bottom: 1.5em;*/
     padding: 8px;
   }
-  .userType {
-    float: left;
-    margin-left: 98px;
-    /*width: 310px;*/
+  .type {
+    width: 400px;
   }
+  .userType {
+    width: 400px;
+  }
+  /*.userType {*/
+    /*float: left;*/
+    /*margin-left: 98px;*/
+    /*!*width: 310px;*!*/
+  /*}*/
   .input-group-prepend {
     margin-right: -1px;
     margin-top: 9px;

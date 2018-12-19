@@ -77,7 +77,7 @@
       <el-table-column
         prop="createTime"
         label="销售日期"
-        min-width="150"
+        min-width="160"
         show-overflow-tooltip
         align="center">
       </el-table-column>

@@ -20,9 +20,9 @@
         <el-select v-model="searchData.orderStatus" placeholder="请选择入库状态">
           <el-option
             v-for="item in stateList"
-            :key="item.id"
-            :label="item.title"
-            :value="item.id">
+            :key="item.code"
+            :label="item.desc"
+            :value="item.code">
           </el-option>
         </el-select>
       </el-form-item>
@@ -48,7 +48,7 @@
       <el-table-column
         prop="venderOrderId"
         label="订单编号"
-        min-width="100"
+        min-width="130"
         show-overflow-tooltip
         align="center">
       </el-table-column>
@@ -110,7 +110,7 @@
         label="创建时间">
       </el-table-column>
       <el-table-column
-        prop="orderStatus"
+        prop="orderStatusStr"
         header-align="center"
         align="center"
         min-width="100"
@@ -131,11 +131,16 @@
   </div>
 </template>
 <script>
-  import { getGodownEntryList } from '../../api/stockManage.js'
+  import { getGodownEntryList, getGodownEntryState } from '../../api/stockManage.js'
   const qs = require('querystring')
   export default {
     created () {
       this.venderId = this.$route.query.venderId
+      getGodownEntryState().then(res => {
+        if (res.code === 1) {
+          this.stateList = res.data
+        }
+      })
       this.initData()
     },
     data () {

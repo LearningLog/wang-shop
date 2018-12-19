@@ -42,7 +42,7 @@ http.interceptors.request.use(function (config) {
   loading()
   // 如果本次请求的不是 /login 接口，则我们就加入请求头
   if (config.url !== '/admin/passport/login' && config.url !== '/manufacturer/passport/login') {
-    config.headers.Authorization = getToken(getToken('userType'))
+    config.headers.Authorization = getToken('userType') + '=' + getToken(getToken('userType'))
   }
 
   // return config 就好比 next() 允许通过
@@ -60,15 +60,14 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
   loading('close')
   const res = response.data
-  if (res.code === 403) {
+  if (res.code === 2100) {
     Message({
-      message: '你没有权限执行该操作！',
+      message: res.message,
       type: 'error'
     })
-  } else if (res.code === 401) {
     // 如果用户长时间未操作导致 token 失效或者有人恶意伪造 token
     // 我们也不允许他进入我的系统界面
-    // 所以我们这里通过对 401 统一拦截跳转到登录页
+    // 所以我们这里通过对 2100 统一拦截跳转到登录页
 
     // 1. 我们只需要告诉登陆组件，我从哪里跳过来的
     //    通过 url 地址告诉登陆组件

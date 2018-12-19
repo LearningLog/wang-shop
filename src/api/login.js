@@ -62,13 +62,29 @@ export const logoutVender = params => {
  * @returns {*}
  */
 export const getUserInfo = params => {
-  let tokenName = getToken('userType')
-  if (tokenName === 'adminToken') {
-    return http.get('/admin/passport/info', params).then(res => res.data)
-  } else if (tokenName === 'manufacturerToken') {
-    return http.get('/manufacturer/passport/info', params).then(res => res.data)
+  let tokenName = ''
+  if (params) {
+    tokenName = params
   } else {
-    return http.get('/vender/passport/info', params).then(res => res.data)
+    tokenName = getToken('userType')
+  }
+  if (tokenName === 'adminToken') {
+    return http.get('/admin/passport/info').then(res => res.data)
+  } else if (tokenName === 'manufacturerToken') {
+    return http.get('/manufacturer/passport/info').then(res => res.data)
+  } else if (tokenName === 'venderToken') {
+    return http.get('/vender/passport/info').then(res => res.data)
+  } else {
+    this.$message({
+      type: 'error',
+      message: '当前登录身份错误！，请重新登录'
+    })
+    this.$router.push({
+      path: '/login',
+      query: {
+        redirect: window.location.hash
+      }
+    })
   }
 }
 

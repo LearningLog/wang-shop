@@ -21,3 +21,7 @@ export const getDetailList = params => {
 export const getStockDetailOperationType = params => {
   return http.get('/admin/common/platformstockdetail/operatetype/list/').then(res => res.data)
 }
+// 获取入库单状态
+export const getGodownEntryState = params => {
+  return http.get('/admin/common/venderOrderstatus/list/').then(res => res.data)
+}

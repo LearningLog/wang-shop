@@ -11,7 +11,14 @@
         <el-input v-model="searchData.shareBilId" placeholder="请输入分账订单编号"></el-input>
       </el-form-item>
       <el-form-item label="分账类型:">
-        <el-input v-model="searchData.shareType" placeholder="请输入分账类型"></el-input>
+        <el-select v-model="searchData.shareType" placeholder="请选择分账类型">
+          <el-option
+            v-for="item in shareTypeList"
+            :key="item.code"
+            :label="item.desc"
+            :value="item.code">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="分账日期:">
         <el-date-picker
@@ -76,7 +83,7 @@
         label="商户名称">
       </el-table-column>
       <el-table-column
-        prop="shareType"
+        prop="shareTypeStr"
         align="center"
         min-width="100"
         show-overflow-tooltip
@@ -101,7 +108,7 @@
         label="分账费率">
       </el-table-column>
       <el-table-column
-        prop="status"
+        prop="statusStr"
         align="center"
         min-width="100"
         show-overflow-tooltip
@@ -132,10 +139,15 @@
   </div>
 </template>
 <script>
-  import { getSplitAccountList } from '../../api/splitAccountManage.js'
+  import { getSplitAccountList, getSplitAccountType } from '../../api/splitAccountManage.js'
   const qs = require('querystring')
   export default {
     created () {
+      getSplitAccountType().then(res => {
+        if (res.code === 1) {
+          this.shareTypeList = res.data
+        }
+      })
       this.initData()
     },
     data () {
@@ -152,6 +164,7 @@
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
+        shareTypeList: [], // 分账类型
         splitAccountTime: [], // 分账日期
         splitAccountList: [] // 产品列表
       }

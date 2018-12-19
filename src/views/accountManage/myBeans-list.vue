@@ -24,7 +24,7 @@
     </el-form>
     <!--表格-->
     <el-table
-      :data="orderFormList"
+      :data="myBeansList"
       stripe
       border
       :header-cell-style="{
@@ -33,42 +33,46 @@
         'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
-        prop="name"
+        prop="businessTime"
         label="业务日期"
         min-width="150"
         show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="businessTypeDesc"
         align="center"
         min-width="100"
         show-overflow-tooltip
         label="业务类型">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="amount"
+        header-align="center"
+        align="right"
         min-width="100"
+        :formatter="priceFormatter"
         show-overflow-tooltip
         label=业务金额>
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="balance"
+        header-align="center"
+        align="right"
         min-width="100"
+        :formatter="priceFormatter"
         show-overflow-tooltip
         label="孖豆余额">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="operateTypeDesc"
         align="center"
         min-width="100"
         show-overflow-tooltip
         label="业务操作">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="remark"
         align="center"
         min-width="200"
         show-overflow-tooltip
@@ -89,7 +93,6 @@
 </template>
 <script>
   import { getMyBeansAmount, getMyBeansList } from '../../api/accountManage.js'
-  const qs = require('querystring')
   export default {
     created () {
       this.initData()
@@ -106,7 +109,7 @@
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
-        myBeansList: [{address: '哈哈哈哈'}] // 客户销售单列表
+        myBeansList: [] // 孖豆列表
       }
     },
     methods: {
@@ -114,14 +117,13 @@
         getMyBeansAmount().then(res => {
           if (res.code === 1 && res.data) {
             this.myBeansAmount = res.data
-            this.venderId = res.data.venderId
-            getMyBeansList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify({venderId: this.venderId})}).then(res => {
-              if (res.code === 1 && res.data) {
-                this.myBeansList = res.data.list
-                this.total = res.data.total
-                this.currentSize = res.data.size
-              }
-            })
+          }
+        })
+        getMyBeansList({pageSize: this.pageSize, pageNum: this.pageNum}).then(res => {
+          if (res.code === 1 && res.data) {
+            this.myBeansList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       },

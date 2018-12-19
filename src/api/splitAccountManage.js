@@ -13,3 +13,11 @@ export const getSplitAccountList = params => {
 export const getOrderFormDetailList = params => {
   return http.get('/admin/sharebillquery/toBillDetail/' + params.shareBillId + '?' + params.params).then(res => res.data)
 }
+// 获取分账单类型
+export const getSplitAccountType = params => {
+  return http.get('/admin/common/sharebilltype/list/').then(res => res.data)
+}
+// 获取分账单状态
+export const getSplitAccountState = params => {
+  return http.get('/admin/common/sharebillstatus/list/').then(res => res.data)
+}

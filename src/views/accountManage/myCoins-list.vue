@@ -37,42 +37,46 @@
         'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
-        prop="name"
+        prop="businessTime"
         label="业务日期"
         min-width="150"
         show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="businessTypeDesc"
         align="center"
         min-width="100"
         show-overflow-tooltip
         label="业务类型">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="balance"
+        header-align="center"
+        align="right"
         min-width="100"
+        :formatter="priceFormatter"
         show-overflow-tooltip
         label=业务金额>
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="amount"
+        header-align="center"
+        align="right"
         min-width="100"
+        :formatter="priceFormatter"
         show-overflow-tooltip
         label="孖蹦余额">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="operateTypeDesc"
         align="center"
         min-width="100"
         show-overflow-tooltip
         label="业务操作">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="remark"
         align="center"
         min-width="200"
         show-overflow-tooltip
