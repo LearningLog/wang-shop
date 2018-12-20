@@ -1,27 +1,39 @@
 /**
  * @author: YanHuaKang
  * @2018/11/24
- * @Description:商品管理
+ * @Description:账户管理
  */
 import {http} from '../api/http'
 
-// 获取列表
+// 获取 商家-我的孖孖数据
+export const getVenderZiZiList = params => {
+  return http.get('/vender/order/findmyorders/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
+}
+// 获取 厂商-我的孖孖数据
+export const getManufacturerZiZiList = params => {
+  return http.get('/manufacturer/order/findmyorders/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
+}
+// 获取孖豆上边数据
+export const getMyBeansAmount = params => {
+  return http.get('/vender/integral/getby/venderId').then(res => res.data)
+}
+// 获取孖豆下边数据
+export const getMyBeansList = params => {
+  return http.get('/vender/integral/detail/page/list/' + params.pageNum + '/' + params.pageSize).then(res => res.data)
+}
+// 获取孖蹦余额数据
+export const getMyCoinsAmount = params => {
+  return http.get('/vender/venderaccountquery/findMyAccount').then(res => res.data)
+}
+// 获取孖蹦下边数据
+export const getMyCoinsList = params => {
+  return http.get('/vender/venderaccountquery/page/list/' + params.pageNum + '/' + params.pageSize).then(res => res.data)
+}
+// 获取 商家-我的销售单
 export const getSalesFormList = params => {
-  return http.get('getSalesFormList', params).then(res => res.data)
+  return http.get('/vender/sale/order/pagelist/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
 }
-// 新增||编辑产品
-export const saveProduct = params => {
-  return http.post('saveProduct', params).then(res => res.data)
-}
-// 删除产品
-export const deleteSalesForm = params => {
-  return http.get('deleteSalesForm', params).then(res => res.data)
-}
-// 上传图片
-export const uploadInfo = () => {
-  return http.get('/upload').then(res => res.data)
-}
-// 产品详情
-export const getOrderFormDetail = params => {
-  return http.get('getOrderFormDetail', params).then(res => res.data)
+// 获取分账状态/结算状态接口
+export const getBalanceState = params => {
+  return http.get('/vender/common/shareBill/status/list/').then(res => res.data)
 }

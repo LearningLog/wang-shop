@@ -2,8 +2,8 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>新增商品</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/commodityList' }">商品管理</el-breadcrumb-item>
+      <el-breadcrumb-item>商品编辑</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="product" status-icon :model="product" label-width="140px" size="small" class="productForm">
@@ -77,13 +77,29 @@
   </div>
 </template>
 <script>
-  import { addProduct, uploadSingle } from '../../api/commodityManage.js'
+  import { updateProduct, getProductDetail, uploadSingle } from '../../api/commodityManage.js'
   import { uploadInfo } from '../../api/http.js'
   import {onNumValid} from '../../api/util.js'
-
   export default {
+    created () {
+      this.skuId = this.$route.query.skuId
+      if (this.skuId) {
+        getProductDetail(this.skuId).then(res => {
+          if (res.code === 1) {
+            this.product = res.data
+            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 0)
+            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 0)
+            this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
+            this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
+            this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 2)
+            this.product.skuImageList = [{url: res.data.skuImage, name: res.data.skuId}]
+          }
+        })
+      }
+    },
     data () {
       return {
+        skuId: '', // 产品ID
         product: {// 表单数据
           skuId: '', // 产品编号,
           brand: '', // 产品品牌
@@ -158,16 +174,18 @@
             data.increaseNum = parseInt(data.increaseNum.toString().replace(/,/g, ''))
             data.minPurchaseNum = data.minPurchaseNum.toString().replace(/,/g, '')
             data.fraction = parseFloat(data.fraction.toString().replace(/,/g, ''))
-            addProduct(data).then(res => {
-              if (res.code === 1) {
-                this.$message({
-                  type: 'success',
-                  message: '保存成功!'
-                })
-                // 到编辑页面
-                this.$router.push({path: '/commodityList'})
-              }
-            })
+            if (this.skuId) {
+              updateProduct(data).then(res => {
+                if (res.code === 1) {
+                  this.$message({
+                    type: 'success',
+                    message: '保存成功!'
+                  })
+                  // 到编辑页面
+                  this.$router.push({path: '/commodityList'})
+                }
+              })
+            }
           } else {
             return false
           }
@@ -175,21 +193,12 @@
       },
       // 重置
       reset () {
-        this.product = {
-          skuId: '', // 产品编号,
-          brand: '', // 产品品牌
-          skuName: '', // 产品名称
-          manufacturerName: '', // 厂家
-          manufacturerId: '', // 厂家ID
-          saleProperty: '', // 规格
-          model: '', // 型号
-          originalPrice: '', // 单价
-          salePrice: '', // 售价
-          fraction: '', // 分润比例
-          creater: '', // 创建人
-          createTime: '', // 创建时间
-          skuImageList: [], // 商品图片
-          skuImage: '' // 商品图片地址
+        if (this.skuId) {
+          getProductDetail(this.skuId).then(res => {
+            if (res.code === 1) {
+              this.product = res.data
+            }
+          })
         }
         this.$refs['product'].resetFields()
       },
@@ -258,10 +267,10 @@
     line-height: 45px;
   }
   .productForm {
-     margin-top: 10px;
-   }
+    margin-top: 10px;
+  }
   /*.productForm input {*/
-    /*margin-right: 150px !important;*/
+  /*margin-right: 150px !important;*/
   /*}*/
   .manufacturerName {
     width: 200px;

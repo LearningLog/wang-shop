@@ -2,8 +2,8 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/commodityList' }">商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>新增发布</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/publishProductList' }">发布管理</el-breadcrumb-item>
+      <el-breadcrumb-item>编辑发布</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="product" status-icon :model="product" label-width="140px" size="small" class="productForm">
@@ -52,15 +52,21 @@
   </div>
 </template>
 <script>
-  import { publishProductAdd } from '../../api/publishManage.js'
-  import { getProductDetail } from '../../api/commodityManage.js'
+  import { getPublishDetail, publishProductEdit } from '../../api/publishManage.js'
   import {onNumValid} from '../../api/util.js'
   export default {
     created () {
       this.skuId = this.$route.query.skuId
-      this.product.skuId = this.skuId
-      if (this.skuId) {
-        this.initData()
+      this.publishId = this.$route.query.publishId
+      if (this.publishId) {
+        getPublishDetail(this.publishId).then(res => {
+          if (res.code === 1) {
+            this.product = res.data
+            this.product.publishNum = this.$accounting.format(this.product.publishNum.toString(), 0)
+            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 0)
+            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 0)
+          }
+        })
       }
     },
     data () {
@@ -92,26 +98,22 @@
       }
     },
     methods: {
-      initData () {
-        getProductDetail(this.skuId).then(res => {
-          if (res.code === 1) {
-            this.product = res.data
-            this.product.originalPrice = parseInt(this.$accounting.format(this.product.originalPrice.toString(), 0))
-            this.product.salePrice = parseInt(this.$accounting.format(this.product.salePrice.toString(), 0))
-          }
-        })
-      },
       // 发布
       publishProduct () {
         this.$refs['product'].validate((valid) => {
           if (valid) {
-            let publishNum = parseInt(this.product.publishNum.toString().replace(/,/g, ''))
-            publishProductAdd({publishNum: publishNum}).then(res => {
-              if (res.code === 1) {
-                // 到列表页面
-                this.$router.push({path: '/publishProductList'})
-              }
-            })
+            if (this.publishId) { // 修改
+              let data = this.product
+              data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, ''))
+              data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, ''))
+              data.publishNum = parseInt(data.publishNum.toString().replace(/,/g, ''))
+              publishProductEdit(data).then(res => {
+                if (res.code === 1) {
+                  // 到列表页面
+                  this.$router.push({path: '/publishProductList'})
+                }
+              })
+            }
           } else {
             return false
           }
@@ -120,9 +122,6 @@
       // 重置
       reset () {
         this.product.publishNum = '' // 发布数量
-        if (this.skuId) {
-          this.initData()
-        }
         this.$refs['product'].resetFields()
       },
       // 数字输入框失去焦点时

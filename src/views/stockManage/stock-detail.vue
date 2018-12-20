@@ -2,45 +2,48 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>账户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>我的销售单</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="source === 1" :to="{ path: '/totalStockList' }">总库存列表</el-breadcrumb-item>
+      <el-breadcrumb-item v-else :to="{ path: '/stockList' }">库存列表</el-breadcrumb-item>
+      <el-breadcrumb-item>库存明细</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
-      <el-form-item label="销售单编号:">
-        <el-input v-model="searchData.orderId" placeholder="请输入销售单编号"></el-input>
+      <el-form-item label="产品名称:">
+        <el-input v-model="searchData.skuName" placeholder="请输入产品名称"></el-input>
       </el-form-item>
-      <el-form-item label="销售日期:">
+      <el-form-item label="产品编号:">
+        <el-input v-model="searchData.skuId" placeholder="请输入产品编号"></el-input>
+      </el-form-item>
+      <el-form-item label="操作时间:">
         <el-date-picker
-          class="salesTime"
-          v-model="searchData.salesTime"
+          class="operateTime"
+          v-model="operateTime"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
-          @change="publishTimeChange"
+          @change="timeChange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="结算状态:">
-        <el-select v-model="searchData.shareStatus" placeholder="请选择结算状态">
+      <el-form-item label="操作类型:">
+        <el-select class="operateType" v-model="searchData.operateType" placeholder="请选择操作类型">
           <el-option
-            v-for="item in settleStatusList"
+            v-for="item in operateTypeList"
             :key="item.code"
             :label="item.desc"
             :value="item.code">
           </el-option>
         </el-select>
       </el-form-item>
-      <!--查询按钮-->
-      <el-form-item>
-        <el-button type="primary" @click="onSearch">查询</el-button>
-        <el-button type="primary" @click="reset">重置</el-button>
-      </el-form-item>
     </el-form>
+    <div>
+      <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
+    </div>
     <!--表格-->
     <el-table
-      :data="salesFormList"
+      :data="productList"
       stripe
       border
       :header-cell-style="{
@@ -49,25 +52,10 @@
         'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
-        prop="orderId"
-        label="销售单编号"
-        align="center"
-        min-width="100"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="userName"
-        align="center"
-        min-width="150"
-        show-overflow-tooltip
-        label="客户名称">
-      </el-table-column>
-      <el-table-column
         prop="skuId"
-        min-width="100"
-        show-overflow-tooltip
+        label="产品编号(SKU)"
         align="center"
-        label="产品编码">
+        width="120">
       </el-table-column>
       <el-table-column
         prop="skuName"
@@ -77,59 +65,53 @@
         label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="skuBuyNum"
+        prop="brand"
+        align="center"
+        min-width="150"
+        show-overflow-tooltip
+        label="产品品牌">
+      </el-table-column>
+      <el-table-column
+        prop="saleProperty"
+        align="center"
+        min-width="100"
+        show-overflow-tooltip
+        label="规格">
+      </el-table-column>
+      <el-table-column
+        prop="model"
+        align="center"
+        min-width="100"
+        show-overflow-tooltip
+        label="型号">
+      </el-table-column>
+      <el-table-column
+        prop="manufacturerName"
+        align="center"
+        min-width="150"
+        show-overflow-tooltip
+        label="厂家">
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        header-align="center"
+        align="right"
+        min-width="160"
+        show-overflow-tooltip
+        label="操作时间">
+      </el-table-column>
+      <el-table-column
+        prop="skuNum"
         header-align="center"
         align="right"
         min-width="100"
         show-overflow-tooltip
         :formatter="numFormatter"
-        label="产品数量">
+        label="操作数量">
       </el-table-column>
       <el-table-column
-        prop="skuBuyPrice"
-        header-align="center"
-        align="right"
-        min-width="100"
-        :formatter="priceFormatter"
-        show-overflow-tooltip
-        label="销售单金额">
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        align="center"
-        min-width="150"
-        show-overflow-tooltip
-        label="销售日期">
-      </el-table-column>
-      <el-table-column
-        prop="payType"
-        label="支付渠道"
-        min-width="100"
-        show-overflow-tooltip
-        align="center">
-      </el-table-column>
-      <el-table-column
-        prop="fraction"
-        label="分润比例"
-        header-align="center"
-        align="right"
-        min-width="100"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="skuBuyPrice"
-        label="分润金额"
-        min-width="100"
-        header-align="center"
-        align="right"
-        :formatter="priceFormatter"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="orderItemStatus"
-        label="分润状态"
-        min-width="100"
-        show-overflow-tooltip
+        prop="operateTypeDesc"
+        label="操作类型"
         align="center">
       </el-table-column>
     </el-table>
@@ -146,70 +128,84 @@
   </div>
 </template>
 <script>
-  import { getSalesFormList, getBalanceState } from '../../api/accountManage.js'
+  import { getDetailList, getStockDetailOperationType } from '../../api/stockManage.js'
   const qs = require('querystring')
   export default {
     created () {
-      getBalanceState().then(res => {
-        if (res.code === 1) {
-          this.settleStatusList = res.data
+      this.searchData.skuId = this.$route.query.skuId
+      this.skuId = this.$route.query.skuId
+      this.source = this.$route.query.source
+      getStockDetailOperationType().then(res => {
+        if (res.code === 1 && res.data) {
+          this.operateTypeList = res.data
         }
       })
-      this.iniData()
+      this.initData()
     },
     data () {
       return {
-        searchData: { // 搜索数据
-          orderId: '', // 销售单编号
+        source: null, // 来源
+        skuId: null, // 商品编号
+        searchData: {// 搜索数据
+          skuId: null, // 商品编号
+          skuName: '' // 产品名称
           // startTime: '', // 开始时间
           // endTime: '', // 结束时间
-          shareStatus: '' // 销售日期
+          // operateType: '' // 操作类型
         },
-        salesTime: [], // 销售日期
         pageSize: 10, // 每页条数
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
-        salesFormList: [], // 销售单列表
-        settleStatusList: [] // 结算下拉数据
+        operateTime: [], // 发布时间
+        operateTypeList: [], // 操作类型下拉数据
+        productList: [] // 产品列表
       }
     },
     methods: {
-      iniData () {
-        getSalesFormList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify(this.searchData)}).then(res => {
-          if (res.code === 1) {
-            this.salesFormList = res.data.list
+      // 搜索
+      onSearch () {
+        this.initData()
+      },
+      initData () {
+        getDetailList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1 && res.data) {
+            this.productList = res.data.list
             this.total = res.data.total
             this.currentSize = res.data.size
           }
         })
       },
-      // 搜索
-      onSearch () {
-        this.iniData()
-      },
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          orderId: '', // 销售单编号
+          skuId: this.skuId, // 商品编号
+          skuName: '' // 产品名称
           // startTime: '', // 开始时间
           // endTime: '', // 结束时间
-          shareStatus: '' // 销售日期
+          // operateType: '' // 操作类型
         }
-        this.iniData()
+        this.operateTime = [] // 发布时间
+        this.onSearch()
       },
       // 获取发布时间
-      publishTimeChange (date) {
+      timeChange (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
       },
-      // 金额格式化
-      priceFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+      // 修改
+      handleEdit (index, row) {
+        // 到编辑页面
+        this.$router.push({path: '/commodityAdd', query: {skuId: row.skuId}})
       },
-      // 数量格式化
+      // 明细
+      handleDetail (index, row) {
+        // 到详情页面
+        this.$router.push({path: '/commodityDetail', query: {skuId: row.skuId}})
+      },
+      // 单价、数量格式化
       numFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+        return this.$accounting.format(cellValue, '0')
       },
       // 处理分页
       handleSizeChange (val) {
@@ -234,7 +230,10 @@
   .searchData {
     margin-top: 10px;
   }
-  .salesTime {
+  .operateTime {
     width:220px;
+  }
+  .operateType {
+    width: 180px;
   }
 </style>

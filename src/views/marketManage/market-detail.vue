@@ -7,9 +7,13 @@
     </el-breadcrumb>
     <!--表格-->
     <el-table
-      :data="orderFormList"
+      :data="list"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
         label="序号"
@@ -18,66 +22,115 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="skuId"
         label="产品编号"
         align="center"
-        width="140">
+        min-width="100">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="skuName"
         label="产品名称"
         align="center"
-        width="140">
+        min-width="150"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="venderId"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="商户编号">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="venderName"
         label="商户名称"
+        min-width="150"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="brand"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="产品品牌">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="saleProperty"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="规格">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="model"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="型号">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="skuBuyPrice"
+        header-align="center"
+        align="right"
+        :formatter="numFormatter"
+        min-width="100"
+        show-overflow-tooltip
         label="价格">
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getOrderFormDetail } from '../../api/marketManage.js'
+  import { getOrderFormDetailList } from '../../api/marketManage.js'
   export default {
     created () {
-      this.productId = this.$route.query.pId
-      if (this.productId) {
-        getOrderFormDetail(this.productId).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
-          }
-        })
-      }
+      this.orderId = this.$route.query.orderId
+      this.initData()
     },
     data () {
       return {
-        orderFormList: [{}] // 产品列表
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        list: [] // 列表
+      }
+    },
+    methods: {
+      initData () {
+        if (this.orderId) {
+          getOrderFormDetailList({pageSize: this.pageSize, pageNum: this.pageNum, params: this.orderId}).then(res => {
+            if (res.code === 1) {
+              this.list = res.data.list
+              this.total = res.data.total
+              this.currentSize = res.data.size
+            }
+          })
+        }
+      },
+      // 单价、数量格式化
+      numFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }
@@ -89,14 +142,5 @@
     font-size: 15px;
     padding-left: 10px;
     line-height: 45px;
-  }
-  .productForm {
-    margin-top: 10px;
-  }
-  /*.productForm input {*/
-  /*margin-right: 150px !important;*/
-  /*}*/
-  .vender {
-    width: 200px;
   }
 </style>

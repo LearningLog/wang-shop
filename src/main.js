@@ -6,6 +6,8 @@ import router from './router'
 import httpPlugin from '@/api/http'
 // require('./mock/app.js')
 import 'element-ui/lib/theme-chalk/index.css'
+import accounting from 'accounting'
+import moment from 'moment'
 // import ElementUI from 'element-ui'
 import {
   Dialog,
@@ -88,6 +90,10 @@ Vue.prototype.$confirm = MessageBox.confirm
 Vue.use(Loading.directive)
 // import VueEditor from 'vue-quill-editor'
 // Vue.use(VueEditor)
+Vue.use(accounting)
+Vue.use(moment)
+Vue.prototype.$accounting = accounting
+Vue.prototype.$moment = moment
 
 Vue.config.productionTip = false
 

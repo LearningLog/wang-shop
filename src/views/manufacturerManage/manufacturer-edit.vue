@@ -2,8 +2,8 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>厂商管理</el-breadcrumb-item>
-      <el-breadcrumb-item>新增厂商</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/manufacturerList' }">厂商管理</el-breadcrumb-item>
+      <el-breadcrumb-item>厂商编辑</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="manufacturer" :model="manufacturer" label-width="140px" size="small" class="manufacturerForm">
@@ -26,11 +26,11 @@
         <el-form-item label="注册地址" prop="registerAddress">
           <el-input v-model="manufacturer.registerAddress"></el-input>
         </el-form-item>
-        <el-form-item label="创建时间" prop="createTime">
-          <el-input v-model="manufacturer.createTime" disabled></el-input>
+        <el-form-item label="创建时间" prop="createDate">
+          <el-input v-model="manufacturer.createDate" disabled></el-input>
         </el-form-item>
-        <el-form-item label="创建人" prop="createMan">
-          <el-input v-model="manufacturer.createMan" disabled></el-input>
+        <el-form-item label="创建人" prop="creater">
+          <el-input v-model="manufacturer.creater" disabled></el-input>
         </el-form-item>
       </el-col>
     </el-form>
@@ -41,10 +41,15 @@
   </div>
 </template>
 <script>
-  import { addManufacturer } from '../../api/manufacturerManage.js'
+  import { getManufacturerDetail, editManufacturer } from '../../api/manufacturerManage.js'
   import {onNumValid, validatePhone} from '../../api/util.js'
-
   export default {
+    created () {
+      this.manufacturerId = this.$route.query.id
+      if (this.manufacturerId) {
+        this.initData()
+      }
+    },
     data () {
       let _this = this
       var tel = (rule, value, callback) => {
@@ -69,7 +74,7 @@
         }
       }
       return {
-        manufacturerId: '', // 产品ID
+        manufacturerId: '', // 厂商编号
         manufacturer: {// 表单数据
           manufacturerId: '', // 厂商编号,
           manufacturerName: '', // 厂商名称
@@ -77,8 +82,8 @@
           contact: '', // 联系人
           tel: '', // 联系电话
           registerAddress: '', // 注册地址
-          createTime: '', // 创建时间
-          createMan: '' // 创建人
+          createDate: '', // 创建时间
+          creater: '' // 创建人
         },
         rules: {
           manufacturerName: [
@@ -100,11 +105,18 @@
       }
     },
     methods: {
+      initData () {
+        getManufacturerDetail(this.manufacturerId).then(res => {
+          if (res.code === 1) {
+            this.manufacturer = res.data
+          }
+        })
+      },
       // 保存
       save () {
         this.$refs['manufacturer'].validate((valid) => {
           if (valid) {
-            addManufacturer(this.manufacturer).then(res => {
+            editManufacturer(this.manufacturer).then(res => {
               if (res.code === 1) {
                 this.$message({
                   type: 'success',
@@ -121,16 +133,7 @@
       },
       // 重置
       reset () {
-        this.manufacturer = {
-          manufacturerId: '', // 厂商编号,
-          manufacturerName: '', // 厂商名称
-          brand: '', // 品牌
-          contact: '', // 联系人
-          tel: '', // 联系电话
-          registerAddress: '', // 注册地址
-          createTime: '', // 创建时间
-          createMan: '' // 创建人
-        }
+        this.initData()
         this.$refs['manufacturer'].resetFields()
       }
     }
@@ -146,5 +149,8 @@
   }
   .manufacturerForm {
     margin-top: 10px;
+  }
+  .vender {
+    width: 200px;
   }
 </style>

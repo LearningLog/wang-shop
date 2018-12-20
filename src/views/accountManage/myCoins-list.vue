@@ -9,84 +9,144 @@
     <el-form>
       <el-col span="8">
         <el-form-item label="余额：">
-          <div>{{incomeExpenses.remainder}}</div>
+          <div>{{myCoinsAmount.balance}}</div>
         </el-form-item>
         <el-form-item label="提现：">
-          <div>{{incomeExpenses.withdrawDeposit}}</div>
+          <div>{{myCoinsAmount.withdrawDeposit}}</div>
         </el-form-item>
       </el-col>
       <el-col span="8">
         <el-form-item label="收入：">
-          <div>{{incomeExpenses.income}}</div>
+          <div>{{myCoinsAmount.income}}</div>
         </el-form-item>
       </el-col>
       <el-col span="8">
         <el-form-item label="支出：">
-          <div>{{incomeExpenses.expenses}}</div>
+          <div>{{myCoinsAmount.payOut}}</div>
         </el-form-item>
       </el-col>
     </el-form>
     <!--表格-->
     <el-table
-      :data="orderFormList"
+      :data="myCoinsList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       style="width: 100%">
       <el-table-column
-        prop="name"
+        prop="businessTime"
         label="业务日期"
+        min-width="150"
+        show-overflow-tooltip
         align="center">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="businessTypeDesc"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="业务类型">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="balance"
+        header-align="center"
+        align="right"
+        min-width="100"
+        :formatter="priceFormatter"
+        show-overflow-tooltip
         label=业务金额>
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
+        prop="amount"
+        header-align="center"
+        align="right"
+        min-width="100"
+        :formatter="priceFormatter"
+        show-overflow-tooltip
         label="孖蹦余额">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="operateTypeDesc"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="业务操作">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="remark"
         align="center"
+        min-width="200"
+        show-overflow-tooltip
         label="详细说明">
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getOrderFormDetail } from '../../api/accountManage.js'
+  import { getMyCoinsAmount, getMyCoinsList } from '../../api/accountManage.js'
+
   export default {
     created () {
-      this.productId = this.$route.query.pId
-      if (this.productId) {
-        getOrderFormDetail(this.productId).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
-          }
-        })
-      }
+      this.initData()
     },
     data () {
       return {
-        incomeExpenses: {
-          remainder: '', // 余额
+        myCoinsAmount: {
+          balance: '', // 余额
           income: '', // 收入
-          expenses: '', // 支出
+          payOut: '', // 支出
           withdrawDeposit: '' // 提现
         },
-        orderFormList: [{address: '哈哈哈哈'}] // 客户销售单列表
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        myCoinsList: [{address: '哈哈哈哈'}] // 客户销售单列表
+      }
+    },
+    methods: {
+      initData () {
+        getMyCoinsAmount().then(res => {
+          if (res.code === 1) {
+            this.myCoinsAmount = res.data
+          }
+        })
+        getMyCoinsList({
+          pageSize: this.pageSize,
+          pageNum: this.pageNum
+        }).then(res => {
+          if (res.code === 1 && res.data) {
+            this.myCoinsList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
+          }
+        })
+      },
+      // 金额格式化
+      priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }

@@ -58,7 +58,7 @@ export default {
   .el-input__prefix {
     left: 10px;
   }
-  .username .el-input__inner, .password .el-input__inner {
+  .loginName .el-input__inner, .password .el-input__inner {
     float: left;
     background: none;
     outline: none;
@@ -68,7 +68,7 @@ export default {
     padding: 10px 16px;
     border: none;
     border-left: 2px solid #fff;
-    width: 96%;
+    width: 88%;
     display: inline-block;
     margin-left: 40px;
     border-radius: 0px;
@@ -85,14 +85,19 @@ export default {
     line-height: 40px;
     vertical-align: middle;
   }
+  /*顶部固定按钮*/
   .operfixed {
     position: fixed;
     bottom: 10px;
-    left: 100px;
+    left: 0px;
     right: 0px;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+  }
+  /*菜单*/
+  .asideBar .el-scrollbar__wrap {
+    overflow-x: hidden;
   }
   .fl {
       float: left;
@@ -102,5 +107,13 @@ export default {
   }
   .operBtn {
     margin-right: 14px;
+  }
+  /*myOrderForm.vue 右侧单元格样式*/
+  .orderInfo .el-form-item, .orderInfo .el-form-item__label, .orderInfo .el-form-item__content {
+    line-height: 26px !important;
+    margin-bottom: 0px !important;
+  }
+  .orderInfo .el-form-item__content {
+    text-align: left;
   }
 </style>

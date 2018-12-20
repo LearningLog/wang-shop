@@ -8,14 +8,14 @@
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
       <el-form-item label="厂商名称:">
-        <el-input v-model="searchData.manufacturerName" placeholder="请输入厂商名称"></el-input>
+        <el-input v-model="searchData.name" placeholder="请输入厂商名称"></el-input>
       </el-form-item>
       <el-form-item label="厂商编号:">
-        <el-input v-model="searchData.manufacturerCode" placeholder="请输入厂商编号"></el-input>
+        <el-input v-model="searchData.id" placeholder="请输入厂商编号"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSearch">查询</el-button>
-        <el-button type="primary" @click="reset">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSearch">查询</el-button>
+        <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>
@@ -25,44 +25,60 @@
       :data="productList"
       stripe
       border
+      :header-cell-style="{
+        'background-color': '#fafafa',
+        'color': 'rgb(103, 194, 58)',
+        'border-bottom': '1px rgb(103, 194, 58) solid'}"
       ref="checkedList"
       @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
+        fixed="left"
         type="selection"
         label="选择"
         align="center"
         width="40">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="manufacturerId"
         label="厂商编号"
         align="center"
-        width="140">
+        min-width="100"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="manufacturerName"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="厂商名称">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="brand"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="品牌">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="registerAddress"
         align="center"
+        min-width="150"
+        show-overflow-tooltip
         label="注册地址">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="tel"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="联系电话">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="contact"
         align="center"
+        min-width="70"
+        show-overflow-tooltip
         label="联系人">
       </el-table-column>
       <el-table-column
@@ -77,44 +93,58 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="page fr">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
-  import { getManufacturerList, deleteManufacturer } from '../../api/manufacturerManage.js'
+  import { getManufacturerList, deleteManufacturers } from '../../api/manufacturerManage.js'
+  const qs = require('querystring')
   export default {
     created () {
-      // getManufacturerList().then(res => {
-      //   if (res.meta.status === 200) {
-      //     this.productList = res.data.productList
-      //     this.btnDisabled = res.data.btnDisabled
-      //   }
-      // })
+      this.initData()
     },
     data () {
       return {
         searchData: { // 搜索数据
-          manufacturerName: '', // 厂商名称
-          manufacturerCode: '' // 厂商编号
+          name: '', // 厂商名称
+          id: '' // 厂商编号
         },
-        productList: [{}], // 产品列表
-        btnDisabled: false, // 是否禁用按钮
+        pageSize: 10, // 每页条数
+        pageNum: 1, // 当前第几页
+        total: 0, // 总页数
+        currentSize: 0, // 当前页数据条数
+        productList: [], // 产品列表
         checkedList: [] // CheckBox选择的数据
       }
     },
     methods: {
       // 搜索
       onSearch () {
-        getManufacturerList(this.searchData).then(res => {
-          if (res.meta.status === 200) {
-            this.productList = res.data.productList
+        this.initData()
+      },
+      initData () {
+        getManufacturerList({pageSize: this.pageSize, pageNum: this.pageNum, venderId: this.venderId, params: qs.stringify((this.searchData))}).then(res => {
+          if (res.code === 1 && res.data) {
+            this.productList = res.data.list
+            this.total = res.data.total
+            this.currentSize = res.data.size
           }
         })
       },
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          manufacturerName: '', // 厂商名称
-          manufacturerCode: '' // 厂商编号
+          name: '', // 厂商名称
+          id: '' // 厂商编号
         }
         this.onSearch()
       },
@@ -131,23 +161,51 @@
       remove () {
         if (this.checkedList.length === 0) {
           this.$message({
-            message: '请选择至少一项产品记录！',
+            message: '请选择至少一个供应商！',
             type: 'warning'
           })
           return false
         } else {
-          deleteManufacturer(this.checkedList).then(res => {
-            if (res.meta.status === 200) {
-              this.productList = res.data.productList
-            }
+          this.$confirm('确认删除吗吗?', '删除提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => { // 点击确认执行 resolve 函数
+            let ids = this.checkedList.map(function (item) {
+              return item.id
+            })
+            let len = ids.length
+            ids = ids.join(',')
+            deleteManufacturers(ids).then(res => {
+              if (res.code === 1) {
+                if ((this.currentSize - len) === 0) { // 如果当前页数据已删完，则去往上一页
+                  this.pageNum = this.pageNum - 1
+                }
+                this.initData()
+              }
+            })
+          }).catch(() => {
+            // 点击取消的处理
           })
         }
       },
       // 修改
       handleEdit (index, row) {
         // 到编辑页面
-        //   this.$router.push({path: '/manufacturerAdd', query: {pId: row.goods_id}})
-        this.$router.push({path: '/manufacturerAdd', query: {pId: '1111'}})
+        this.$router.push({path: '/manufacturerEdit', query: {id: row.id}})
+      },
+      // 单价、数量格式化
+      priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format(cellValue, '2')
+      },
+      // 处理分页
+      handleSizeChange (val) {
+        this.pageSize = val
+        this.initData()
+      },
+      handleCurrentChange (val) {
+        this.pageNum = val
+        this.initData()
       }
     }
   }
