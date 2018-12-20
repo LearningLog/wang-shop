@@ -5,6 +5,10 @@
  */
 import {http} from '../api/http'
 
+// 获取 商家-我的孖孖数据
+export const getVenderZiZiList = params => {
+  return http.get('/vender/order/findmyorders/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
+}
 // 获取 厂商-我的孖孖数据
 export const getManufacturerZiZiList = params => {
   return http.get('/manufacturer/order/findmyorders/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
@@ -30,6 +34,6 @@ export const getSalesFormList = params => {
   return http.get('/vender/sale/order/pagelist/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
 }
 // 获取分账状态/结算状态接口
-export const getShareBillState = params => {
-  return http.get('/admin/common/shareBill/status/list/').then(res => res.data)
+export const getBalanceState = params => {
+  return http.get('/vender/common/shareBill/status/list/').then(res => res.data)
 }

@@ -26,9 +26,9 @@
         <el-select v-model="searchData.shareStatus" placeholder="请选择结算状态">
           <el-option
             v-for="item in settleStatusList"
-            :key="item.id"
-            :label="item.title"
-            :value="item.id">
+            :key="item.code"
+            :label="item.desc"
+            :value="item.code">
           </el-option>
         </el-select>
       </el-form-item>
@@ -146,15 +146,15 @@
   </div>
 </template>
 <script>
-  import { getSalesFormList } from '../../api/accountManage.js'
+  import { getSalesFormList, getBalanceState } from '../../api/accountManage.js'
   const qs = require('querystring')
   export default {
     created () {
-      // getShareBillState().then(res => {
-      //   if (res.code === 1) {
-      //     this.settleStatusList = res.data
-      //   }
-      // })
+      getBalanceState().then(res => {
+        if (res.code === 1) {
+          this.settleStatusList = res.data
+        }
+      })
       this.iniData()
     },
     data () {

@@ -89,7 +89,8 @@
   </div>
 </template>
 <script>
-  import { getManufacturerZiZiList } from '../../api/accountManage.js'
+  import { getManufacturerZiZiList, getVenderZiZiList } from '../../api/accountManage.js'
+  import {getToken} from '../../api/auth.js'
   const qs = require('querystring')
   export default {
     created () {
@@ -178,35 +179,56 @@
     },
     methods: {
       initData () {
-        getManufacturerZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
-          if (res.code === 1) {
-            let list = res.data.list
-            this.total = res.data.total
-            this.currentSize = res.data.size
-            this.ziZiList = []
-            for (let i = 0, len1 = list.length; i < len1; i++) {
-              let item1 = list[i]
-              this.ziZiList.push(item1)
-              for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {
-                let item2 = item1.skuList[j]
-                this.ziZiList.push(item2)
+        let userType = getToken('userType')
+        if (userType === 'manufacturerToken') {
+          getManufacturerZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+            if (res.code === 1) {
+              let list = res.data.list
+              this.total = res.data.total
+              this.currentSize = res.data.size
+              this.ziZiList = []
+              for (let i = 0, len1 = list.length; i < len1; i++) {
+                let item1 = list[i]
+                this.ziZiList.push(item1)
+                for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {
+                  let item2 = item1.skuList[j]
+                  this.ziZiList.push(item2)
+                }
               }
             }
-          }
-        })
-        let list = this.ziZiList
-        this.ziZiList = []
-        for (let i = 0, len1 = list.length; i < len1; i++) {
-          let item1 = list[i]
-          this.ziZiList.push(item1)
-          for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {
-            let item2 = item1.skuList[j]
-            if (j === 0) {
-              item2.skuListLength = len2
-            }
-            this.ziZiList.push(item2)
-          }
+          })
         }
+        if (userType === 'venderToken') {
+          getVenderZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
+            if (res.code === 1) {
+              let list = res.data.list
+              this.total = res.data.total
+              this.currentSize = res.data.size
+              this.ziZiList = []
+              for (let i = 0, len1 = list.length; i < len1; i++) {
+                let item1 = list[i]
+                this.ziZiList.push(item1)
+                for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {
+                  let item2 = item1.skuList[j]
+                  this.ziZiList.push(item2)
+                }
+              }
+            }
+          })
+        }
+        // let list = this.ziZiList
+        // this.ziZiList = []
+        // for (let i = 0, len1 = list.length; i < len1; i++) {
+        //   let item1 = list[i]
+        //   this.ziZiList.push(item1)
+        //   for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {
+        //     let item2 = item1.skuList[j]
+        //     if (j === 0) {
+        //       item2.skuListLength = len2
+        //     }
+        //     this.ziZiList.push(item2)
+        //   }
+        // }
         console.log(this.ziZiList)
       },
       // 点击送货

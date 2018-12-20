@@ -15,6 +15,7 @@
       <el-aside :style='{width:"auto"}'>
         <!--<div class="logo"></div>-->
         <el-scrollbar class="asideBar" style="height: 100%;">
+            <!--管理员-->
           <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-if="userType === 'adminToken'">
             <!--<el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>-->
             <!--<template slot="title">-->
@@ -26,7 +27,6 @@
             <!--<span>{{tag.authName}}</span>-->
             <!--</el-menu-item>-->
             <!--</el-submenu>-->
-            <!--管理员-->
             <!--商品管理-->
             <el-submenu index="1">
               <template slot="title">
