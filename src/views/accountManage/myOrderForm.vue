@@ -29,29 +29,33 @@
       :row-style="rowStyle"
       style="width: 100%">
       <el-table-column
-        prop="detail"
+        prop="brand"
         label="订单详情"
         align="center">
         <template slot-scope="scope" align="left">
           <div v-if="scope.row.skuList">
-            <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '50px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '50px'}">订单状态：{{scope.row.state}}</span><span :style="{paddingLeft: '50px'}">收货人：{{scope.row.consignee}}</span><span :style="{paddingLeft: '50px'}">收货地址：{{scope.row.receivingAddress}}</span>
+            <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '50px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '50px'}">订单状态：{{scope.row.orderStatusStr}}</span><span :style="{paddingLeft: '50px'}">收货人：{{scope.row.receiverName}}</span><span :style="{paddingLeft: '50px'}">收货地址：{{scope.row.receiveAddrInfo}}</span>
           </div>
-          <span v-else>{{scope.row.detail}}</span>
+          <div v-else>
+            <img ref="skuImage" :src="scope.row.skuImage" alt="商品图片" :style='{marginRight:"10px"}' @click="visible"><span>{{scope.row.brand}}</span><span :style='{display:"inline-block",width:"100px",align:"right"}'>X {{scope.row.skuBuyNum}}</span>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
-        prop="consignee"
+        prop="receiverName"
         align="center"
         label="收货人">
       </el-table-column>
       <el-table-column
-        prop="state"
+        prop="orderStatusStr"
         align="center"
         label=状态>
       </el-table-column>
       <el-table-column
         prop="oper"
         align="center"
+        min-width="100"
+        show-overflow-tooltip
         label="操作">
         <template slot-scope="scope">
           <el-button
@@ -61,16 +65,16 @@
             @click="handleDelivery(scope.$index, scope.row)">发货</el-button>
           <el-form label-width="100px" :size="mini" v-else class="orderInfo">
             <el-form-item label="发货人：">
-              <span>{{scope.row.consignee}}</span>
+              <span>{{scope.row.senderName}}</span>
             </el-form-item>
             <el-form-item label="快递公司：">
-              <span>{{scope.row.receivingAddress}}</span>
+              <span>{{scope.row.logisticsCompany}}</span>
             </el-form-item>
             <el-form-item label="快递单号：">
               <span>{{scope.row.orderId}}</span>
             </el-form-item>
             <el-form-item label="发货时间：">
-              <span>{{scope.row.orderTimeStr}}</span>
+              <span>{{scope.row.logisticsTimeStr}}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -86,6 +90,9 @@
         :total="total">
       </el-pagination>
     </div>
+    <el-dialog :visible.sync="dialogVisible" append-to-body>
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -106,6 +113,8 @@
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
+        dialogImageUrl: '', // dialog弹窗图片路径
+        dialogVisible: false, // dialog弹窗是否显示
         daysList: [{id: 30, title: '近一个月订单'}, {id: 90, title: '近三个月订单'}], // 订单日期下列数据
         ziZiList: [
           {
@@ -192,9 +201,18 @@
                 this.ziZiList.push(item1)
                 for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {
                   let item2 = item1.skuList[j]
+                  if (j === 0) {
+                    item2.skuListLength = len2
+                  }
+                  item2.orderStatus = item1.orderStatus
+                  item2.orderStatusStr = item1.orderStatusStr
+                  item2.receiverName = item1.receiverName
+                  item2.orderId = item1.orderId
+                  item2.logisticsTimeStr = item1.logisticsTimeStr
                   this.ziZiList.push(item2)
                 }
               }
+              console.log(this.ziZiList)
             }
           })
         }
@@ -210,9 +228,18 @@
                 this.ziZiList.push(item1)
                 for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {
                   let item2 = item1.skuList[j]
+                  if (j === 0) {
+                    item2.skuListLength = len2
+                  }
+                  item2.orderStatus = item1.orderStatus
+                  item2.orderStatusStr = item1.orderStatusStr
+                  item2.receiverName = item1.receiverName
+                  item2.orderId = item1.orderId
+                  item2.logisticsTimeStr = item1.logisticsTimeStr
                   this.ziZiList.push(item2)
                 }
               }
+              console.log(this.ziZiList)
             }
           })
         }
@@ -229,7 +256,6 @@
         //     this.ziZiList.push(item2)
         //   }
         // }
-        console.log(this.ziZiList)
       },
       // 点击送货
       handleDelivery (index, row) {
@@ -292,6 +318,11 @@
       daysChange (val) {
         this.searchData.days = val
         this.initData()
+      },
+      // 处理预览
+      visible () {
+        this.dialogImageUrl = this.$refs['skuImage'].src
+        this.dialogVisible = true
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {

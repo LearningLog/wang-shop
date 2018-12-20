@@ -15,7 +15,7 @@
       <el-aside :style='{width:"auto"}'>
         <!--<div class="logo"></div>-->
         <el-scrollbar class="asideBar" style="height: 100%;">
-            <!--管理员-->
+          <!--管理员-->
           <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-if="userType === 'adminToken'">
             <!--<el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>-->
             <!--<template slot="title">-->
@@ -139,7 +139,7 @@
               </el-menu-item>
             </el-submenu>
           </el-menu>
-            <!--厂商-->
+          <!--厂商-->
           <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'manufacturerToken'">
             <!--账户管理-->
             <el-submenu index="10">
@@ -153,32 +153,32 @@
               </el-menu-item>
             </el-submenu>
           </el-menu>
-            <!--商家-->
-            <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'venderToken'">
-            <!--账户管理-->
-            <el-submenu index="10">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">账户管理</span>
-              </template>
-              <el-menu-item index="/myOrderForm">
-                <i class="el-icon-menu"></i>
-                <span>我的孖孖</span>
-              </el-menu-item>
-              <el-menu-item index="/myMarketDocList">
-                <i class="el-icon-menu"></i>
-                <span>我的销售单</span>
-              </el-menu-item>
-              <el-menu-item index="/myCoinsList">
-                <i class="el-icon-menu"></i>
-                <span>我的孖蹦</span>
-              </el-menu-item>
-              <el-menu-item index="/myBeansList">
-                <i class="el-icon-menu"></i>
-                <span>我的孖豆</span>
-              </el-menu-item>
-            </el-submenu>
-          </el-menu>
+          <!--商家-->
+          <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'venderToken'">
+          <!--账户管理-->
+          <el-submenu index="10">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">账户管理</span>
+            </template>
+            <el-menu-item index="/myOrderForm">
+              <i class="el-icon-menu"></i>
+              <span>我的孖孖</span>
+            </el-menu-item>
+            <el-menu-item index="/myMarketDocList">
+              <i class="el-icon-menu"></i>
+              <span>我的销售单</span>
+            </el-menu-item>
+            <el-menu-item index="/myCoinsList">
+              <i class="el-icon-menu"></i>
+              <span>我的孖蹦</span>
+            </el-menu-item>
+            <el-menu-item index="/myBeansList">
+              <i class="el-icon-menu"></i>
+              <span>我的孖豆</span>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
           <!--<div style="height: 60;"></div>-->
         </el-scrollbar>
       </el-aside>

@@ -229,7 +229,7 @@
     margin-bottom: 0;
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1.5;
+    /*line-height: 1.5;*/
     color: #495057;
     text-align: center;
     white-space: nowrap;
@@ -242,7 +242,7 @@
     font-size: 15px;
     font-weight: 700;
     color: #fff;
-    padding: 13px 0;
+    line-height: 44px;
     background: #ff3366;
     display: inline-block;
     /*width: 100%;*/

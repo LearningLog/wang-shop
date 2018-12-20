@@ -54,7 +54,7 @@
             <img width="100%" :src="dialogImageUrl" alt="">
           </el-dialog>
           <el-upload
-            limit="3"
+            limit="2"
             accept=".jpg,.png,.gif,.jepg,.jpeg"
             class="upload-demo"
             :action="uploadUrl()"
@@ -63,8 +63,9 @@
             :on-remove="handleRemove"
             :on-preview="handlePreview"
             :file-list="product.skuImageList"
-            list-type="picture">
-            <el-button size="small" type="primary">上传<i class="el-icon-upload el-icon--right"></i></el-button>
+            list-type="picture-card">
+            <i class="el-icon-plus"></i>
+            <!--<el-button size="small" type="primary">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
             <div slot="tip" class="el-upload__tip">只能上传jpg/png/gif/jepg/jpeg文件</div>
           </el-upload>
         </el-form-item>
@@ -195,12 +196,12 @@
       },
       // 上传路径
       uploadUrl () {
-        return uploadInfo().url + '/admin/upload/batchUploadFile'
+        return uploadInfo().url + '/admin/upload/uploadFile'
       },
       // 上传成功
       handleSuccess (response, file, fileList) {
         this.product.skuImageList = [file]
-        var formData = new FormData()
+        let formData = new FormData()
         formData.append('file', file.raw)
         uploadSingle(formData).then(res => {
           if (res.data) this.product.skuImage = res.data
@@ -208,7 +209,7 @@
       },
       // 删除前处理
       beforeRemove (file, fileList) {
-        return this.$confirm(`确定移除 ${file.name}？`, '删除提示', {
+        return this.$confirm(`确定移除此图片吗？`, '删除提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
