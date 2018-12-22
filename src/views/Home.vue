@@ -7,6 +7,7 @@
         <div class="stitle">孖孖后台管理系统</div>
         <div class="userEdit">
           <!--<el-button class="modify" type="primary" size="mini" @click='modifyDialog = true'>修改密码</el-button>-->
+          <span class="userMessage">{{userMessage}}</span>
           <el-button class="logoutbtn" type="warning" size="mini" @click='handleLogout'>退出</el-button>
         </div>
       </div>
@@ -229,6 +230,15 @@
       getUserInfo(getToken('userType')).then(res => {
         if (res.code === 1) {
           this.userType = getToken('userType')
+          if (this.userType === 'adminToken') {
+            this.userMessage = `你好管理员，${res.data.userName}`
+          }
+          if (this.userType === 'manufacturerToken') {
+            this.userMessage = `你好厂商，${res.data.manufacturerName}`
+          }
+          if (this.userType === 'venderToken') {
+            this.userMessage = `你好商家，${res.data.venderName}`
+          }
         } else {
           this.$message({
             type: 'error',
@@ -248,6 +258,7 @@
     },
     data () {
       return {
+        userMessage: '', // 头部用户信息
         currentMenu: [], // 当前打开的 sub-menu 的 index 的数组
         defaultActive: '', // 当前激活菜单的 index
         isCollapse: false, // 是否关闭菜单
@@ -485,5 +496,9 @@
   }
   .el-scrollbar__wrap {
     overflow-x: hidden;
+  }
+  .userMessage {
+    color: #fff;
+    margin-right: 10px;
   }
 </style>

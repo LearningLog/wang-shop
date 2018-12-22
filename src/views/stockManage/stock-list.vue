@@ -112,10 +112,10 @@
         width="160"
         align="center">
         <template slot-scope="scope">
-          <el-button
-            type="success"
-            size="mini"
-            @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+          <!--<el-button-->
+            <!--type="success"-->
+            <!--size="mini"-->
+            <!--@click="handleDetail(scope.$index, scope.row)">明细</el-button>-->
           <el-button
             type="success"
             size="mini"

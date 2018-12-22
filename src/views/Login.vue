@@ -80,7 +80,7 @@
                   } else {
                     // 登录失败
                     this.$message({
-                      message: '用户名或者密码错误！',
+                      message: res.message,
                       type: 'error'
                     })
                   }
@@ -100,7 +100,7 @@
                   } else {
                     // 登录失败
                     this.$message({
-                      message: '用户名或者密码错误！',
+                      message: res.message,
                       type: 'error'
                     })
                   }
@@ -120,7 +120,7 @@
                   } else {
                     // 登录失败
                     this.$message({
-                      message: '用户名或者密码错误！',
+                      message: res.message,
                       type: 'error'
                     })
                   }

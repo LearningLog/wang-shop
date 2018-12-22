@@ -18,7 +18,7 @@
           <el-input v-model="product.saleProperty"></el-input>
         </el-form-item>
         <el-form-item label="单价" prop="originalPrice">
-          <el-input v-model="product.originalPrice" @blur="numBlur(product.originalPrice, 0, 'originalPrice')"></el-input>
+          <el-input v-model="product.originalPrice" @blur="numBlur(product.originalPrice, 2, 'originalPrice')"></el-input>
         </el-form-item>
         <el-form-item label="分润比例" prop="fraction">
           <el-input v-model="product.fraction" @blur="numBlur(product.fraction, 2, 'fraction')"></el-input>
@@ -33,14 +33,14 @@
         </el-form-item>
         <el-form-item label="厂家" prop="manufacturerName">
           <el-select v-model="product.manufacturerName" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect">
-            <el-option v-for="item in manufacturerNameList" :label="item.title" :value="item.id" :key="item.id"></el-option>
+            <el-option v-for="item in manufacturerNameList" :label="item.desc" :value="item.code" :key="item.code"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="型号" prop="model">
           <el-input v-model="product.model"></el-input>
         </el-form-item>
         <el-form-item label="售价" prop="salePrice">
-          <el-input v-model="product.salePrice" @blur="numBlur(product.salePrice, 0, 'salePrice')"></el-input>
+          <el-input v-model="product.salePrice" @blur="numBlur(product.salePrice, 2, 'salePrice')"></el-input>
         </el-form-item>
         <el-form-item label="递增数量" prop="increaseNum">
           <el-input v-model="product.increaseNum" @blur="numBlur(product.increaseNum, 0, 'increaseNum')"></el-input>
@@ -80,7 +80,7 @@
 <script>
   import { updateProduct, getProductDetail, uploadSingle } from '../../api/commodityManage.js'
   import { uploadInfo } from '../../api/http.js'
-  import {onNumValid} from '../../api/util.js'
+  import {onNumValid, onKeyValid} from '../../api/util.js'
   export default {
     created () {
       this.skuId = this.$route.query.skuId
@@ -117,12 +117,10 @@
           skuImage: '', // 商品图片地址
           increaseNum: null, // 递增数量
           minPurchaseNum: null // 起定数量
-          // createTime: '2018-12-02 07:06:27', // 创建时间
-          // updateTime: '2018-12-02 07:06:30'
         },
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
-        manufacturerNameList: [{id: 3464, title: '厂商13'}, {id: 3465, title: '厂商14'}], // 厂家数组
+        manufacturerNameList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家数组
         rules: {
           brand: [
             { required: true, message: '请输入产品品牌', trigger: 'blur' }
@@ -247,14 +245,23 @@
         this.product.manufacturerId = val
         let obj = {}
         obj = this.manufacturerNameList.find((item) => {
-          return item.id === val
+          return item.code === val
         })
-        this.product.manufacturerName = obj.title
+        this.product.manufacturerName = obj.desc
       },
       // 数字输入框失去焦点时
       numBlur (value, num, name) {
-        value = onNumValid(value, num)
-        this.product[name] = value || value === 0 ? this.$accounting.format(value, num) : ''
+        if (!value) return false
+        if (name === 'originalPrice' || name === 'salePrice') {
+          value = value.replace(/,/g, '') * 100
+        }
+        if (name === 'fraction') {
+          value = onKeyValid(value, num)
+        } else {
+          value = onNumValid(value, num)
+        }
+        this.product[name] = value || value === 0 ? this.$accounting.formatNumber(value, num) : ''
+        if (this.product.fraction === '1.00') this.product.fraction = ''
       }
     }
   }

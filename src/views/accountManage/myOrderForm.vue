@@ -5,6 +5,24 @@
       <el-breadcrumb-item>账户管理</el-breadcrumb-item>
       <el-breadcrumb-item>我的孖孖</el-breadcrumb-item>
     </el-breadcrumb>
+    <span class="zizilogo"></span>
+    <h2 class="condition">我的孖孖</h2>
+    <el-form v-if="userType === 'manufacturer'">
+      <el-col span="7">
+        <el-form-item label="">
+        </el-form-item>
+      </el-col>
+      <el-col span="8">
+        <el-form-item label="我的孖豆：">
+          <div>{{integration}}</div>
+        </el-form-item>
+      </el-col>
+      <el-col span="9">
+        <el-form-item label="我的孖蹦：">
+          <div>{{balance}}</div>
+        </el-form-item>
+      </el-col>
+    </el-form>
     <el-radio-group size="mini" v-model="searchData.type" @change="typeChange">
       <el-radio-button :label="1" border>未发货订单</el-radio-button>
       <el-radio-button :label="0" border >已发货订单</el-radio-button>
@@ -12,9 +30,9 @@
     <el-select placeholder="请选择状态" size="mini" clearable v-model="searchData.days"  @change="daysChange">
       <el-option
         v-for="item in daysList"
-        :key="item.id"
-        :label="item.title"
-        :value="item.id">
+        :key="item.code"
+        :label="item.desc"
+        :value="item.code">
       </el-option>
     </el-select>
     <!--表格-->
@@ -62,7 +80,7 @@
             v-if="searchData.type === 1"
             type="primary"
             size="mini"
-            @click="handleDelivery(scope.$index, scope.row)">发货</el-button>
+            @click="handleDelivery(scope.$index, scope.row)">{{userTypeStr}}</el-button>
           <el-form label-width="100px" :size="mini" v-else class="orderInfo">
             <el-form-item label="发货人：">
               <span>{{scope.row.senderName}}</span>
@@ -93,10 +111,29 @@
     <el-dialog :visible.sync="dialogVisible" append-to-body>
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
+    <el-dialog title="物流信息"
+               :visible.sync="logisticsDialog"
+               append-to-body width="40%"
+               :close-on-click-modal="false"
+               @close="closeDialog"
+    >
+      <el-form ref="logisticsInfo" :model="logisticsInfo" label-width="110px">
+        <el-form-item label="物流公司">
+          <el-input v-model="logisticsInfo.logisticsCompany" style="width:86%"></el-input>
+        </el-form-item>
+        <el-form-item label="物流单号">
+          <el-input v-model="logisticsInfo.logisticsNo" style="width:86%"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button type="primary" @click="consignment">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-  import { getManufacturerZiZiList, getVenderZiZiList } from '../../api/accountManage.js'
+  import { getManufacturerZiZiList, getVenderZiZiList, getMyCoinsBeans, takeDelivery, consignment } from '../../api/accountManage.js'
   import {getToken} from '../../api/auth.js'
   const qs = require('querystring')
   export default {
@@ -109,13 +146,23 @@
           type: 1, // 1-未发货 2-已发或收货
           days: null // 查询最近多少天，不传查全部
         },
+        logisticsInfo: {
+          orderId: '', // 订单号
+          logisticsCompany: '', // 物流公司
+          logisticsNo: '' // 物流单号
+        },
         pageSize: 10, // 每页条数
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
+        userType: '', // 身份类型
+        userTypeStr: '', // 身份类型Str
+        integration: '', // 我的孖豆
+        balance: '', // 我的孖蹦
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
-        daysList: [{id: 30, title: '近一个月订单'}, {id: 90, title: '近三个月订单'}], // 订单日期下列数据
+        logisticsDialog: false, // dialog弹窗是否显示
+        daysList: [{code: 30, desc: '近一个月订单'}, {code: 90, desc: '近三个月订单'}], // 订单日期下列数据
         ziZiList: [
           {
             'orderId': '20181125001',
@@ -192,6 +239,8 @@
         if (userType === 'manufacturerToken') {
           getManufacturerZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
             if (res.code === 1) {
+              this.userType = 'vender'
+              this.userTypeStr = '发货'
               let list = res.data.list
               this.total = res.data.total
               this.currentSize = res.data.size
@@ -217,8 +266,16 @@
           })
         }
         if (userType === 'venderToken') {
+          getMyCoinsBeans().then(res => {
+            if (res.code === 1) {
+              this.balance = res.data.balance
+              this.integration = res.data.integration
+            }
+          })
           getVenderZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
             if (res.code === 1) {
+              this.userType = 'manufacturer'
+              this.userTypeStr = '收货'
               let list = res.data.list
               this.total = res.data.total
               this.currentSize = res.data.size
@@ -257,9 +314,35 @@
         //   }
         // }
       },
-      // 点击送货
+      // 点击发/送货
       handleDelivery (index, row) {
-        // debugger
+        if (this.userType === 'vender') {
+          this.logisticsInfo.orderId = row.orderId
+          this.logisticsDialog = true
+        } else {
+          takeDelivery({orderId: row.orderId}).then(res => {
+            if (res.code === 1) {
+              this.$message({
+                type: 'success',
+                message: '收货成功!'
+              })
+              this.initData()
+            }
+          })
+        }
+      },
+      // 点击确定 ->发货
+      consignment () {
+        consignment(this.logisticsInfo).then(res => {
+          if (res.code === 1) {
+            this.logisticsDialog = false
+            this.$message({
+              type: 'success',
+              message: '发货成功!'
+            })
+            this.initData()
+          }
+        })
       },
       // 合并单元格
       arraySpanMethod ({ row, column, rowIndex, columnIndex }) {
@@ -324,6 +407,15 @@
         this.dialogImageUrl = this.$refs['skuImage'].src
         this.dialogVisible = true
       },
+      // 关闭dialog
+      closeDialog () {
+        // 点击取消 数据重置
+        this.logisticsDialog = false
+        this.logisticsInfo.orderId = '' // 订单号
+        this.logisticsInfo.logisticsCompany = '' // 物流公司
+        this.logisticsInfo.logisticsNo = '' // 物流单号
+        this.$refs['logisticsInfo'].resetFields()
+      },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '0')
@@ -348,4 +440,22 @@
     padding-left: 10px;
     line-height: 45px;
   }
+  .condition {
+    text-align: center;
+    font-weight: 400;
+  }
+  /*.el-main>div {*/
+    /*position: relative;*/
+  /*}*/
+  /*.zizilogo {*/
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*top: 50px;*/
+    /*display: inline-block;*/
+    /*width: 116px;*/
+    /*height: 116px;*/
+    /*background-size: cover;*/
+    /*background: url(../../assets/logo.jpg);*/
+    /*border-radius: 50%;*/
+  /*}*/
 </style>

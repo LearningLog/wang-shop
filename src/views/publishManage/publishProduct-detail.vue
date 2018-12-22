@@ -41,7 +41,7 @@
           <div>{{product.salePrice}}</div>
         </el-form-item>
         <el-form-item label="创建人：">
-          <div>{{product.creater}}</div>
+          <div>{{product.publisher}}</div>
         </el-form-item>
       </el-col>
     </el-form>
@@ -71,13 +71,12 @@
           originalPrice: '', // 单价
           salePrice: '', // 售价
           fraction: '', // 分润比例
-          creater: '', // 创建人
+          publisher: '', // 创建人
           increaseNum: null, // 递增数量
           minPurchaseNum: null, // 起定数量
           publishNum: null, // 起定数量
           createTime: '', // 创建时间
-          updateTime: '',
-          publisher: '' // 发布人
+          updateTime: ''
         }
       }
     },

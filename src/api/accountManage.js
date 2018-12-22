@@ -37,3 +37,15 @@ export const getSalesFormList = params => {
 export const getBalanceState = params => {
   return http.get('/vender/common/shareBill/status/list/').then(res => res.data)
 }
+// 商家-我的孖蹦豆
+export const getMyCoinsBeans = params => {
+  return http.get('vender/order/findBalanceAndIntegration').then(res => res.data)
+}
+// 商家-收货
+export const takeDelivery = params => {
+  return http.post('/vender/order/updateLogistics', params).then(res => res.data)
+}
+// 厂商-发货
+export const consignment = params => {
+  return http.post('/manufacturer/order/updateLogistics', params).then(res => res.data)
+}

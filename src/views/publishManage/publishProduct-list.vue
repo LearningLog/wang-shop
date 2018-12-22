@@ -68,7 +68,6 @@
       <el-table-column
         prop="skuId"
         label="产品编号(SKU)"
-        :formatter="numFormatter"
         align="center"
         min-width="120">
       </el-table-column>
