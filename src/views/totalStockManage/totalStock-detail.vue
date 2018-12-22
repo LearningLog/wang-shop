@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>总库存管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/totalStockList' }">总库存管理</el-breadcrumb-item>
       <el-breadcrumb-item>总库存明细</el-breadcrumb-item>
     </el-breadcrumb>
     <!--搜索-->
@@ -66,7 +66,7 @@
       <el-table-column
         prop="brand"
         align="center"
-        min-width="100"
+        min-width="150"
         show-overflow-tooltip
         label="产品品牌">
       </el-table-column>
@@ -109,10 +109,8 @@
         label="操作数量">
       </el-table-column>
       <el-table-column
-        prop="operateType"
+        prop="operateTypeDesc"
         label="操作类型"
-        min-width="150"
-        show-overflow-tooltip
         align="center">
       </el-table-column>
     </el-table>
@@ -129,7 +127,7 @@
   </div>
 </template>
 <script>
-  import { getDetailList, getStockDetailOperationType } from '../../api/stockManage.js'
+  import { getDetailList, getStockDetailOperationType } from '../../api/totalStockManage.js'
   const qs = require('querystring')
   export default {
     created () {

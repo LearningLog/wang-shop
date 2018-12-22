@@ -102,7 +102,7 @@
         label="销售日期">
       </el-table-column>
       <el-table-column
-        prop="payType"
+        prop="payTypeDesc"
         label="支付渠道"
         min-width="100"
         show-overflow-tooltip
@@ -126,7 +126,7 @@
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="orderItemStatus"
+        prop="orderItemStatusDesc"
         label="分润状态"
         min-width="100"
         show-overflow-tooltip

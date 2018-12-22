@@ -145,7 +145,7 @@
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
-        manufacturerList: [{code: 1, desc: '11111'}, {code: 2, desc: '2222'}], // 厂家
+        manufacturerList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家
         productList: [] // 产品列表
       }
     },
@@ -185,7 +185,7 @@
       // 明细
       handleDetail (index, row) {
         // 到详情页面
-        this.$router.push({path: '/stockDetail', query: {skuId: row.skuId, source: 1}})
+        this.$router.push({path: '/totalStockDetail', query: {skuId: row.skuId, source: 1}})
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {
