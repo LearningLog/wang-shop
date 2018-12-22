@@ -104,7 +104,7 @@
         align="right"
         min-width="100"
         show-overflow-tooltip
-        :formatter="rateFormatter"
+        :formatter="numFormatter"
         label="分账费率">
       </el-table-column>
       <el-table-column
@@ -209,9 +209,6 @@
       // 单价、数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
-      },
-      rateFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '4')
       },
       // 处理分页
       handleSizeChange (val) {

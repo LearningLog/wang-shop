@@ -19,7 +19,7 @@
       @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
-        fixed="lefr"
+        fixed="left"
         type="selection"
         label="选择"
         align="center"
@@ -127,8 +127,8 @@
       center>
       <span>是否通过审核？</span>
       <span slot="footer" class="dialog-footer">
-    <el-button type="primary" size="small" @click="noAgree">不通过</el-button>
     <el-button type="primary" size="small" @click="agree">通 过</el-button>
+    <el-button type="primary" size="small" @click="noAgree">不通过</el-button>
   </span>
     </el-dialog>
   </div>
@@ -181,15 +181,18 @@
             return item.publishId
           })
           this.approveIdListLength = this.approveIdList.length
-          this.approveIdList = JSON.stringify(this.approveIdList)
+          this.approveIdList = this.approveIdList
           this.dialogVisible = true
         }
       },
-      approve (data) {
+      agree () {
+        this.status = 1
+        let data = {publishIds: this.approveIdList, status: this.status}
+        this.dialogVisible = false
         approve(data).then(res => {
           if (res.code === 1) {
             if ((this.currentSize - this.approveIdListLength) === 0) { // 如果当前页数据已删完，则去往上一页
-              this.pageNum = this.searchData.pageNum - 1
+              this.pageNum -= 1
             }
             this.initData()
           }
@@ -197,13 +200,16 @@
       },
       noAgree () {
         this.status = 2
+        let data = {publishIds: this.approveIdList, status: this.status}
         this.dialogVisible = false
-        approve(qs.stringify({publishIds: this.approveIdList, status: this.status}))
-      },
-      agree () {
-        this.status = 1
-        this.dialogVisible = false
-        approve(qs.stringify({publishIds: this.approveIdList, status: this.status}))
+        approve(data).then(res => {
+          if (res.code === 1) {
+            if ((this.currentSize - this.approveIdListLength) === 0) { // 如果当前页数据已删完，则去往上一页
+              this.pageNum -= 1
+            }
+            this.initData()
+          }
+        })
       },
       // 修改
       handleEdit (index, row) {

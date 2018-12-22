@@ -14,7 +14,14 @@
         <el-input v-model="searchData.skuId" placeholder="请输入产品编号"></el-input>
       </el-form-item>
       <el-form-item label="厂家:">
-        <el-input v-model="searchData.manufacturerId" placeholder="请输入厂家"></el-input>
+        <el-select v-model="searchData.manufacturerId" @change="manufacturerChange" placeholder="请选择厂家">
+          <el-option
+            v-for="item in manufacturerList"
+            :key="item.code"
+            :label="item.desc"
+            :value="item.code">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="品牌:">
         <el-input v-model="searchData.brand" placeholder="请输入品牌"></el-input>
@@ -130,13 +137,15 @@
         searchData: {// 搜索数据
           skuName: '', // 产品名称
           skuId: '', // 产品编号
-          manufacturerId: '', // 厂家
+          manufacturerId: '', // 厂商编号
+          // manufacturerName: '', // 厂商名称
           brand: '' // 品牌
         },
         pageSize: 10, // 每页条数
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
+        manufacturerList: [{code: 1, desc: '11111'}, {code: 2, desc: '2222'}], // 厂家
         productList: [] // 产品列表
       }
     },
@@ -159,10 +168,19 @@
         this.searchData = { // 搜索数据
           skuName: '', // 产品名称
           skuId: '', // 产品编号
-          manufacturerId: '', // 厂家
+          manufacturerId: '', // 厂商编号
+          // manufacturerName: '', // 厂商名称
           brand: '' // 品牌
         }
         this.onSearch()
+      },
+      // 监听厂家改变
+      manufacturerChange (val) {
+        let obj = {}
+        obj = this.manufacturerList.find((item) => {
+          return item.code === val
+        })
+        this.searchData.manufacturerName = obj.desc
       },
       // 明细
       handleDetail (index, row) {

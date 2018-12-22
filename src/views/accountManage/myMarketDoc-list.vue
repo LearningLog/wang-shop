@@ -161,8 +161,8 @@
       return {
         searchData: { // 搜索数据
           orderId: '', // 销售单编号
-          // startTime: '', // 开始时间
-          // endTime: '', // 结束时间
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
           shareStatus: '' // 销售日期
         },
         salesTime: [], // 销售日期
@@ -192,8 +192,8 @@
       reset () {
         this.searchData = { // 搜索数据
           orderId: '', // 销售单编号
-          // startTime: '', // 开始时间
-          // endTime: '', // 结束时间
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
           shareStatus: '' // 销售日期
         }
         this.iniData()

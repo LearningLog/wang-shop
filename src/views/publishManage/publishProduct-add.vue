@@ -41,7 +41,7 @@
           <el-input v-model="product.salePrice" disabled></el-input>
         </el-form-item>
         <el-form-item label="发布人">
-          <el-input v-model="product.publisher" disabled></el-input>
+          <el-input v-model="product.creater" disabled></el-input>
         </el-form-item>
       </el-col>
     </el-form>
@@ -57,9 +57,8 @@
   import {onNumValid} from '../../api/util.js'
   export default {
     created () {
-      this.skuId = this.$route.query.skuId
-      this.product.skuId = this.skuId
-      if (this.skuId) {
+      this.product.skuId = this.$route.query.skuId
+      if (this.product.skuId) {
         this.initData()
       }
     },
@@ -76,13 +75,12 @@
           originalPrice: '', // 单价
           salePrice: '', // 售价
           fraction: '', // 分润比例
-          creater: '', // 创建人
           increaseNum: null, // 递增数量
           minPurchaseNum: null, // 起定数量
           publishNum: null, // 起定数量
           createTime: '', // 创建时间
           updateTime: '',
-          publisher: '' // 发布人
+          creater: '' // 发布人
         },
         rules: {
           publishNum: [
@@ -93,7 +91,7 @@
     },
     methods: {
       initData () {
-        getProductDetail(this.skuId).then(res => {
+        getProductDetail(this.product.skuId).then(res => {
           if (res.code === 1) {
             this.product = res.data
             this.product.originalPrice = parseInt(this.$accounting.format(this.product.originalPrice.toString(), 0))
@@ -106,7 +104,7 @@
         this.$refs['product'].validate((valid) => {
           if (valid) {
             let publishNum = parseInt(this.product.publishNum.toString().replace(/,/g, ''))
-            publishProductAdd({publishNum: publishNum}).then(res => {
+            publishProductAdd({publishNum: publishNum, skuId: this.product.skuId, skuName: this.product.skuName}).then(res => {
               if (res.code === 1) {
                 // 到列表页面
                 this.$router.push({path: '/publishProductList'})
@@ -120,7 +118,7 @@
       // 重置
       reset () {
         this.product.publishNum = '' // 发布数量
-        if (this.skuId) {
+        if (this.product.skuId) {
           this.initData()
         }
         this.$refs['product'].resetFields()

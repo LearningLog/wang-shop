@@ -29,9 +29,9 @@
         <el-select class="operateType" v-model="searchData.operateType" placeholder="请选择操作类型">
           <el-option
             v-for="item in operateTypeList"
-            :key="item.id"
-            :label="item.title"
-            :value="item.id">
+            :key="item.code"
+            :label="item.desc"
+            :value="item.code">
           </el-option>
         </el-select>
       </el-form-item>
@@ -129,28 +129,33 @@
   </div>
 </template>
 <script>
-  import { getDetailList } from '../../api/stockManage.js'
+  import { getDetailList, getStockDetailOperationType } from '../../api/stockManage.js'
   const qs = require('querystring')
   export default {
     created () {
       this.searchData.skuId = this.$route.query.skuId
+      getStockDetailOperationType().then(res => {
+        if (res.code === 1) {
+          this.operateTypeList = res.data
+        }
+      })
       this.initData()
     },
     data () {
       return {
         searchData: {// 搜索数据
           skuId: null, // 商品编号
-          skuName: '' // 产品名称
-          // startTime: '', // 开始时间
-          // endTime: '', // 结束时间
-          // operateType: '' // 操作类型
+          skuName: '', // 产品名称
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
+          operateType: '' // 操作类型
         },
         pageSize: 10, // 每页条数
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
         operateTime: [], // 发布时间
-        operateTypeList: [{id: 1, title: '已发布'}, {id: 2, title: '待发布'}], // 操作类型下拉数据
+        operateTypeList: [{code: 1, desc: '已发布'}, {code: 2, desc: '待发布'}], // 操作类型下拉数据
         productList: [] // 产品列表
       }
     },
@@ -172,10 +177,10 @@
       reset () {
         this.searchData = { // 搜索数据
           skuId: this.searchData.skuId, // 商品编号
-          skuName: '' // 产品名称
-          // startTime: '', // 开始时间
-          // endTime: '', // 结束时间
-          // operateType: '' // 操作类型
+          skuName: '', // 产品名称
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
+          operateType: '' // 操作类型
         }
         this.operateTime = [] // 发布时间
         this.onSearch()
