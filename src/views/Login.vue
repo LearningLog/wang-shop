@@ -57,7 +57,6 @@
     methods: {
       loginSubmit () {
         this.$refs['loginForm'].validate(valid => {
-          debugger
           if (valid) {
             console.log(this.userType)
             if (!this.userType) {
