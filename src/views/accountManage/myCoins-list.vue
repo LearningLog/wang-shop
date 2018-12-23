@@ -123,6 +123,10 @@
         getMyCoinsAmount().then(res => {
           if (res.code === 1) {
             this.myCoinsAmount = res.data
+            this.myCoinsAmount.balance = this.$accounting.format((this.myCoinsAmount.balance / 100), '2')
+            this.myCoinsAmount.income = this.$accounting.format((this.myCoinsAmount.income / 100), '2')
+            this.myCoinsAmount.payOut = this.$accounting.format((this.myCoinsAmount.payOut / 100), '2')
+            this.myCoinsAmount.withdrawDeposit = this.$accounting.format((this.myCoinsAmount.withdrawDeposit / 100), '2')
           }
         })
         getMyCoinsList({
@@ -138,7 +142,7 @@
       },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+        return this.$accounting.format((cellValue / 100), '2')
       },
       // 处理分页
       handleSizeChange (val) {

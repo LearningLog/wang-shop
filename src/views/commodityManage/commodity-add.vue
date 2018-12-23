@@ -152,8 +152,8 @@
               return false
             }
             let data = this.product
-            data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, '')) * 100
-            data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, '')) * 100
+            data.originalPrice = Number(data.originalPrice.toString().replace(/,/g, '')) * 100
+            data.salePrice = Number(data.salePrice.toString().replace(/,/g, '')) * 100
             data.increaseNum = parseInt(data.increaseNum.toString().replace(/,/g, ''))
             data.minPurchaseNum = data.minPurchaseNum.toString().replace(/,/g, '')
             data.fraction = parseFloat(data.fraction.toString().replace(/,/g, ''))

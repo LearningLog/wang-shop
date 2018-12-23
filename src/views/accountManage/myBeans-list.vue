@@ -118,6 +118,9 @@
         getMyBeansAmount().then(res => {
           if (res.code === 1 && res.data) {
             this.myBeansAmount = res.data
+            this.myBeansAmount.balance = this.$accounting.format((this.myBeansAmount.balance / 100), '2')
+            this.myBeansAmount.income = this.$accounting.format((this.myBeansAmount.income / 100), '2')
+            this.myBeansAmount.payOut = this.$accounting.format((this.myBeansAmount.payOut / 100), '2')
           }
         })
         getMyBeansList({pageSize: this.pageSize, pageNum: this.pageNum}).then(res => {
@@ -130,7 +133,7 @@
       },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+        return this.$accounting.format((cellValue / 100), '2')
       },
       // 处理分页
       handleSizeChange (val) {

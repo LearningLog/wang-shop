@@ -149,8 +149,8 @@
           getProductDetail(this.skuId).then(res => {
             if (res.code === 1) {
               this.product = res.data
-              this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100).toString(), 0)
-              this.product.salePrice = this.$accounting.format((this.product.salePrice / 100).toString(), 0)
+              this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100).toString(), 2)
+              this.product.salePrice = this.$accounting.format((this.product.salePrice / 100).toString(), 2)
               this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
               this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
               this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 2)
@@ -171,8 +171,8 @@
               return false
             }
             let data = this.product
-            data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, '')) * 100
-            data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, '')) * 100
+            data.originalPrice = Number(data.originalPrice.toString().replace(/,/g, '')) * 100
+            data.salePrice = Number(data.salePrice.toString().replace(/,/g, '')) * 100
             data.increaseNum = parseInt(data.increaseNum.toString().replace(/,/g, ''))
             data.minPurchaseNum = data.minPurchaseNum.toString().replace(/,/g, '')
             data.fraction = parseFloat(data.fraction.toString().replace(/,/g, ''))

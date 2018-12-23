@@ -216,8 +216,8 @@
         if (this.userTypeToken === 'venderToken') {
           getMyCoinsBeans().then(res => {
             if (res.code === 1) {
-              this.balance = res.data.balance
-              this.integration = res.data.integration
+              this.balance = this.$accounting.format((res.data.balance / 100), '2')
+              this.integration = this.$accounting.format((res.data.integration / 100), '2')
             }
           })
           getVenderZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
