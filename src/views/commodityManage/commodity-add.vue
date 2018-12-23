@@ -152,8 +152,8 @@
               return false
             }
             let data = this.product
-            data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, ''))
-            data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, ''))
+            data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, '')) * 100
+            data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, '')) * 100
             data.increaseNum = parseInt(data.increaseNum.toString().replace(/,/g, ''))
             data.minPurchaseNum = data.minPurchaseNum.toString().replace(/,/g, '')
             data.fraction = parseFloat(data.fraction.toString().replace(/,/g, ''))
@@ -243,9 +243,6 @@
       // 数字输入框失去焦点时
       numBlur (value, num, name) {
         if (!value) return false
-        if (name === 'originalPrice' || name === 'salePrice') {
-          value = value.replace(/,/g, '') * 100
-        }
         if (name === 'fraction') {
           value = onKeyValid(value, num)
         } else {

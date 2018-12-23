@@ -38,7 +38,7 @@
       <el-form-item label="商户名称:">
         <el-input v-model="searchData.venderName" placeholder="请输入商户名称"></el-input>
       </el-form-item>
-      <el-form-item label="商户名称:">
+      <el-form-item>
         <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
         <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
