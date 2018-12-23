@@ -23,9 +23,13 @@
         </el-form-item>
       </el-col>
     </el-form>
-    <el-radio-group size="mini" v-model="searchData.type" @change="typeChange">
+    <el-radio-group size="mini" v-model="searchData.type" @change="typeChange" v-if="userType === 'manufacturer'">
       <el-radio-button :label="1" border>未发货订单</el-radio-button>
-      <el-radio-button :label="0" border >已发货订单</el-radio-button>
+      <el-radio-button :label="2" border >已发货订单</el-radio-button>
+    </el-radio-group>
+    <el-radio-group size="mini" v-model="searchData.type" @change="typeChange" v-else>
+      <el-radio-button :label="3" border>已发货订单</el-radio-button>
+      <el-radio-button :label="4" border >已收货订单</el-radio-button>
     </el-radio-group>
     <el-select placeholder="请选择状态" size="mini" clearable v-model="searchData.days"  @change="daysChange">
       <el-option
@@ -55,7 +59,9 @@
             <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '50px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '50px'}">订单状态：{{scope.row.orderStatusStr}}</span><span :style="{paddingLeft: '50px'}">收货人：{{scope.row.receiverName}}</span><span :style="{paddingLeft: '50px'}">收货地址：{{scope.row.receiveAddrInfo}}</span>
           </div>
           <div v-else>
-            <img ref="skuImage" :src="scope.row.skuImage" alt="商品图片" :style='{marginRight:"10px"}' @click="visible"><span>{{scope.row.brand}}</span><span :style='{display:"inline-block",width:"100px",align:"right"}'>X {{scope.row.skuBuyNum}}</span>
+            <el-tooltip content="点击查看商品图片" placement="top">
+              <img ref="skuImage" class="skuImage" :src="scope.row.skuImage" alt="商品图片" :style='{marginRight:"10px"}' @click="visible">
+            </el-tooltip><span>{{scope.row.brand}}</span><span :style='{display:"inline-block",width:"100px",align:"right"}'>X {{scope.row.skuBuyNum}}</span>
           </div>
         </template>
       </el-table-column>
@@ -138,12 +144,19 @@
   const qs = require('querystring')
   export default {
     created () {
+      this.userTypeToken = getToken('userType')
+      if (this.userTypeToken === 'venderToken') {
+        this.searchData.type = 1
+      } else {
+        this.searchData.type = 3
+      }
       this.initData()
     },
     data () {
       return {
+        userTypeToken: '', // 当前登录用户
         searchData: {
-          type: 1, // 1-未发货 2-已发或收货
+          type: null, // 1-未发货 2-已发或收货
           days: null // 查询最近多少天，不传查全部
         },
         logisticsInfo: {
@@ -162,81 +175,13 @@
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
         logisticsDialog: false, // dialog弹窗是否显示
-        daysList: [{code: 30, desc: '近一个月订单'}, {code: 90, desc: '近三个月订单'}], // 订单日期下列数据
-        ziZiList: [
-          {
-            'orderId': '20181125001',
-            'detail': '111111111',
-            'consignee': '张三',
-            'receivingAddress': '北京东城区',
-            'skuList': [{
-              'id': null,
-              'detail': '111111111',
-              'consignee': '张三',
-              'receivingAddress': '北京东城区',
-              'state': '1',
-              'skuId': 1000,
-              'skuName': '水',
-              'skuImage': 'water',
-              'brand': '农夫山泉',
-              'saleProperty': '500ML',
-              'model': '瓶',
-              'skuBuyPrice': 100,
-              'skuBuyNum': 70,
-              'amount': 7000,
-              'createTimeStr': '2018-11-25 18:31:57'
-            }, {
-              'id': null,
-              'detail': '2222',
-              'consignee': '李四',
-              'receivingAddress': '北京西城区',
-              'state': '2',
-              'skuId': 1001,
-              'skuName': '水',
-              'skuImage': 'water',
-              'brand': '雀巢',
-              'saleProperty': '500ML',
-              'model': '瓶',
-              'skuBuyPrice': 100,
-              'skuBuyNum': 30,
-              'amount': 3000,
-              'createTimeStr': '2018-11-25 18:31:57'
-            }],
-            'orderTimeStr': '2018-11-25 18:31:57',
-            'logisticsTimeStr': null
-          }, {
-            'id': null,
-            'orderId': '20181125002',
-            'detail': '222222',
-            'consignee': '李四',
-            'receivingAddress': '北京西城区',
-            'state': '1',
-            'skuList': [{
-              'detail': '222222',
-              'consignee': '李四',
-              'receivingAddress': '北京西城区',
-              'state': '1',
-              'skuId': 2000,
-              'skuName': '咖啡',
-              'skuImage': 'coffee',
-              'brand': '雀巢',
-              'saleProperty': '10g',
-              'model': '袋',
-              'skuBuyPrice': 500,
-              'skuBuyNum': 100,
-              'amount': 50000,
-              'createTimeStr': '2018-11-25 19:09:17'
-            }],
-            'orderTimeStr': '2018-11-25 19:09:17',
-            'logisticsTimeStr': null
-          }
-        ] // 我的订单列表
+        daysList: [{code: 7, desc: '近一周订单'}, {code: 30, desc: '近一个月订单'}, {code: 90, desc: '近三个月订单'}], // 订单日期下列数据
+        ziZiList: [] // 我的订单列表
       }
     },
     methods: {
       initData () {
-        let userType = getToken('userType')
-        if (userType === 'manufacturerToken') {
+        if (this.userTypeToken === 'manufacturerToken') {
           getManufacturerZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
             if (res.code === 1) {
               this.userType = 'vender'
@@ -261,11 +206,14 @@
                   this.ziZiList.push(item2)
                 }
               }
-              console.log(this.ziZiList)
+            } else {
+              this.ziZiList = []
+              this.total = 0
+              this.currentSize = 0
             }
           })
         }
-        if (userType === 'venderToken') {
+        if (this.userTypeToken === 'venderToken') {
           getMyCoinsBeans().then(res => {
             if (res.code === 1) {
               this.balance = res.data.balance
@@ -296,23 +244,13 @@
                   this.ziZiList.push(item2)
                 }
               }
-              console.log(this.ziZiList)
+            } else {
+              this.ziZiList = []
+              this.total = 0
+              this.currentSize = 0
             }
           })
         }
-        // let list = this.ziZiList
-        // this.ziZiList = []
-        // for (let i = 0, len1 = list.length; i < len1; i++) {
-        //   let item1 = list[i]
-        //   this.ziZiList.push(item1)
-        //   for (let j = 0, len2 = item1.skuList.length; j < len2; j++) {
-        //     let item2 = item1.skuList[j]
-        //     if (j === 0) {
-        //       item2.skuListLength = len2
-        //     }
-        //     this.ziZiList.push(item2)
-        //   }
-        // }
       },
       // 点击发/送货
       handleDelivery (index, row) {
@@ -320,14 +258,23 @@
           this.logisticsInfo.orderId = row.orderId
           this.logisticsDialog = true
         } else {
-          takeDelivery({orderId: row.orderId}).then(res => {
-            if (res.code === 1) {
-              this.$message({
-                type: 'success',
-                message: '收货成功!'
-              })
-              this.initData()
-            }
+          this.$confirm('确认收货吗?', '收货提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => { // 点击确认执行 resolve 函数
+            // 调用后台退出接口
+            takeDelivery({orderId: row.orderId}).then(res => {
+              if (res.code === 1) {
+                this.$message({
+                  type: 'success',
+                  message: '收货成功!'
+                })
+                this.initData()
+              }
+            })
+          }).catch(() => {
+            // 点击取消的处理
           })
         }
       },
@@ -395,7 +342,7 @@
       // 监听类型改变
       typeChange (val) {
         this.searchData.type = val
-        // this.initData()
+        this.initData()
       },
       // 监听天数改变
       daysChange (val) {
@@ -440,22 +387,25 @@
     padding-left: 10px;
     line-height: 45px;
   }
+  .skuImage:hover {
+    cursor: pointer;
+  }
   .condition {
     text-align: center;
     font-weight: 400;
   }
-  /*.el-main>div {*/
-    /*position: relative;*/
-  /*}*/
-  /*.zizilogo {*/
-    /*position: absolute;*/
-    /*left: 0;*/
-    /*top: 50px;*/
-    /*display: inline-block;*/
-    /*width: 116px;*/
-    /*height: 116px;*/
-    /*background-size: cover;*/
-    /*background: url(../../assets/logo.jpg);*/
-    /*border-radius: 50%;*/
-  /*}*/
+  .el-main>div {
+    position: relative;
+  }
+  .zizilogo {
+    position: absolute;
+    left: 0;
+    top: 48px;
+    display: inline-block;
+    width: 130px;
+    height: 128px;
+    background-size: cover;
+    background: url(../../assets/logo.jpg);
+    border-radius: 50%;
+  }
 </style>

@@ -226,7 +226,7 @@
     margin-top: 10px;
   }
   .operateTime {
-    width:220px;
+    width:220px !important;
   }
   .operateType {
     width: 180px;

@@ -239,18 +239,19 @@
           if (this.userType === 'venderToken') {
             this.userMessage = `你好商家，${res.data.venderName}`
           }
-        } else {
-          this.$message({
-            type: 'error',
-            message: res.message
-          })
-          this.$router.push({
-            path: '/login',
-            query: {
-              redirect: window.location.hash
-            }
-          })
         }
+        // else {
+        //   this.$message({
+        //     type: 'error',
+        //     message: res.message
+        //   })
+        //   this.$router.push({
+        //     path: '/login',
+        //     query: {
+        //       redirect: window.location.hash
+        //     }
+        //   })
+        // }
       })
     },
     mounted () {

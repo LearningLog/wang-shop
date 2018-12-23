@@ -32,7 +32,7 @@
           <el-input v-model="product.brand"></el-input>
         </el-form-item>
         <el-form-item label="厂家" prop="manufacturerName">
-          <el-select v-model="product.manufacturerName" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect">
+          <el-select v-model="product.manufacturerId" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect">
             <el-option v-for="item in manufacturerNameList" :label="item.desc" :value="item.code" :key="item.code"></el-option>
           </el-select>
         </el-form-item>
@@ -84,19 +84,7 @@
   export default {
     created () {
       this.skuId = this.$route.query.skuId
-      if (this.skuId) {
-        getProductDetail(this.skuId).then(res => {
-          if (res.code === 1) {
-            this.product = res.data
-            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 0)
-            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 0)
-            this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
-            this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
-            this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 2)
-            this.product.skuImageList = [{url: res.data.skuImage, name: res.data.skuId}]
-          }
-        })
-      }
+      this.initData()
     },
     data () {
       return {
@@ -156,6 +144,21 @@
       }
     },
     methods: {
+      initData () {
+        if (this.skuId) {
+          getProductDetail(this.skuId).then(res => {
+            if (res.code === 1) {
+              this.product = res.data
+              this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 0)
+              this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 0)
+              this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
+              this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
+              this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 2)
+              this.product.skuImageList = [{url: res.data.skuImage, name: res.data.skuId}]
+            }
+          })
+        }
+      },
       // 保存
       saveProduct () {
         this.$refs['product'].validate((valid) => {
@@ -192,13 +195,7 @@
       },
       // 重置
       reset () {
-        if (this.skuId) {
-          getProductDetail(this.skuId).then(res => {
-            if (res.code === 1) {
-              this.product = res.data
-            }
-          })
-        }
+        this.initData()
         this.$refs['product'].resetFields()
       },
       // 上传路径

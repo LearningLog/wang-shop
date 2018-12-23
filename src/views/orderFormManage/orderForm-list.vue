@@ -34,12 +34,11 @@
       <el-form-item label="厂商编号:">
         <el-input v-model="searchData.manufacturerId" placeholder="请输入厂商编号"></el-input>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
+      </el-form-item>
     </el-form>
-    <!--查询按钮-->
-    <div class="fl">
-      <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
-      <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
-    </div>
     <!--表格-->
     <el-table
       :data="orderFormList"
@@ -237,6 +236,6 @@
     margin-top: 10px;
   }
   .orderFormTime {
-    width:220px;
+    width:220px !important;
   }
 </style>

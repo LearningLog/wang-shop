@@ -148,10 +148,10 @@
         skuId: null, // 商品编号
         searchData: {// 搜索数据
           skuId: null, // 商品编号
-          skuName: '' // 产品名称
-          // startTime: '', // 开始时间
-          // endTime: '', // 结束时间
-          // operateType: '' // 操作类型
+          skuName: '', // 产品名称
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
+          operateType: '' // 操作类型
         },
         pageSize: 10, // 每页条数
         pageNum: 1, // 当前第几页
@@ -180,10 +180,10 @@
       reset () {
         this.searchData = { // 搜索数据
           skuId: this.skuId, // 商品编号
-          skuName: '' // 产品名称
-          // startTime: '', // 开始时间
-          // endTime: '', // 结束时间
-          // operateType: '' // 操作类型
+          skuName: '', // 产品名称
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
+          operateType: '' // 操作类型
         }
         this.operateTime = [] // 发布时间
         this.onSearch()

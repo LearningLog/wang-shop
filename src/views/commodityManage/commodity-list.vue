@@ -206,7 +206,7 @@
             deleteProduct(skuIdList).then(res => {
               if (res.code === 1) {
                 if ((this.currentSize - len) === 0) { // 如果当前页数据已删完，则去往上一页
-                  this.pageNum = this.pageNum - 1
+                  this.pageNum -= 1
                 }
                 this.initData()
               }

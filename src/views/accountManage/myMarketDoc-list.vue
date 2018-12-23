@@ -13,7 +13,7 @@
       <el-form-item label="销售日期:">
         <el-date-picker
           class="salesTime"
-          v-model="searchData.salesTime"
+          v-model="salesTime"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
           @change="publishTimeChange"
@@ -97,7 +97,7 @@
       <el-table-column
         prop="createTime"
         align="center"
-        min-width="150"
+        min-width="160"
         show-overflow-tooltip
         label="销售日期">
       </el-table-column>
@@ -113,6 +113,7 @@
         label="分润比例"
         header-align="center"
         align="right"
+        :formatter="priceFormatter"
         min-width="100"
         show-overflow-tooltip>
       </el-table-column>
@@ -235,6 +236,6 @@
     margin-top: 10px;
   }
   .salesTime {
-    width:220px;
+    width:220px !important;
   }
 </style>

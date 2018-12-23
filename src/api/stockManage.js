@@ -17,3 +17,11 @@ export const getGodownEntryList = params => {
 export const getGodownEntryState = params => {
   return http.get('/admin/common/venderOrderstatus/list/').then(res => res.data)
 }
+// 获取明细列表
+export const getDetailList = params => {
+  return http.get('/admin/platorm/stock/detail/page/list/' + params.pageNum + '/' + params.pageSize + '?' + params.params).then(res => res.data)
+}
+// 获取库存明细操作类型
+export const getStockDetailOperationType = params => {
+  return http.get('/admin/common/platformstockdetail/operatetype/list/').then(res => res.data)
+}

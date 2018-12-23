@@ -27,7 +27,6 @@ export function onNumValid (val, num) {
 
 // input键入小数限制
 export function onKeyValid (val, num) {
-  debugger
   val = val === undefined ? '' : val
   val = val.toString()
   if (num === 2) {
