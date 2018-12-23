@@ -15,7 +15,7 @@ let menuConfig = [
   ['/marketList', '/marketDetail'],
   ['/splitAccountList', '/splitAccountDetail'],
   ['/clientList', '/customerSalesOrderDetail'],
-  ['/myOrderForm', '/myMarketDocList', '/myCoinsList', '/myBeansList']
+  ['/myZiZi', '/myOrderForm', '/myCoinsList', '/myBeansList']
 ]
 export const getActiveMenu = path => {
   for (let i = 0, len = menuConfig.length; i < len; i++) {

@@ -148,7 +148,7 @@
                 <i class="el-icon-location"></i>
                 <span slot="title">账户管理</span>
               </template>
-              <el-menu-item index="/myOrderForm">
+              <el-menu-item index="/myZiZi">
                 <i class="el-icon-menu"></i>
                 <span>我的孖孖</span>
               </el-menu-item>
@@ -162,11 +162,11 @@
               <i class="el-icon-location"></i>
               <span slot="title">账户管理</span>
             </template>
-            <el-menu-item index="/myOrderForm">
+            <el-menu-item index="/myZiZi">
               <i class="el-icon-menu"></i>
               <span>我的孖孖</span>
             </el-menu-item>
-            <el-menu-item index="/myMarketDocList">
+            <el-menu-item index="/myOrderForm">
               <i class="el-icon-menu"></i>
               <span>我的销售单</span>
             </el-menu-item>
