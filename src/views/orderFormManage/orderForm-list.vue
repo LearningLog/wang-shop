@@ -7,8 +7,8 @@
     </el-breadcrumb>
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
-      <el-form-item label="产品编号:">
-        <el-input v-model="searchData.skuId" placeholder="请输入产品编号"></el-input>
+      <el-form-item label="订单编号:">
+        <el-input v-model="searchData.orderId" placeholder="请输入订单编号"></el-input>
       </el-form-item>
       <el-form-item label="订单日期:">
         <el-date-picker
@@ -34,12 +34,11 @@
       <el-form-item label="厂商编号:">
         <el-input v-model="searchData.manufacturerId" placeholder="请输入厂商编号"></el-input>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
+      </el-form-item>
     </el-form>
-    <!--查询按钮-->
-    <div class="fl">
-      <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
-      <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
-    </div>
     <!--表格-->
     <el-table
       :data="orderFormList"
@@ -111,7 +110,7 @@
         label="产品数量">
       </el-table-column>
       <el-table-column
-        prop="orderStatus"
+        prop="orderStatusDesc"
         align="center"
         min-width="80"
         show-overflow-tooltip
@@ -151,10 +150,10 @@
     data () {
       return {
         searchData: { // 搜索数据
-          skuId: '', // 产品编号
+          orderId: '', // 订单编号
           venderId: '', // 商户编号
-          // startTime: '', // 开始时间
-          // endTime: '', // 结束时间
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
           venderName: '', // 商户名称
           manufacturerName: '', // 厂商名称
           manufacturerId: '' // 厂商编号
@@ -184,10 +183,10 @@
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          skuId: '', // 产品编号
+          orderId: '', // 订单编号
           venderId: '', // 商户编号
-          // startTime: '', // 开始时间
-          // endTime: '', // 结束时间
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
           venderName: '', // 商户名称
           manufacturerName: '', // 厂商名称
           manufacturerId: '' // 厂商编号
@@ -237,6 +236,6 @@
     margin-top: 10px;
   }
   .orderFormTime {
-    width:220px;
+    width:220px !important;
   }
 </style>

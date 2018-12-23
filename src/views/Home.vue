@@ -7,6 +7,7 @@
         <div class="stitle">孖孖后台管理系统</div>
         <div class="userEdit">
           <!--<el-button class="modify" type="primary" size="mini" @click='modifyDialog = true'>修改密码</el-button>-->
+          <span class="userMessage">{{userMessage}}</span>
           <el-button class="logoutbtn" type="warning" size="mini" @click='handleLogout'>退出</el-button>
         </div>
       </div>
@@ -15,7 +16,7 @@
       <el-aside :style='{width:"auto"}'>
         <!--<div class="logo"></div>-->
         <el-scrollbar class="asideBar" style="height: 100%;">
-            <!--管理员-->
+          <!--管理员-->
           <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-if="userType === 'adminToken'">
             <!--<el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>-->
             <!--<template slot="title">-->
@@ -139,7 +140,7 @@
               </el-menu-item>
             </el-submenu>
           </el-menu>
-            <!--厂商-->
+          <!--厂商-->
           <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'manufacturerToken'">
             <!--账户管理-->
             <el-submenu index="10">
@@ -147,38 +148,38 @@
                 <i class="el-icon-location"></i>
                 <span slot="title">账户管理</span>
               </template>
-              <el-menu-item index="/myOrderForm">
+              <el-menu-item index="/myZiZi">
                 <i class="el-icon-menu"></i>
                 <span>我的孖孖</span>
               </el-menu-item>
             </el-submenu>
           </el-menu>
-            <!--商家-->
-            <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'venderToken'">
-            <!--账户管理-->
-            <el-submenu index="10">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">账户管理</span>
-              </template>
-              <el-menu-item index="/myOrderForm">
-                <i class="el-icon-menu"></i>
-                <span>我的孖孖</span>
-              </el-menu-item>
-              <el-menu-item index="/myMarketDocList">
-                <i class="el-icon-menu"></i>
-                <span>我的销售单</span>
-              </el-menu-item>
-              <el-menu-item index="/myCoinsList">
-                <i class="el-icon-menu"></i>
-                <span>我的孖蹦</span>
-              </el-menu-item>
-              <el-menu-item index="/myBeansList">
-                <i class="el-icon-menu"></i>
-                <span>我的孖豆</span>
-              </el-menu-item>
-            </el-submenu>
-          </el-menu>
+          <!--商家-->
+          <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'venderToken'">
+          <!--账户管理-->
+          <el-submenu index="10">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">账户管理</span>
+            </template>
+            <el-menu-item index="/myZiZi">
+              <i class="el-icon-menu"></i>
+              <span>我的孖孖</span>
+            </el-menu-item>
+            <el-menu-item index="/myOrderForm">
+              <i class="el-icon-menu"></i>
+              <span>我的销售单</span>
+            </el-menu-item>
+            <el-menu-item index="/myCoinsList">
+              <i class="el-icon-menu"></i>
+              <span>我的孖蹦</span>
+            </el-menu-item>
+            <el-menu-item index="/myBeansList">
+              <i class="el-icon-menu"></i>
+              <span>我的孖豆</span>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
           <!--<div style="height: 60;"></div>-->
         </el-scrollbar>
       </el-aside>
@@ -229,18 +230,28 @@
       getUserInfo(getToken('userType')).then(res => {
         if (res.code === 1) {
           this.userType = getToken('userType')
-        } else {
-          this.$message({
-            type: 'error',
-            message: res.message
-          })
-          this.$router.push({
-            path: '/login',
-            query: {
-              redirect: window.location.hash
-            }
-          })
+          if (this.userType === 'adminToken') {
+            this.userMessage = `你好管理员，${res.data.userName}`
+          }
+          if (this.userType === 'manufacturerToken') {
+            this.userMessage = `你好厂商，${res.data.manufacturerName}`
+          }
+          if (this.userType === 'venderToken') {
+            this.userMessage = `你好商家，${res.data.venderName}`
+          }
         }
+        // else {
+        //   this.$message({
+        //     type: 'error',
+        //     message: res.message
+        //   })
+        //   this.$router.push({
+        //     path: '/login',
+        //     query: {
+        //       redirect: window.location.hash
+        //     }
+        //   })
+        // }
       })
     },
     mounted () {
@@ -248,6 +259,7 @@
     },
     data () {
       return {
+        userMessage: '', // 头部用户信息
         currentMenu: [], // 当前打开的 sub-menu 的 index 的数组
         defaultActive: '', // 当前激活菜单的 index
         isCollapse: false, // 是否关闭菜单
@@ -485,5 +497,9 @@
   }
   .el-scrollbar__wrap {
     overflow-x: hidden;
+  }
+  .userMessage {
+    color: #fff;
+    margin-right: 10px;
   }
 </style>

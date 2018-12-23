@@ -109,13 +109,13 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="160"
+        min-width="100"
         align="center">
         <template slot-scope="scope">
-          <el-button
-            type="success"
-            size="mini"
-            @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+          <!--<el-button-->
+            <!--type="success"-->
+            <!--size="mini"-->
+            <!--@click="handleDetail(scope.$index, scope.row)">明细</el-button>-->
           <el-button
             type="success"
             size="mini"
@@ -181,11 +181,11 @@
         }
         this.onSearch()
       },
-      // 明细
-      handleDetail (index, row) {
-        // 到详情页面
-        this.$router.push({path: '/stockDetail', query: {skuId: row.skuId, source: 2}})
-      },
+      // // 明细
+      // handleDetail (index, row) {
+      //   // 到详情页面
+      //   this.$router.push({path: '/stockDetail', query: {skuId: row.skuId, source: 2}})
+      // },
       // 入库单
       godownEntry (index, row) {
         // 到详情页面

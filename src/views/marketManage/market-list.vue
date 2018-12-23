@@ -211,6 +211,6 @@
     margin-top: 10px;
   }
   .orderFormTime {
-    width:220px;
+    width:220px !important;
   }
 </style>

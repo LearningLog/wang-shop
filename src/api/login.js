@@ -5,12 +5,6 @@
  */
 import {http} from '../api/http'
 import {getToken} from './auth'
-// export const uploadInfo = () => {
-//   return {
-//     url: baseURL,
-//     token: localStorage.getItem('mytoken')
-//   }
-// }
 
 /**
  * 管理员登录

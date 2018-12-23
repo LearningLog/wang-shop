@@ -38,12 +38,11 @@
       <el-form-item label="商户名称:">
         <el-input v-model="searchData.venderName" placeholder="请输入商户名称"></el-input>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
+      </el-form-item>
     </el-form>
-    <!--查询按钮-->
-    <div class="fl">
-      <el-button type="primary" size="mini" icon="el-icon-search" @click="onSearch">查询</el-button>
-      <el-button type="primary" size="mini" icon="el-icon-refresh" @click="reset">重置</el-button>
-    </div>
     <!--表格-->
     <el-table
       :data="splitAccountList"
@@ -104,7 +103,7 @@
         align="right"
         min-width="100"
         show-overflow-tooltip
-        :formatter="rateFormatter"
+        :formatter="numFormatter"
         label="分账费率">
       </el-table-column>
       <el-table-column
@@ -210,9 +209,6 @@
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
       },
-      rateFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '4')
-      },
       // 处理分页
       handleSizeChange (val) {
         this.pageSize = val
@@ -237,6 +233,6 @@
     margin-top: 10px;
   }
   .splitAccountTime {
-    width:220px;
+    width:220px !important;
   }
 </style>

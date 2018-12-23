@@ -68,7 +68,6 @@
       <el-table-column
         prop="skuId"
         label="产品编号(SKU)"
-        :formatter="numFormatter"
         align="center"
         min-width="120">
       </el-table-column>
@@ -174,15 +173,16 @@
         searchData: {// 搜索数据
           skuName: '', // 产品名称
           skuId: '', // 产品编号
-          // startTime: '', // 开始日期
-          // endTime: '', // 结束日期
+          startTime: '', // 开始日期
+          endTime: '', // 结束日期
           status: '' // 状态
         },
         pageSize: 10, // 每页条数
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
-        publishTime: [], // 发布时间
+        // publishTime: [], // 发布时间
+        publishTime: [Date.now() + 1 * 24 * 60 * 60 * 1000, Date.now() + 8 * 24 * 60 * 60 * 1000], // 发布时间
         stateList: [], // 状态下拉数据
         productList: [], // 产品列表
         checkedList: [] // CheckBox选择的数据
@@ -255,7 +255,7 @@
             deleteProduct(publishIdStr).then(res => {
               if (res.code === 1) {
                 if ((this.currentSize - len) === 0) { // 如果当前页数据已删完，则去往上一页
-                  this.pageNum = this.searchData.pageNum - 1
+                  this.pageNum -= 1
                 }
                 this.initData()
               }
@@ -303,7 +303,7 @@
     margin-top: 10px;
   }
   .publishTime {
-    width:220px;
+    width:220px !important
   }
   .operBtn {
     margin-right: 14px;

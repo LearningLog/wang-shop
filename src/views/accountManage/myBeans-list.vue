@@ -35,7 +35,7 @@
       <el-table-column
         prop="businessTime"
         label="业务日期"
-        min-width="150"
+        min-width="160"
         show-overflow-tooltip
         align="center">
       </el-table-column>
@@ -73,7 +73,8 @@
       </el-table-column>
       <el-table-column
         prop="remark"
-        align="center"
+        align="left"
+        header-align="center"
         min-width="200"
         show-overflow-tooltip
         label="详细说明">

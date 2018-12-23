@@ -25,7 +25,7 @@
         </el-form-item>
         <!-- <el-checkbox>记住密码</el-checkbox> -->
         <el-form-item>
-          <button type='primary' class='btn' @click='loginSubmit'>登录</button>
+          <button type='primary' class='btn' @click.prevent='loginSubmit'>登录</button>
         </el-form-item>
       <!--</div>-->
     </el-form>
@@ -58,6 +58,7 @@
       loginSubmit () {
         this.$refs['loginForm'].validate(valid => {
           if (valid) {
+            console.log(this.userType)
             if (!this.userType) {
               this.$message({
                 message: '请选择身份类型！',
@@ -80,7 +81,7 @@
                   } else {
                     // 登录失败
                     this.$message({
-                      message: '用户名或者密码错误！',
+                      message: res.message,
                       type: 'error'
                     })
                   }
@@ -100,7 +101,7 @@
                   } else {
                     // 登录失败
                     this.$message({
-                      message: '用户名或者密码错误！',
+                      message: res.message,
                       type: 'error'
                     })
                   }
@@ -120,7 +121,7 @@
                   } else {
                     // 登录失败
                     this.$message({
-                      message: '用户名或者密码错误！',
+                      message: res.message,
                       type: 'error'
                     })
                   }
@@ -229,7 +230,7 @@
     margin-bottom: 0;
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1.5;
+    /*line-height: 1.5;*/
     color: #495057;
     text-align: center;
     white-space: nowrap;
@@ -242,7 +243,7 @@
     font-size: 15px;
     font-weight: 700;
     color: #fff;
-    padding: 13px 0;
+    line-height: 44px;
     background: #ff3366;
     display: inline-block;
     /*width: 100%;*/
