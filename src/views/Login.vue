@@ -25,7 +25,7 @@
         </el-form-item>
         <!-- <el-checkbox>记住密码</el-checkbox> -->
         <el-form-item>
-          <button type='primary' class='btn' @click='loginSubmit'>登录</button>
+          <button type='primary' class='btn' @click.prevent='loginSubmit'>登录</button>
         </el-form-item>
       <!--</div>-->
     </el-form>
@@ -57,7 +57,9 @@
     methods: {
       loginSubmit () {
         this.$refs['loginForm'].validate(valid => {
+          debugger
           if (valid) {
+            console.log(this.userType)
             if (!this.userType) {
               this.$message({
                 message: '请选择身份类型！',
