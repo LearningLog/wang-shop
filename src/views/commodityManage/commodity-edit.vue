@@ -271,10 +271,10 @@
   .productForm {
     margin-top: 10px;
   }
-  /*.productForm input {*/
-  /*margin-right: 150px !important;*/
-  /*}*/
-  .manufacturerName {
-    width: 200px;
+  .el-input {
+    width: 200px !important;
+  }
+  .el-select {
+    width: 200px !important;
   }
 </style>

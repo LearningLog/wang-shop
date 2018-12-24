@@ -143,4 +143,10 @@
   .productForm {
     margin-top: 10px;
   }
+  .el-input {
+    width: 200px !important;
+  }
+  .el-select {
+    width: 200px !important;
+  }
 </style>
