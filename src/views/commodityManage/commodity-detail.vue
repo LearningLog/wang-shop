@@ -70,11 +70,11 @@
       getProductDetail(this.skuId).then(res => {
         if (res.code === 1 && res.data) {
           this.product = res.data
-          this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 0)
-          this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 0)
-          this.product.increaseNum = this.$accounting.format(this.product.increaseNum.toString(), 0)
-          this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum.toString(), 0)
-          this.product.fraction = this.$accounting.format(this.product.fraction.toString(), 0)
+          this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100), 2)
+          this.product.salePrice = this.$accounting.format((this.product.salePrice / 100), 2)
+          this.product.increaseNum = this.$accounting.format(this.product.increaseNum, 0)
+          this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum, 0)
+          this.product.fraction = this.$accounting.format(this.product.fraction, 2)
           this.dialogImageUrl = res.data.skuImage
         }
       })

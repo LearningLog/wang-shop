@@ -99,7 +99,6 @@
       <el-table-column
         prop="statusDesc"
         align="center"
-        :formatter="statusFormatter"
         label="状态">
       </el-table-column>
       <el-table-column
@@ -238,16 +237,6 @@
       // 单价、数量格式化
       priceFormatter (row, column, cellValue, index) {
         return this.$accounting.format((cellValue / 100), '2')
-      },
-      statusFormatter (row, column, cellValue, index) {
-        switch (cellValue) {
-          case 0:
-            return '待审核'
-          case 1:
-            return '上架'
-          case 2:
-            return '下架'
-        }
       },
       // 处理分页
       handleSizeChange (val) {

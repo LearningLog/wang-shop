@@ -182,7 +182,7 @@
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
         // publishTime: [], // 发布时间
-        publishTime: [Date.now() + 1 * 24 * 60 * 60 * 1000, Date.now() + 8 * 24 * 60 * 60 * 1000], // 发布时间
+        publishTime: [], // 发布时间
         stateList: [], // 状态下拉数据
         productList: [], // 产品列表
         checkedList: [] // CheckBox选择的数据

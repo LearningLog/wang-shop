@@ -94,8 +94,8 @@
         getProductDetail(this.product.skuId).then(res => {
           if (res.code === 1) {
             this.product = res.data
-            this.product.originalPrice = parseInt(this.$accounting.format(this.product.originalPrice.toString(), 0))
-            this.product.salePrice = parseInt(this.$accounting.format(this.product.salePrice.toString(), 0))
+            this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100), 2)
+            this.product.salePrice = this.$accounting.format((this.product.salePrice / 100), 2)
           }
         })
       },
