@@ -56,7 +56,7 @@ export default {
     content: "\e9bd";
   }
   .el-input__prefix {
-    left: 10px;
+    left: 10px !important;
   }
   .loginName .el-input__inner, .password .el-input__inner {
     float: left;
@@ -65,7 +65,7 @@ export default {
     font-size: 15px;
     font-weight: 400;
     color: #fff;
-    padding: 10px 16px;
+    padding: 0px 16px;
     border: none;
     border-left: 2px solid #fff;
     width: 88%;
@@ -107,6 +107,9 @@ export default {
   }
   .operBtn {
     margin-right: 14px;
+  }
+  .info .el-form-item__content {
+    line-height: 10px !important;
   }
   /*myOrderForm.vue 右侧单元格样式*/
   .orderInfo .el-form-item, .orderInfo .el-form-item__label, .orderInfo .el-form-item__content {
