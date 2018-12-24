@@ -119,4 +119,7 @@ export default {
   .orderInfo .el-form-item__content {
     text-align: left;
   }
+  .el-menu {
+    border-right: none;
+  }
 </style>
