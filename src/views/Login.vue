@@ -58,7 +58,6 @@
       loginSubmit () {
         this.$refs['loginForm'].validate(valid => {
           if (valid) {
-            console.log(this.userType)
             if (!this.userType) {
               this.$message({
                 message: '请选择身份类型！',
