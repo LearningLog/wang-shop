@@ -122,7 +122,7 @@ export default {
   .el-menu {
     border-right: none;
   }
-  .el-scrollbar__wrap {
+  .mainBar>.el-scrollbar__wrap {
     overflow-x: hidden;
   }
 </style>

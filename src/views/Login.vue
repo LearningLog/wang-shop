@@ -161,7 +161,6 @@
     margin: 280px auto 0;
     width: 400px;
     height: 340px;
-    /*background-color: #fff;*/
     position: relative;
   }
   .avatar {
@@ -176,7 +175,6 @@
     box-shadow: 0 1px 5px #CCC;
     background-color: pink;
     overflow: hidden;
-    /*z-index: 9999;*/
   }
   .avatar img {
     width: 100%;
@@ -199,11 +197,6 @@
   .userType {
     width: 400px;
   }
-  /*.userType {*/
-    /*float: left;*/
-    /*margin-left: 98px;*/
-    /*!*width: 310px;*!*/
-  /*}*/
   .input-group-prepend {
     margin-right: -1px;
     margin-top: 9px;
@@ -245,7 +238,6 @@
     line-height: 44px;
     background: #ff3366;
     display: inline-block;
-    /*width: 100%;*/
     outline: none;
     border: 2px solid #ff3366;
     cursor: pointer;

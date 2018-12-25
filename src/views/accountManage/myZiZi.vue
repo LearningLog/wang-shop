@@ -83,7 +83,7 @@
         label="操作">
         <template slot-scope="scope">
           <el-button
-            v-if="searchData.type === 1"
+            v-if="searchData.type === 1 || searchData.type === 3"
             type="primary"
             size="mini"
             @click="handleDelivery(scope.$index, scope.row)">{{userTypeStr}}</el-button>
@@ -124,12 +124,17 @@
                @close="closeDialog"
     >
       <el-form ref="logisticsInfo" :model="logisticsInfo" label-width="110px">
-        <el-form-item label="物流公司">
+        <el-form-item label="物流公司" prop="manufacturerName">
+          <el-select v-model="logisticsInfo.logisticsCompany" placeholder="请选择物流公司" class="logisticsCompany" @change="logisticsCompanySelect">
+            <el-option v-for="item in logisticsCompany" :label="item.logisticsCompanyName" :value="item.logisticsCompanyId" :key="item.logisticsCompanyId"></el-option>
+          </el-select>
+        </el-form-item>
+        <!--<el-form-item label="物流公司">
           <el-input v-model="logisticsInfo.logisticsCompany" style="width:86%"></el-input>
         </el-form-item>
         <el-form-item label="物流单号">
           <el-input v-model="logisticsInfo.logisticsNo" style="width:86%"></el-input>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -139,7 +144,7 @@
   </div>
 </template>
 <script>
-  import { getManufacturerZiZiList, getVenderZiZiList, getMyCoinsBeans, takeDelivery, consignment } from '../../api/accountManage.js'
+  import { getManufacturerZiZiList, getVenderZiZiList, getMyCoinsBeans, takeDelivery, consignment, getLogisticsCompanylist } from '../../api/accountManage.js'
   import {getToken} from '../../api/auth.js'
   const qs = require('querystring')
   export default {
@@ -171,6 +176,7 @@
         userType: '', // 身份类型
         userTypeStr: '', // 身份类型Str
         integration: '', // 我的孖豆
+        logisticsCompany: [], // 物流公司
         balance: '', // 我的孖蹦
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
@@ -182,6 +188,11 @@
     methods: {
       initData () {
         if (this.userTypeToken === 'manufacturerToken') {
+          getLogisticsCompanylist().then(res => {
+            if (res.code === 1) {
+              this.logisticsCompany = res.data
+            }
+          })
           getManufacturerZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
             if (res.code === 1) {
               this.userType = 'vender'
