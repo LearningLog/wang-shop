@@ -55,6 +55,7 @@
           </el-dialog>
           <el-upload
             limit="2"
+            ref="clearUpload"
             accept=".jpg,.png,.gif,.jepg,.jpeg"
             class="upload-demo"
             :action="uploadUrl()"
@@ -62,7 +63,7 @@
             :before-remove="beforeRemove"
             :on-remove="handleRemove"
             :on-preview="handlePreview"
-            :file-list="product.skuImageList"
+            :file-list="skuImageList"
             list-type="picture-card">
             <i class="el-icon-plus"></i>
             <!--<el-button size="small" type="primary">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
@@ -101,11 +102,11 @@
           salePrice: '', // 售价
           fraction: '', // 分润比例
           creater: '', // 创建人
-          skuImageList: [], // 商品图片
           skuImage: '', // 商品图片地址
           increaseNum: null, // 递增数量
           minPurchaseNum: null // 起定数量
         },
+        skuImageList: [], // 商品图片
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
         manufacturerNameList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家数组
@@ -154,7 +155,7 @@
               this.product.increaseNum = this.$accounting.format(this.product.increaseNum, 0)
               this.product.minPurchaseNum = this.$accounting.format(this.product.minPurchaseNum, 0)
               this.product.fraction = this.$accounting.format(this.product.fraction, 2)
-              this.product.skuImageList = [{url: res.data.skuImage, name: res.data.skuId}]
+              this.skuImageList = [{url: res.data.skuImage, name: res.data.skuImageName}]
             }
           })
         }
@@ -204,7 +205,7 @@
       },
       // 上传成功
       handleSuccess (response, file, fileList) {
-        this.product.skuImageList = [file]
+        this.skuImageList = [file]
         let formData = new FormData()
         formData.append('file', file.raw)
         uploadSingle(formData).then(res => {
@@ -222,13 +223,13 @@
       // 处理文件移除
       handleRemove (file, fileList) {
         let now = ''
-        this.product.skuImageList.some((item, index) => {
+        this.skuImageList.some((item, index) => {
           if (file.uid === item.uid) {
             now = index
             return false
           }
         })
-        this.product.skuImageList.splice(now, 1)
+        this.skuImageList.splice(now, 1)
         this.product.skuImage = ''
       },
       // 处理预览

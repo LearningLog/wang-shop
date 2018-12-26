@@ -62,7 +62,7 @@
             :before-remove="beforeRemove"
             :on-remove="handleRemove"
             :on-preview="handlePreview"
-            :file-list="product.skuImageList"
+            :file-list="skuImageList"
             list-type="picture-card">
             <i class="el-icon-plus"></i>
             <!--<el-button size="small" type="primary">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
@@ -97,11 +97,11 @@
           salePrice: '', // 售价
           fraction: '', // 分润比例
           creater: '', // 创建人
-          skuImageList: [], // 商品图片
           skuImage: '', // 商品图片地址
           increaseNum: null, // 递增数量
           minPurchaseNum: null // 起定数量
         },
+        skuImageList: [], // 商品图片
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
         manufacturerNameList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家数组
@@ -187,9 +187,9 @@
           fraction: '', // 分润比例
           creater: '', // 创建人
           createTime: '', // 创建时间
-          skuImageList: [], // 商品图片
           skuImage: '' // 商品图片地址
         }
+        this.skuImageList = [] // 商品图片
         this.$refs['product'].resetFields()
       },
       // 上传路径
@@ -198,7 +198,7 @@
       },
       // 上传成功
       handleSuccess (response, file, fileList) {
-        this.product.skuImageList = [file]
+        this.skuImageList = [file]
         let formData = new FormData()
         formData.append('file', file.raw)
         uploadSingle(formData).then(res => {
@@ -216,13 +216,13 @@
       // 处理文件移除
       handleRemove (file, fileList) {
         let now = ''
-        this.product.skuImageList.some((item, index) => {
+        this.skuImageList.some((item, index) => {
           if (file.uid === item.uid) {
             now = index
             return false
           }
         })
-        this.product.skuImageList.splice(now, 1)
+        this.skuImageList.splice(now, 1)
         this.product.skuImage = ''
       },
       // 处理预览
