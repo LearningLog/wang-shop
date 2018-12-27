@@ -32,7 +32,7 @@
           <el-input v-model="product.brand"></el-input>
         </el-form-item>
         <el-form-item label="厂家" prop="manufacturerName">
-          <el-select v-model="product.manufacturerId" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect">
+          <el-select v-model="product.manufacturerId" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect" filterable>
             <el-option v-for="item in manufacturerList" :label="item.manufacturerName" :value="item.manufacturerId" :key="item.manufacturerId"></el-option>
           </el-select>
         </el-form-item>
