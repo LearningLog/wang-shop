@@ -120,7 +120,7 @@ export default {
     text-align: left;
   }
   .el-menu {
-    border-right: none;
+    border-right: none !important;
   }
   .mainBar>.el-scrollbar__wrap {
     overflow-x: hidden;

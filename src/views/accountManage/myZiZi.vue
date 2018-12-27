@@ -57,7 +57,7 @@
           align="center">
           <template slot-scope="scope" align="left">
             <div v-if="scope.row.skuList">
-              <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '40px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '4 0px'}">订单状态：{{scope.row.orderStatusStr}}</span><span :style="{paddingLeft: '40px'}">收货人：{{scope.row.receiverName}}</span><span class="receiveAddrInfo" :style="{paddingLeft: '40px'}">收货地址：{{scope.row.receiveAddrInfo}}</span>
+              <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '40px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '40px'}">订单状态：{{scope.row.orderStatusStr}}</span><span :style="{paddingLeft: '40px'}">收货人：{{scope.row.receiverName}}</span><span class="receiveAddrInfo" :style="{paddingLeft: '40px'}">收货地址：{{scope.row.receiveAddrInfo}}</span>
             </div>
             <div v-else>
               <el-tooltip content="点击查看商品图片" placement="top">
@@ -447,7 +447,7 @@
   }
   .brand {
     display: inline-block;
-    width: 190px;
+    width: 188px;
     text-align: left;
     overflow: hidden;
     text-overflow:ellipsis;
