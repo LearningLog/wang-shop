@@ -9,7 +9,8 @@ import { Message, Loading } from 'element-ui'
 import {getToken} from './auth'
 const baseURL = 'http://shop.gemini.test.ginkgofit.com'
 export const http = axios.create({
-  baseURL: baseURL
+  baseURL: baseURL,
+  withCredentials: true
 })
 
 export const uploadInfo = () => {
