@@ -57,12 +57,15 @@
           align="center">
           <template slot-scope="scope" align="left">
             <div v-if="scope.row.skuList">
-              <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '50px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '50px'}">订单状态：{{scope.row.orderStatusStr}}</span><span :style="{paddingLeft: '50px'}">收货人：{{scope.row.receiverName}}</span><span :style="{paddingLeft: '50px'}">收货地址：{{scope.row.receiveAddrInfo}}</span>
+              <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '40px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '4 0px'}">订单状态：{{scope.row.orderStatusStr}}</span><span :style="{paddingLeft: '40px'}">收货人：{{scope.row.receiverName}}</span><span class="receiveAddrInfo" :style="{paddingLeft: '40px'}">收货地址：{{scope.row.receiveAddrInfo}}</span>
             </div>
             <div v-else>
               <el-tooltip content="点击查看商品图片" placement="top">
-                <img ref="skuImage" class="skuImage" :src="scope.row.skuImage" alt="商品图片" :style='{marginRight:"10px"}' @click="visible">
-              </el-tooltip><span>{{scope.row.brand}}</span><span :style='{display:"inline-block",width:"100px",align:"right"}'>X {{scope.row.skuBuyNum}}</span>
+                <img ref="skuImage" class="skuImage" :src="scope.row.skuImage" alt="商品图片" @click="visible">
+              </el-tooltip>
+              <el-tooltip :content="scope.row.brand" placement="top">
+                <span class="brand">{{scope.row.brand}}</span>
+              </el-tooltip><span>X {{scope.row.skuBuyNum}}</span>
             </div>
           </template>
         </el-table-column>
@@ -434,5 +437,30 @@
     background-size: cover;
     background: url(../../assets/logo.jpg);
     border-radius: 50%;
+  }
+  .skuImage {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    vertical-align: text-bottom;
+  }
+  .brand {
+    display: inline-block;
+    width: 190px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    vertical-align: text-bottom;
+  }
+  .receiveAddrInfo {
+    display: inline-block;
+    /*width: 440px;*/
+    text-align: left;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    vertical-align: text-bottom;
   }
 </style>

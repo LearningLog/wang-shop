@@ -30,7 +30,7 @@ export const loginManufacturer = params => {
  * @returns {*}
  */
 export const loginVender = params => {
-  return http.post('/vender/passport/login', params).then(res => res.data)
+  return http.post('http://support.gemini.test.ginkgofit.com/shop/login', params).then(res => res.data)
 }
 
 /**

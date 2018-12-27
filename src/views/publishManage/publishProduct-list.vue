@@ -43,8 +43,8 @@
     </div>
     <!--操作按钮-->
     <div class="fr operBtn">
-      <!--<el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>-->
-      <el-button type="danger" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
+      <el-button type="primary" size="mini" @click="publishProduct">新增发布</el-button>
+      <el-button type="danger" size="mini" @click="deleteProduct">删除</el-button>
     </div>
     <!--表格-->
     <el-table
@@ -224,8 +224,8 @@
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
       },
-      // 添加
-      addProduct () {
+      // 发布
+      publishProduct () {
         // 到编辑页面
         this.$router.push({path: '/addPublishProduct'})
       },

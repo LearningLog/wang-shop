@@ -219,18 +219,6 @@
             this.userMessage = `你好商家，${res.data.venderName}`
           }
         }
-        // else {
-        //   this.$message({
-        //     type: 'error',
-        //     message: res.message
-        //   })
-        //   this.$router.push({
-        //     path: '/login',
-        //     query: {
-        //       redirect: window.location.hash
-        //     }
-        //   })
-        // }
       })
     },
     mounted () {
@@ -460,7 +448,7 @@
     height: 60px;
     width: 200px;
     z-index: 2;
-    background: url(../assets/logo.jpg);
+    background: url(../assets/logo_1.jpg);
     background-size:contain;
   }
   .el-main {

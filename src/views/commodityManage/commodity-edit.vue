@@ -32,8 +32,8 @@
           <el-input v-model="product.brand"></el-input>
         </el-form-item>
         <el-form-item label="厂家" prop="manufacturerName">
-          <el-select v-model="product.manufacturerName" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect">
-            <el-option v-for="item in manufacturerNameList" :label="item.desc" :value="item.code" :key="item.code"></el-option>
+          <el-select v-model="product.manufacturerId" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect">
+            <el-option v-for="item in manufacturerList" :label="item.manufacturerName" :value="item.manufacturerId" :key="item.manufacturerId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="型号" prop="model">
@@ -79,7 +79,7 @@
   </div>
 </template>
 <script>
-  import { updateProduct, getProductDetail, uploadSingle } from '../../api/commodityManage.js'
+  import { updateProduct, getProductDetail, uploadSingle, getManufacturerList } from '../../api/commodityManage.js'
   import { uploadInfo } from '../../api/http.js'
   import {onNumValid, onKeyValid} from '../../api/util.js'
   export default {
@@ -109,7 +109,7 @@
         skuImageList: [], // 商品图片
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
-        manufacturerNameList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家数组
+        manufacturerList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家数组
         rules: {
           brand: [
             { required: true, message: '请输入产品品牌', trigger: 'blur' }
@@ -147,6 +147,11 @@
     methods: {
       initData () {
         if (this.skuId) {
+          getManufacturerList().then(res => {
+            if (res.code === 1) {
+              this.manufacturerList = res.data.list
+            }
+          })
           getProductDetail(this.skuId).then(res => {
             if (res.code === 1) {
               this.product = res.data
@@ -240,12 +245,13 @@
       },
       // 选择厂商获取ID
       manufacturerSelect (val) {
+        debugger
         this.product.manufacturerId = val
         let obj = {}
-        obj = this.manufacturerNameList.find((item) => {
-          return item.code === val
+        obj = this.manufacturerList.find((item) => {
+          return item.manufacturerId === val
         })
-        this.product.manufacturerName = obj.desc
+        this.product.manufacturerName = obj.manufacturerName
       },
       // 数字输入框失去焦点时
       numBlur (value, num, name) {

@@ -8,11 +8,13 @@
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="product" status-icon :model="product" label-width="140px" size="small" class="productForm">
       <el-col span="12">
+        <el-form-item label="产品名称" prop="skuId">
+          <el-select v-model="product.skuId" placeholder="请选择产品" class="skuId" @change="productChange" filterable>
+            <el-option v-for="item in productSelectList" :label="item.skuName" :value="item.skuId" :key="item.skuId"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="产品编号（SKU）">
           <el-input v-model="product.skuId" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="产品名称">
-          <el-input v-model="product.skuName" disabled></el-input>
         </el-form-item>
         <el-form-item label="规格">
           <el-input v-model="product.saleProperty" disabled></el-input>
@@ -52,15 +54,12 @@
   </div>
 </template>
 <script>
-  import { publishProductAdd } from '../../api/publishManage.js'
+  import { publishProductAdd, getProductSelectList } from '../../api/publishManage.js'
   import { getProductDetail } from '../../api/commodityManage.js'
   import {onNumValid} from '../../api/util.js'
   export default {
     created () {
-      this.product.skuId = this.$route.query.skuId
-      if (this.product.skuId) {
-        this.initData()
-      }
+      this.initData()
     },
     data () {
       return {
@@ -82,7 +81,11 @@
           updateTime: '',
           creater: '' // 发布人
         },
+        productSelectList: [], // 商品下拉数据
         rules: {
+          skuId: [
+            { required: true, message: '请选择商品', trigger: 'change' }
+          ],
           publishNum: [
             { required: true, message: '请输入发布数量', trigger: 'blur' }
           ]
@@ -91,11 +94,10 @@
     },
     methods: {
       initData () {
-        getProductDetail(this.product.skuId).then(res => {
+        // 获取商品下拉框数据
+        getProductSelectList().then(res => {
           if (res.code === 1) {
-            this.product = res.data
-            this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100), 2)
-            this.product.salePrice = this.$accounting.format((this.product.salePrice / 100), 2)
+            this.productSelectList = res.data.list
           }
         })
       },
@@ -117,11 +119,20 @@
       },
       // 重置
       reset () {
-        this.product.publishNum = '' // 发布数量
-        if (this.product.skuId) {
-          this.initData()
-        }
+        this.product = {} // 发布数量
+        this.initData()
         this.$refs['product'].resetFields()
+      },
+      // 选择商品获取ID
+      productChange (val) {
+        this.product.skuId = val
+        getProductDetail(this.product.skuId).then(res => {
+          if (res.code === 1) {
+            this.product = res.data
+            this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100), 2)
+            this.product.salePrice = this.$accounting.format((this.product.salePrice / 100), 2)
+          }
+        })
       },
       // 数字输入框失去焦点时
       numBlur (value, num, name) {

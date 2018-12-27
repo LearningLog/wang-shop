@@ -70,12 +70,19 @@ export function removeToken (name) {
  * 获取cookie中用户信息的 Token 令牌
  * @return {string} 用户的 Token 身份令牌
  */
-// export function getToken () {
-//   try {
-//     // cooike存储中的 adminToken 可能不是一个有效的 JSON 格式字符串
-//     // 所以我们这里为了避免程序出错，使用了 try-catcher 来捕获转换失败的异常
-//     return getToken()
-//   } catch (err) {
-//     return ''
-//   }
-// }
+export function getCookie (name) {
+  let offset, cookieValue
+  var search = name + '='
+  if (document.cookie.length > 0) {
+    offset = document.cookie.indexOf(search)
+    if (offset !== -1) {
+      offset += search.length
+      let end = document.cookie.indexOf(';', offset)
+      if (end === -1) {
+        end = document.cookie.length
+        cookieValue = unescape(document.cookie.substring(offset, end))
+      }
+    }
+  }
+  return cookieValue
+}

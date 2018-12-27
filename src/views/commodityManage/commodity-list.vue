@@ -18,8 +18,8 @@
         <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>
-    <el-button type="danger" size="mini" @click="remove" :disabled="btnDisabled">删除</el-button>
+    <el-button type="primary" size="mini" @click="add" >添加</el-button>
+    <el-button type="danger" size="mini" @click="remove" >删除</el-button>
     <!--表格-->
     <el-table
       :data="productList"
@@ -115,10 +115,10 @@
             type="success"
             size="mini"
             @click="handleDetail(scope.$index, scope.row)">明细</el-button>
-          <el-button
-            type="primary"
-            size="mini"
-            @click="handlePublish(scope.$index, scope.row)">发布</el-button>
+          <!--<el-button-->
+            <!--type="primary"-->
+            <!--size="mini"-->
+            <!--@click="handlePublish(scope.$index, scope.row)">发布</el-button>-->
         </template>
       </el-table-column>
     </el-table>

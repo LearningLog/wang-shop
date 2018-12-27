@@ -33,7 +33,7 @@
 </template>
 <script>
   import { loginAdmin, loginManufacturer, loginVender } from '../api/login.js'
-  import { saveToken } from '../api/auth.js'
+  import { saveToken, getToken } from '../api/auth.js'
   const qs = require('querystring')
   export default {
     data () {
@@ -107,9 +107,11 @@
                 })
               } else {
                 loginVender(qs.stringify(this.loginForm)).then(res => {
-                  if (res.code === 1) {
+                  if (res.code === 200) {
                     // 路由跳转
-                    saveToken('venderToken', res.data, 'h24')
+                    let sessionId = getToken('sessionId')
+                    console.log(sessionId)
+                    saveToken('venderToken', sessionId, 'h24')
                     saveToken('userType', 'venderToken', 'h24')
                     this.$router.push({path: '/'})
                     // 给出登陆成功的提示消息

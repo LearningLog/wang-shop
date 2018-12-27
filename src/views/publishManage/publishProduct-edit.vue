@@ -8,11 +8,11 @@
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="product" status-icon :model="product" label-width="140px" size="small" class="productForm">
       <el-col span="12">
-        <el-form-item label="产品编号（SKU）">
-          <el-input v-model="product.skuId" disabled></el-input>
-        </el-form-item>
         <el-form-item label="产品名称">
           <el-input v-model="product.skuName" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="产品编号（SKU）">
+          <el-input v-model="product.skuId" disabled></el-input>
         </el-form-item>
         <el-form-item label="规格">
           <el-input v-model="product.saleProperty" disabled></el-input>
@@ -56,18 +56,8 @@
   import {onNumValid} from '../../api/util.js'
   export default {
     created () {
-      this.skuId = this.$route.query.skuId
       this.publishId = this.$route.query.publishId
-      if (this.publishId) {
-        getPublishDetail(this.publishId).then(res => {
-          if (res.code === 1) {
-            this.product = res.data
-            this.product.publishNum = this.$accounting.format(this.product.publishNum, 0)
-            this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100), 2)
-            this.product.salePrice = this.$accounting.format((this.product.salePrice / 100), 2)
-          }
-        })
-      }
+      this.initData()
     },
     data () {
       return {
@@ -98,6 +88,18 @@
       }
     },
     methods: {
+      initData () {
+        if (this.publishId) {
+          getPublishDetail(this.publishId).then(res => {
+            if (res.code === 1) {
+              this.product = res.data
+              this.product.publishNum = this.$accounting.format(this.product.publishNum, 0)
+              this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100), 2)
+              this.product.salePrice = this.$accounting.format((this.product.salePrice / 100), 2)
+            }
+          })
+        }
+      },
       // 发布
       publishProduct () {
         this.$refs['product'].validate((valid) => {
@@ -121,7 +123,7 @@
       },
       // 重置
       reset () {
-        this.product.publishNum = '' // 发布数量
+        this.initData()
         this.$refs['product'].resetFields()
       },
       // 数字输入框失去焦点时
