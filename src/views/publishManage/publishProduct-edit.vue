@@ -2,7 +2,9 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/publishProductList' }">发布管理</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="source === 1" :to="{ path: '/publishProductList' }">商品发布</el-breadcrumb-item>
+      <el-breadcrumb-item v-else-if="source === 2" :to="{ path: '/publishProductApprove' }">发布审核</el-breadcrumb-item>
+      <el-breadcrumb-item v-else :to="{ path: '/publishProductList' }">发布管理</el-breadcrumb-item>
       <el-breadcrumb-item>编辑发布</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
@@ -57,6 +59,7 @@
   export default {
     created () {
       this.publishId = this.$route.query.publishId
+      this.source = this.$route.query.source
       this.initData()
     },
     data () {
@@ -80,6 +83,7 @@
           updateTime: '',
           publisher: '' // 发布人
         },
+        source: null, // 来源 1 发布列表 2审核列表
         rules: {
           publishNum: [
             { required: true, message: '请输入发布数量', trigger: 'blur' }

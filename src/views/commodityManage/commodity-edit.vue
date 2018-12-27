@@ -245,7 +245,6 @@
       },
       // 选择厂商获取ID
       manufacturerSelect (val) {
-        debugger
         this.product.manufacturerId = val
         let obj = {}
         obj = this.manufacturerList.find((item) => {
