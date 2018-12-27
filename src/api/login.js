@@ -3,7 +3,7 @@
  * @2018/11/24
  * @Description:登录
  */
-import {http, http2} from '../api/http'
+import {http} from '../api/http'
 import {getToken} from './auth'
 
 /**
@@ -30,7 +30,7 @@ export const loginManufacturer = params => {
  * @returns {*}
  */
 export const loginVender = params => {
-  return http2.post('http://support.gemini.test.ginkgofit.com/shop/login', params).then(res => res.data)
+  return http.post('http://support.gemini.test.ginkgofit.com/shop/login', params, {withCredentials: true}).then(res => res.data)
 }
 
 /**

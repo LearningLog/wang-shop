@@ -11,10 +11,6 @@ const baseURL = 'http://shop.gemini.test.ginkgofit.com'
 export const http = axios.create({
   baseURL: baseURL
 })
-export const http2 = axios.create({
-  baseURL: baseURL,
-  withCredentials: true
-})
 
 export const uploadInfo = () => {
   return {
@@ -44,7 +40,7 @@ export const loading = (close) => {
 http.interceptors.request.use(function (config) {
   loading()
   // 如果本次请求的不是 /login 接口，则我们就加入请求头
-  if (config.url !== '/admin/passport/login' && config.url !== '/manufacturer/passport/login' && config.url !== 'http://support.gemini.test.ginkgofit.com/shop/login') {
+  if (config.url !== '/admin/passport/login' && config.url !== '/manufacturer/passport/login' && config.url !== '/vender/passport/login') {
     config.headers.Authorization = getToken('userType') + '=' + getToken(getToken('userType'))
   }
 
@@ -95,33 +91,6 @@ http.interceptors.response.use(function (response) {
   return Promise.reject(error)
 })
 
-http2.interceptors.response.use(function (response) {
-  loading('close')
-  const res = response.data
-  if (res.code === 2100) {
-    Message({
-      message: res.message,
-      type: 'error'
-    })
-    router.push({
-      path: '/login',
-      query: {
-        redirect: window.location.hash
-      }
-    })
-  } else if (res.code !== 1) {
-    Message({
-      message: res.message,
-      type: 'error'
-    })
-  }
-
-  // 类似于 next()，放行通过响应拦截器
-  return response
-}, function (error) {
-  return Promise.reject(error)
-})
-
 // 建议通过定义插件的配置来扩展 Vue 本身
 // 1. 定义一个插件对象
 const httpPlugin = {}
@@ -134,7 +103,6 @@ const httpPlugin = {}
 httpPlugin.install = function (Vue, options) {
   // 3. 添加实例方法
   Vue.prototype.$http = http
-  Vue.prototype.$http2 = http2
 }
 
 // 4. 导出插件对象
