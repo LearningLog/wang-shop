@@ -146,6 +146,7 @@
           name: '', // 厂商名称
           id: '' // 厂商编号
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // 添加

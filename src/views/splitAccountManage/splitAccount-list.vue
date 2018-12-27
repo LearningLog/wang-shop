@@ -193,6 +193,7 @@
           venderId: '' // 商户编号
         }
         this.splitAccountTime = []
+        this.pageNum = 1
         this.onSearch()
       },
       // 获取发布时间

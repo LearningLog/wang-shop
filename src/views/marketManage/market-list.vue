@@ -167,6 +167,7 @@
           userName: '', // 客户姓名
           userPhone: '' // 手机号
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // 获取订单时间

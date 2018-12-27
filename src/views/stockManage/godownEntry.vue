@@ -184,6 +184,7 @@
           orderStatus: '', // 入库状态
           logisticsNo: '' // 配送编号
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // 单价、数量格式化

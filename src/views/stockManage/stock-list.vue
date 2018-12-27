@@ -179,6 +179,7 @@
           skuName: '', // 产品名称
           skuId: '' // 产品编号
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // // 明细

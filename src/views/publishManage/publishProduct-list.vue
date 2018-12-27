@@ -217,6 +217,7 @@
           status: '' // 状态
         }
         this.publishTime = [] // 发布时间
+        this.pageNum = 1
         this.initData()
       },
       // 获取发布时间

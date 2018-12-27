@@ -192,6 +192,7 @@
           manufacturerId: '' // 厂商编号
         }
         this.orderFormTime = [] // 订单日期
+        this.pageNum = 1
         this.onSearch()
       },
       // 获取订单时间

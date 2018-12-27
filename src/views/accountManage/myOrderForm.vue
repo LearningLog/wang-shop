@@ -197,6 +197,7 @@
           endTime: '', // 结束时间
           shareStatus: '' // 销售日期
         }
+        this.pageNum = 1
         this.iniData()
       },
       // 获取发布时间
