@@ -24,6 +24,13 @@ module.exports = {
   entry: {
     app:  ['babel-polyfill', './src/main.js']
   },
+  externals: {
+    'vue': 'Vue',
+    'vue-router': 'VueRouter',
+    'axios': 'axios',
+    'accounting': 'accounting',
+    'moment': 'moment'
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

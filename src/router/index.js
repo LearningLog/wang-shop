@@ -1,11 +1,12 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+// import Router from 'vue-router'
 import {getToken} from '../api/auth'
 // 功能组件
 // @ 是 src 路径的别名，webpack 配置的
 // import Login from '@/views/Login'
 import Home from '@/views/Home'
 import Main from '@/views/Main'
+const Router = require('vue-router')
 // import commodityList from '@/views/commodityManage/commodity-list'
 // import commodityAdd from '@/views/commodityManage/commodity-add'
 // import commodityEdit from '@/views/commodityManage/commodity-edit'

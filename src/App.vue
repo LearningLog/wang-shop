@@ -65,7 +65,7 @@ export default {
     font-size: 15px;
     font-weight: 400;
     color: #fff;
-    padding: 0px 16px;
+    padding: 0px 16px !important;
     border: none;
     border-left: 2px solid #fff;
     width: 88%;

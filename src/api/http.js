@@ -7,6 +7,7 @@ import axios from 'axios'
 import router from '@/router/index'
 import { Message, Loading } from 'element-ui'
 import {getToken} from './auth'
+// const axios = require('axios')
 const baseURL = 'http://shop.gemini.test.ginkgofit.com'
 export const http = axios.create({
   baseURL: baseURL

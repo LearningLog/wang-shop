@@ -33,7 +33,7 @@
 </template>
 <script>
   import { loginAdmin, loginManufacturer, loginVender } from '../api/login.js'
-  import { saveToken, getToken } from '../api/auth.js'
+  import { saveToken } from '../api/auth.js'
   const qs = require('querystring')
   export default {
     data () {
@@ -69,7 +69,7 @@
                 loginAdmin(qs.stringify(this.loginForm)).then(res => {
                   if (res.code === 1) {
                     // 路由跳转
-                    saveToken('adminToken', res.data, 'h24')
+                    // saveToken('adminToken', res.data, 'h24')
                     saveToken('userType', 'adminToken', 'h24')
                     this.$router.push({path: '/'})
                     // 给出登陆成功的提示消息
@@ -89,7 +89,7 @@
                 loginManufacturer(qs.stringify(this.loginForm)).then(res => {
                   if (res.code === 1) {
                     // 路由跳转
-                    saveToken('manufacturerToken', res.data, 'h24')
+                    // saveToken('manufacturerToken', res.data, 'h24')
                     saveToken('userType', 'manufacturerToken', 'h24')
                     this.$router.push({path: '/'})
                     // 给出登陆成功的提示消息
@@ -109,9 +109,8 @@
                 loginVender(qs.stringify(this.loginForm)).then(res => {
                   if (res.code === 200) {
                     // 路由跳转
-                    let sessionId = getToken('sessionId')
-                    console.log(sessionId)
-                    saveToken('venderToken', sessionId, 'h24')
+                    // let sessionId = getToken('sessionId')
+                    // saveToken('venderToken', sessionId, 'h24')
                     saveToken('userType', 'venderToken', 'h24')
                     this.$router.push({path: '/'})
                     // 给出登陆成功的提示消息
@@ -175,7 +174,7 @@
     margin-left: -70px;
     border-radius: 50%;
     box-shadow: 0 1px 5px #CCC;
-    background-color: pink;
+    /*background-color: pink;*/
     overflow: hidden;
   }
   .avatar img {
