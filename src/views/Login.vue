@@ -156,6 +156,7 @@
     box-sizing: border-box;
     background-color: #2f4050;
     background-image: url(../assets/loginbg.jpg);
+    background-size: cover;
   }
   .container {
     box-sizing: border-box;
