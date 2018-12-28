@@ -99,7 +99,7 @@
                 <span>{{scope.row.logisticsCompany}}</span>
               </el-form-item>
               <el-form-item label="快递单号：">
-                <span>{{scope.row.orderId}}</span>
+                <span>{{scope.row.logisticsNo}}</span>
               </el-form-item>
               <el-form-item label="发货时间：">
                 <span>{{scope.row.logisticsTimeStr}}</span>
@@ -128,18 +128,15 @@
                :close-on-click-modal="false"
                @close="closeDialog"
     >
-      <el-form ref="logisticsInfo" :model="logisticsInfo" label-width="110px">
-        <el-form-item label="物流公司" prop="manufacturerName">
-          <el-select v-model="logisticsInfo.logisticsCompany" placeholder="请选择物流公司" class="logisticsCompany" @change="logisticsCompanySelect">
+      <el-form ref="logisticsInfo" :rules="rules" :model="logisticsInfo" label-width="110px">
+        <el-form-item label="物流公司" prop="logisticsCompany">
+          <el-select v-model="logisticsInfo.logisticsCompany" placeholder="请选择物流公司" class="logisticsCompany" style="width:56%" @change="logisticsCompanySelect">
             <el-option v-for="item in logisticsCompanyList" :label="item.logisticsCompanyName" :value="item.logisticsCompanyId" :key="item.logisticsCompanyId"></el-option>
           </el-select>
         </el-form-item>
-        <!--<el-form-item label="物流公司">
-          <el-input v-model="logisticsInfo.logisticsCompany" style="width:86%"></el-input>
+        <el-form-item label="物流单号" prop="logisticsNo">
+          <el-input v-model="logisticsInfo.logisticsNo" style="width:56%"></el-input>
         </el-form-item>
-        <el-form-item label="物流单号">
-          <el-input v-model="logisticsInfo.logisticsNo" style="width:86%"></el-input>
-        </el-form-item>-->
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -168,6 +165,14 @@
         searchData: {
           type: null, // 1-未发货 2-已发或收货
           days: null // 查询最近多少天，不传查全部
+        },
+        rules: {
+          logisticsCompany: [
+            { required: true, message: '请选择物流公司', trigger: 'change' }
+          ],
+          logisticsNo: [
+            { required: true, message: '请输入物流单号', trigger: 'blur' }
+          ]
         },
         logisticsInfo: {
           orderId: '', // 订单号
@@ -301,14 +306,21 @@
       },
       // 点击确定 ->发货
       consignment () {
-        consignment(this.logisticsInfo).then(res => {
-          if (res.code === 1) {
-            this.logisticsDialog = false
-            this.$message({
-              type: 'success',
-              message: '发货成功!'
+        this.$refs['logisticsInfo'].validate((valid) => {
+          debugger
+          if (valid) {
+            consignment(this.logisticsInfo).then(res => {
+              if (res.code === 1) {
+                this.logisticsDialog = false
+                this.$message({
+                  type: 'success',
+                  message: '发货成功!'
+                })
+                this.initData()
+              }
             })
-            this.initData()
+          } else {
+            return false
           }
         })
       },

@@ -69,7 +69,7 @@
                 loginAdmin(qs.stringify(this.loginForm)).then(res => {
                   if (res.code === 1) {
                     // 路由跳转
-                    // saveToken('adminToken', res.data, 'h24')
+                    saveToken('adminToken', res.data, 'h24')
                     saveToken('userType', 'adminToken', 'h24')
                     this.$router.push({path: '/'})
                     // 给出登陆成功的提示消息
@@ -89,7 +89,7 @@
                 loginManufacturer(qs.stringify(this.loginForm)).then(res => {
                   if (res.code === 1) {
                     // 路由跳转
-                    // saveToken('manufacturerToken', res.data, 'h24')
+                    saveToken('manufacturerToken', res.data, 'h24')
                     saveToken('userType', 'manufacturerToken', 'h24')
                     this.$router.push({path: '/'})
                     // 给出登陆成功的提示消息
