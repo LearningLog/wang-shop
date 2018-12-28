@@ -105,7 +105,7 @@
         fixed="right"
         label="操作"
         align="center"
-        width="220">
+        width="160">
         <template slot-scope="scope">
           <el-button
             type="primary"
