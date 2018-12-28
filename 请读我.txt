@@ -1,4 +1,3 @@
 npm start 启动预览
 默认占用 8081
 启动之后，访问 localhost:8081
-生成环境 注掉index.html 中的 vue.min.js
