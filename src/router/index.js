@@ -121,7 +121,7 @@ const router = new Router({
       component: Home,
       children: [
         {path: '/orderFormList', component: resolve => require(['@/views/orderFormManage/orderForm-list'], resolve), name: 'orderFormList'},
-        {path: '/orderFormDetail', component: resolve => require(['@/views/orderFormManage/orderForm-list'], resolve), name: 'orderFormDetail'}
+        {path: '/orderFormDetail', component: resolve => require(['@/views/orderFormManage/orderForm-detail'], resolve), name: 'orderFormDetail'}
       ]
     },
     {

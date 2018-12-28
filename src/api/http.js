@@ -3,11 +3,11 @@
  * @2018/11/24
  * @Description:配置请求头信息、配置请求拦截器并携带token、配置响应拦截器处理权限及错误码、配置axios未VUE插件
  */
-import axios from 'axios'
+// import axios from 'axios'
 import router from '@/router/index'
 import { Message, Loading } from 'element-ui'
 import {getToken} from './auth'
-// const axios = require('axios')
+const axios = require('axios')
 const baseURL = 'http://shop.gemini.test.ginkgofit.com'
 export const http = axios.create({
   baseURL: baseURL
