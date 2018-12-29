@@ -65,7 +65,8 @@
               </el-tooltip>
               <el-tooltip :content="scope.row.brand" placement="top">
                 <span class="brand">{{scope.row.brand}}</span>
-              </el-tooltip><span>X {{scope.row.skuBuyNum}}</span>
+              </el-tooltip>
+              <span class="num">X {{scope.row.skuBuyNum}}</span>
             </div>
           </template>
         </el-table-column>
@@ -119,9 +120,11 @@
         </el-pagination>
       </div>
     </div>
+    <!--图片预览-->
     <el-dialog :visible.sync="dialogVisible" append-to-body>
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
+    <!--物流信息弹框-->
     <el-dialog title="物流信息"
                :visible.sync="logisticsDialog"
                append-to-body width="40%"
@@ -307,7 +310,6 @@
       // 点击确定 ->发货
       consignment () {
         this.$refs['logisticsInfo'].validate((valid) => {
-          debugger
           if (valid) {
             consignment(this.logisticsInfo).then(res => {
               if (res.code === 1) {
@@ -454,16 +456,21 @@
     display: inline-block;
     width: 20px;
     height: 20px;
-    margin-right: 10px;
     vertical-align: text-bottom;
   }
   .brand {
     display: inline-block;
-    width: 188px;
+    width: 170px;
     text-align: left;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
+    vertical-align: text-bottom;
+  }
+  .num {
+    display: inline-block;
+    width: 46px;
+    text-align: left;
     vertical-align: text-bottom;
   }
   .receiveAddrInfo {
