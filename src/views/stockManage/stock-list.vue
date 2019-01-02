@@ -179,6 +179,7 @@
           skuName: '', // 产品名称
           skuId: '' // 产品编号
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // // 明细
@@ -197,7 +198,7 @@
       },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+        return this.$accounting.format((cellValue / 100), '2')
       },
       // 处理分页
       handleSizeChange (val) {

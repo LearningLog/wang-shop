@@ -37,3 +37,7 @@ export const approve = params => {
 export const getPublishStatus = params => {
   return http.get('/admin/common/sku/publish/status/list/').then(res => res.data)
 }
+// 获取商品下拉数据
+export const getProductSelectList = params => {
+  return http.get('/admin/sku/page/list/1/1000000').then(res => res.data)
+}

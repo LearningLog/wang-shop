@@ -3,14 +3,14 @@
  * @2018/11/24
  * @Description:配置请求头信息、配置请求拦截器并携带token、配置响应拦截器处理权限及错误码、配置axios未VUE插件
  */
-import axios from 'axios'
+// import axios from 'axios'
 import router from '@/router/index'
 import { Message, Loading } from 'element-ui'
 import {getToken} from './auth'
-const baseURL = 'http://39.105.158.244:8001'
+const axios = require('axios')
+const baseURL = 'http://shop.gemini.test.ginkgofit.com'
 export const http = axios.create({
   baseURL: baseURL
-  // baseURL: 'http://localhost:8888/api/private/v1/'
 })
 
 export const uploadInfo = () => {
@@ -41,7 +41,7 @@ export const loading = (close) => {
 http.interceptors.request.use(function (config) {
   loading()
   // 如果本次请求的不是 /login 接口，则我们就加入请求头
-  if (config.url !== '/admin/passport/login' && config.url !== '/manufacturer/passport/login') {
+  if (config.url !== '/admin/passport/login' && config.url !== '/manufacturer/passport/login' && config.url !== '/vender/passport/login') {
     config.headers.Authorization = getToken('userType') + '=' + getToken(getToken('userType'))
   }
 

@@ -35,3 +35,7 @@ export const uploadSingle = params => {
 export const uploadBatch = params => {
   return http.post('/admin/upload/batchUploadFile', params).then(res => res.data)
 }
+// 获取厂商下拉数据
+export const getManufacturerList = params => {
+  return http.get('/admin/manufacturer/page/list/1/1000000').then(res => res.data)
+}

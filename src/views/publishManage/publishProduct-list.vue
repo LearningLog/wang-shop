@@ -43,8 +43,8 @@
     </div>
     <!--操作按钮-->
     <div class="fr operBtn">
-      <!--<el-button type="primary" size="mini" @click="addProduct" :disabled="btnDisabled">添加</el-button>-->
-      <el-button type="danger" size="mini" @click="deleteProduct" :disabled="btnDisabled">删除</el-button>
+      <el-button type="primary" size="mini" @click="publishProduct">新增发布</el-button>
+      <el-button type="danger" size="mini" @click="deleteProduct">删除</el-button>
     </div>
     <!--表格-->
     <el-table
@@ -182,7 +182,7 @@
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
         // publishTime: [], // 发布时间
-        publishTime: [Date.now() + 1 * 24 * 60 * 60 * 1000, Date.now() + 8 * 24 * 60 * 60 * 1000], // 发布时间
+        publishTime: [], // 发布时间
         stateList: [], // 状态下拉数据
         productList: [], // 产品列表
         checkedList: [] // CheckBox选择的数据
@@ -217,6 +217,7 @@
           status: '' // 状态
         }
         this.publishTime = [] // 发布时间
+        this.pageNum = 1
         this.initData()
       },
       // 获取发布时间
@@ -224,8 +225,8 @@
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
       },
-      // 添加
-      addProduct () {
+      // 发布
+      publishProduct () {
         // 到编辑页面
         this.$router.push({path: '/addPublishProduct'})
       },
@@ -268,7 +269,7 @@
       // 修改
       handleEdit (index, row) {
         // 到编辑页面
-        this.$router.push({path: '/editPublishProduct', query: {publishId: row.publishId}})
+        this.$router.push({path: '/editPublishProduct', query: {publishId: row.publishId, source: 1}})
       },
       // 明细
       handleDetail (index, row) {

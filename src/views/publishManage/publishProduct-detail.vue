@@ -8,11 +8,11 @@
     <!--商品编辑-->
     <el-form label-width="140px" size="small" class="productForm">
       <el-col span="12">
-        <el-form-item label="产品编号（SKU）：">
-          <div>{{product.skuId}}</div>
-        </el-form-item>
         <el-form-item label="产品名称：">
           <div>{{product.skuName}}</div>
+        </el-form-item>
+        <el-form-item label="产品编号（SKU）：">
+          <div>{{product.skuId}}</div>
         </el-form-item>
         <el-form-item label="规格：">
           <div>{{product.saleProperty}}</div>
@@ -55,6 +55,8 @@
       getPublishDetail(this.publishId).then(res => {
         if (res.code === 1) {
           this.product = res.data
+          this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100), 2)
+          this.product.salePrice = this.$accounting.format((this.product.salePrice / 100), 2)
         }
       })
     },

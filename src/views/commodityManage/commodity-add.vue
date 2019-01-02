@@ -32,8 +32,8 @@
           <el-input v-model="product.brand"></el-input>
         </el-form-item>
         <el-form-item label="厂家" prop="manufacturerName">
-          <el-select v-model="product.manufacturerName" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect">
-            <el-option v-for="item in manufacturerNameList" :label="item.desc" :value="item.code" :key="item.code"></el-option>
+          <el-select v-model="product.manufacturerId" placeholder="请选择厂家" class="manufacturerName" @change="manufacturerSelect" filterable>
+            <el-option v-for="item in manufacturerList" :label="item.manufacturerName" :value="item.manufacturerId" :key="item.manufacturerId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="型号" prop="model">
@@ -62,7 +62,7 @@
             :before-remove="beforeRemove"
             :on-remove="handleRemove"
             :on-preview="handlePreview"
-            :file-list="product.skuImageList"
+            :file-list="skuImageList"
             list-type="picture-card">
             <i class="el-icon-plus"></i>
             <!--<el-button size="small" type="primary">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
@@ -78,11 +78,18 @@
   </div>
 </template>
 <script>
-  import { addProduct, uploadSingle } from '../../api/commodityManage.js'
+  import { addProduct, uploadSingle, getManufacturerList } from '../../api/commodityManage.js'
   import { uploadInfo } from '../../api/http.js'
   import {onNumValid, onKeyValid} from '../../api/util.js'
 
   export default {
+    created () {
+      getManufacturerList().then(res => {
+        if (res.code === 1) {
+          this.manufacturerList = res.data.list
+        }
+      })
+    },
     data () {
       return {
         product: {// 表单数据
@@ -97,14 +104,14 @@
           salePrice: '', // 售价
           fraction: '', // 分润比例
           creater: '', // 创建人
-          skuImageList: [], // 商品图片
           skuImage: '', // 商品图片地址
           increaseNum: null, // 递增数量
           minPurchaseNum: null // 起定数量
         },
+        skuImageList: [], // 商品图片
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
-        manufacturerNameList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家数组
+        manufacturerList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家数组
         rules: {
           brand: [
             { required: true, message: '请输入产品品牌', trigger: 'blur' }
@@ -152,8 +159,8 @@
               return false
             }
             let data = this.product
-            data.originalPrice = parseInt(data.originalPrice.toString().replace(/,/g, '')) * 100
-            data.salePrice = parseInt(data.salePrice.toString().replace(/,/g, '')) * 100
+            data.originalPrice = Number(data.originalPrice.toString().replace(/,/g, '')) * 100
+            data.salePrice = Number(data.salePrice.toString().replace(/,/g, '')) * 100
             data.increaseNum = parseInt(data.increaseNum.toString().replace(/,/g, ''))
             data.minPurchaseNum = data.minPurchaseNum.toString().replace(/,/g, '')
             data.fraction = parseFloat(data.fraction.toString().replace(/,/g, ''))
@@ -187,9 +194,9 @@
           fraction: '', // 分润比例
           creater: '', // 创建人
           createTime: '', // 创建时间
-          skuImageList: [], // 商品图片
           skuImage: '' // 商品图片地址
         }
+        this.skuImageList = [] // 商品图片
         this.$refs['product'].resetFields()
       },
       // 上传路径
@@ -198,7 +205,7 @@
       },
       // 上传成功
       handleSuccess (response, file, fileList) {
-        this.product.skuImageList = [file]
+        this.skuImageList = [file]
         let formData = new FormData()
         formData.append('file', file.raw)
         uploadSingle(formData).then(res => {
@@ -216,13 +223,13 @@
       // 处理文件移除
       handleRemove (file, fileList) {
         let now = ''
-        this.product.skuImageList.some((item, index) => {
+        this.skuImageList.some((item, index) => {
           if (file.uid === item.uid) {
             now = index
             return false
           }
         })
-        this.product.skuImageList.splice(now, 1)
+        this.skuImageList.splice(now, 1)
         this.product.skuImage = ''
       },
       // 处理预览
@@ -235,10 +242,10 @@
       manufacturerSelect (val) {
         this.product.manufacturerId = val
         let obj = {}
-        obj = this.manufacturerNameList.find((item) => {
-          return item.code === val
+        obj = this.manufacturerList.find((item) => {
+          return item.manufacturerId === val
         })
-        this.product.manufacturerName = obj.desc
+        this.product.manufacturerName = obj.manufacturerName
       },
       // 数字输入框失去焦点时
       numBlur (value, num, name) {
@@ -265,10 +272,10 @@
   .productForm {
      margin-top: 10px;
    }
-  /*.productForm input {*/
-    /*margin-right: 150px !important;*/
-  /*}*/
-  .manufacturerName {
-    width: 200px;
+  .el-input {
+    width: 200px !important;
+  }
+  .el-select {
+    width: 200px !important;
   }
 </style>

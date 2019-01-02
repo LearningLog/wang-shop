@@ -132,6 +132,7 @@
   export default {
     created () {
       this.searchData.skuId = this.$route.query.skuId
+      this.skuId = this.$route.query.skuId
       getStockDetailOperationType().then(res => {
         if (res.code === 1) {
           this.operateTypeList = res.data
@@ -152,16 +153,13 @@
         pageNum: 1, // 当前第几页
         total: 0, // 总页数
         currentSize: 0, // 当前页数据条数
+        skuId: null, // 商品编号
         operateTime: [], // 发布时间
         operateTypeList: [{code: 1, desc: '已发布'}, {code: 2, desc: '待发布'}], // 操作类型下拉数据
         productList: [] // 产品列表
       }
     },
     methods: {
-      // 搜索
-      onSearch () {
-        this.initData()
-      },
       initData () {
         getDetailList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
           if (res.code === 1 && res.data) {
@@ -171,16 +169,21 @@
           }
         })
       },
+      // 搜索
+      onSearch () {
+        this.initData()
+      },
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          skuId: this.searchData.skuId, // 商品编号
+          skuId: this.skuId, // 商品编号
           skuName: '', // 产品名称
           startTime: '', // 开始时间
           endTime: '', // 结束时间
           operateType: '' // 操作类型
         }
         this.operateTime = [] // 发布时间
+        this.pageNum = 1
         this.onSearch()
       },
       // 获取发布时间

@@ -1,15 +1,18 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'babel-polyfill' // 处理在IE11下直接使用axios会报Promise未定义
-import Vue from 'vue'
+// import Vue from 'vue'
 import App from './App'
 import router from './router'
 import httpPlugin from '@/api/http'
 // require('./mock/app.js')
 import 'element-ui/lib/theme-chalk/index.css'
-import accounting from 'accounting'
-import moment from 'moment'
+// import accounting from 'accounting'
+// import moment from 'moment'
 import ElementUI from 'element-ui'
+const Vue = require('vue')
+const accounting = require('accounting')
+const moment = require('moment')
 // import {
 //   Dialog,
 //   Header,

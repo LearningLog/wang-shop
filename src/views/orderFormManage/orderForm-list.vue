@@ -59,7 +59,7 @@
       <el-table-column
         prop="orderTimeStr"
         align="center"
-        min-width="130"
+        min-width="160"
         show-overflow-tooltip
         label="订单日期">
       </el-table-column>
@@ -110,7 +110,7 @@
         label="产品数量">
       </el-table-column>
       <el-table-column
-        prop="orderStatusDesc"
+        prop="orderStatusStr"
         align="center"
         min-width="80"
         show-overflow-tooltip
@@ -192,6 +192,7 @@
           manufacturerId: '' // 厂商编号
         }
         this.orderFormTime = [] // 订单日期
+        this.pageNum = 1
         this.onSearch()
       },
       // 获取订单时间
@@ -210,7 +211,7 @@
       },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+        return this.$accounting.format((cellValue / 100), '2')
       },
       // 处理分页
       handleSizeChange (val) {

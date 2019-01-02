@@ -113,7 +113,7 @@
         label="分润比例"
         header-align="center"
         align="right"
-        :formatter="priceFormatter"
+        :formatter="rateFormatter"
         min-width="100"
         show-overflow-tooltip>
       </el-table-column>
@@ -197,6 +197,7 @@
           endTime: '', // 结束时间
           shareStatus: '' // 销售日期
         }
+        this.pageNum = 1
         this.iniData()
       },
       // 获取发布时间
@@ -206,11 +207,15 @@
       },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format((cellValue / 100), '2')
+      },
+      // 率格式化
+      rateFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
       },
       // 数量格式化
       numFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+        return this.$accounting.format(cellValue, '0')
       },
       // 处理分页
       handleSizeChange (val) {

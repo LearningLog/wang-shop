@@ -8,7 +8,7 @@
     <!--搜索-->
     <el-form :inline="true" :model="searchData" size="mini" class="searchData">
       <el-form-item label="分账订单编号:">
-        <el-input v-model="searchData.shareBilId" placeholder="请输入分账订单编号"></el-input>
+        <el-input v-model="searchData.shareBillId" placeholder="请输入分账订单编号"></el-input>
       </el-form-item>
       <el-form-item label="分账类型:">
         <el-select v-model="searchData.shareType" placeholder="请选择分账类型">
@@ -63,7 +63,7 @@
       <el-table-column
         prop="shareTimeStr"
         align="center"
-        min-width="150"
+        min-width="160"
         show-overflow-tooltip
         label="分账日期">
       </el-table-column>
@@ -94,7 +94,7 @@
         align="right"
         min-width="100"
         show-overflow-tooltip
-        :formatter="numFormatter"
+        :formatter="priceFormatter"
         label="分账金额">
       </el-table-column>
       <el-table-column
@@ -152,10 +152,10 @@
     data () {
       return {
         searchData: { // 搜索数据
-          shareBilId: '', // 销售订单编号
+          shareBillId: '', // 销售订单编号
           shareType: '', // 分账类型,
-          // startShareTime: '', // 分账开始日期
-          // endShareTime: '', // 分账截止日期
+          startShareTime: '', // 分账开始日期
+          endShareTime: '', // 分账截止日期
           venderName: '', // 客户姓名
           venderId: '' // 商户编号
         },
@@ -185,7 +185,7 @@
       // 重置
       reset () {
         this.searchData = { // 搜索数据
-          shareBilId: '', // 销售订单编号
+          shareBillId: '', // 销售订单编号
           shareType: '', // 分账类型,
           startShareTime: '', // 分账开始日期
           endShareTime: '', // 分账截止日期
@@ -193,6 +193,7 @@
           venderId: '' // 商户编号
         }
         this.splitAccountTime = []
+        this.pageNum = 1
         this.onSearch()
       },
       // 获取发布时间
@@ -205,7 +206,11 @@
         // 到详情页面
         this.$router.push({path: '/splitAccountDetail', query: {shareBillId: row.shareBillId}})
       },
-      // 单价、数量格式化
+      // 单价格式化
+      priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format((cellValue / 100), '2')
+      },
+      // 数量格式化
       numFormatter (row, column, cellValue, index) {
         return this.$accounting.format(cellValue, '2')
       },

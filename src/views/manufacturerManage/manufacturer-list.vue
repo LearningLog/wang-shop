@@ -18,8 +18,8 @@
         <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>
-    <el-button type="danger" size="mini" @click="remove" :disabled="btnDisabled">删除</el-button>
+    <el-button type="primary" size="mini" @click="add" >添加</el-button>
+    <el-button type="danger" size="mini" @click="remove" >删除</el-button>
     <!--表格-->
     <el-table
       :data="productList"
@@ -146,6 +146,7 @@
           name: '', // 厂商名称
           id: '' // 厂商编号
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // 添加

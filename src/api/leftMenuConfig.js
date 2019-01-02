@@ -7,7 +7,7 @@
 let menuConfig = [
   ['/', '/main'],
   ['/commodityList', '/commodityAdd', '/commodityEdit', '/commodityDetail'],
-  ['/publishProductList', '/editPublishProduct', '/publishProductApprove', '/publishProductDetail'],
+  ['/publishProductList', '/addPublishProduct', '/editPublishProduct', '/publishProductApprove', '/publishProductDetail'],
   ['/totalStockList', '/totalStockDetail'],
   ['/stockList', '/stockAdd', '/godownEntry'],
   ['/manufacturerList', '/manufacturerAdd', '/manufacturerEdit'],

@@ -1,161 +1,152 @@
 <template>
   <el-container>
-    <el-header>
-      <div v-model="isCollapse">
-        <!--<span class="logo" :style='{width:"200px"}'></span>-->
-        <i @click="toggleFlag" class="myicon myicon-menu btnsize"></i>
-        <div class="stitle">孖孖后台管理系统</div>
-        <div class="userEdit">
-          <!--<el-button class="modify" type="primary" size="mini" @click='modifyDialog = true'>修改密码</el-button>-->
-          <span class="userMessage">{{userMessage}}</span>
-          <el-button class="logoutbtn" type="warning" size="mini" @click='handleLogout'>退出</el-button>
-        </div>
-      </div>
-    </el-header>
-    <el-container>
-      <el-aside :style='{width:"auto"}'>
-        <!--<div class="logo"></div>-->
-        <el-scrollbar class="asideBar" style="height: 100%;">
-          <!--管理员-->
-          <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-if="userType === 'adminToken'">
-            <!--<el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>-->
-            <!--<template slot="title">-->
-            <!--<i class="el-icon-location"></i>-->
-            <!--<span slot="title">{{item.authName}}</span>-->
-            <!--</template>-->
-            <!--<el-menu-item :key='tag.id' v-for='tag in item.children' :index="tag.path">-->
-            <!--<i class="el-icon-menu"></i>-->
-            <!--<span>{{tag.authName}}</span>-->
-            <!--</el-menu-item>-->
-            <!--</el-submenu>-->
-            <!--商品管理-->
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">商品管理</span>
-              </template>
-              <el-menu-item index="/commodityList">
-                <i class="el-icon-menu"></i>
-                <span>商品列表</span>
-              </el-menu-item>
-              <el-menu-item index="/commodityAdd">
-                <i class="el-icon-menu"></i>
-                <span>新增商品</span>
-              </el-menu-item>
-            </el-submenu>
-            <!--发布管理-->
-            <el-submenu index="2">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">发布管理</span>
-              </template>
-              <el-menu-item index="/publishProductList">
-                <i class="el-icon-menu"></i>
-                <span>商品发布列表</span>
-              </el-menu-item>
-              <el-menu-item index="/publishProductApprove">
-                <i class="el-icon-menu"></i>
-                <span>发布审核</span>
-              </el-menu-item>
-            </el-submenu>
-            <!--总库存管理-->
-            <el-submenu index="3">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">总库存管理</span>
-              </template>
-              <el-menu-item index="/totalStockList">
-                <i class="el-icon-menu"></i>
-                <span>总库存列表</span>
-              </el-menu-item>
-            </el-submenu>
-            <!--库存管理-->
-            <el-submenu index="4">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">库存管理</span>
-              </template>
-              <el-menu-item index="/stockList">
-                <i class="el-icon-menu"></i>
-                <span>库存列表</span>
-              </el-menu-item>
-            </el-submenu>
-            <!--厂商管理-->
-            <el-submenu index="5">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">厂商管理</span>
-              </template>
-              <el-menu-item index="/manufacturerList">
-                <i class="el-icon-menu"></i>
-                <span>厂商列表</span>
-              </el-menu-item>
-              <el-menu-item index="/manufacturerAdd">
-                <i class="el-icon-menu"></i>
-                <span>新增厂商</span>
-              </el-menu-item>
-            </el-submenu>
-            <!--订单管理-->
-            <el-submenu index="6">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">订单管理</span>
-              </template>
-              <el-menu-item index="/orderFormList">
-                <i class="el-icon-menu"></i>
-                <span>订单列表</span>
-              </el-menu-item>
-            </el-submenu>
-            <!--销售管理-->
-            <el-submenu index="7">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">销售管理</span>
-              </template>
-              <el-menu-item index="/marketList">
-                <i class="el-icon-menu"></i>
-                <span>销售列表</span>
-              </el-menu-item>
-            </el-submenu>
-            <!--分账管理-->
-            <el-submenu index="8">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">分账管理</span>
-              </template>
-              <el-menu-item index="/splitAccountList">
-                <i class="el-icon-menu"></i>
-                <span>分账列表</span>
-              </el-menu-item>
-            </el-submenu>
-            <!--客户端管理-->
-            <el-submenu index="9">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">C端客户</span>
-              </template>
-              <el-menu-item index="/clientList">
-                <i class="el-icon-menu"></i>
-                <span>客户列表</span>
-              </el-menu-item>
-            </el-submenu>
-          </el-menu>
-          <!--厂商-->
-          <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'manufacturerToken'">
-            <!--账户管理-->
-            <el-submenu index="10">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">账户管理</span>
-              </template>
-              <el-menu-item index="/myZiZi">
-                <i class="el-icon-menu"></i>
-                <span>我的孖孖</span>
-              </el-menu-item>
-            </el-submenu>
-          </el-menu>
-          <!--商家-->
-          <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'venderToken'">
+    <div class="logo" @click="logoGoHome"></div>
+    <el-aside :style='{width:"auto"}'>
+      <el-scrollbar class="asideBar" style="height: 100%;">
+        <!--管理员-->
+        <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-if="userType === 'adminToken'">
+          <!--<el-submenu :key='item.id' :index='item.id' v-for='item in menuData'>-->
+          <!--<template slot="title">-->
+          <!--<i class="el-icon-location"></i>-->
+          <!--<span slot="title">{{item.authName}}</span>-->
+          <!--</template>-->
+          <!--<el-menu-item :key='tag.id' v-for='tag in item.children' :index="tag.path">-->
+          <!--<i class="el-icon-menu"></i>-->
+          <!--<span>{{tag.authName}}</span>-->
+          <!--</el-menu-item>-->
+          <!--</el-submenu>-->
+          <!--商品管理-->
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">商品管理</span>
+            </template>
+            <el-menu-item index="/commodityList">
+              <i class="el-icon-menu"></i>
+              <span>商品列表</span>
+            </el-menu-item>
+            <el-menu-item index="/commodityAdd">
+              <i class="el-icon-menu"></i>
+              <span>新增商品</span>
+            </el-menu-item>
+          </el-submenu>
+          <!--发布管理-->
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">发布管理</span>
+            </template>
+            <el-menu-item index="/publishProductList">
+              <i class="el-icon-menu"></i>
+              <span>商品发布列表</span>
+            </el-menu-item>
+            <el-menu-item index="/addPublishProduct">
+              <i class="el-icon-menu"></i>
+              <span>新增发布</span>
+            </el-menu-item>
+            <el-menu-item index="/publishProductApprove">
+              <i class="el-icon-menu"></i>
+              <span>发布审核</span>
+            </el-menu-item>
+          </el-submenu>
+          <!--总库存管理-->
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">总库存管理</span>
+            </template>
+            <el-menu-item index="/totalStockList">
+              <i class="el-icon-menu"></i>
+              <span>总库存列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <!--库存管理-->
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">库存管理</span>
+            </template>
+            <el-menu-item index="/stockList">
+              <i class="el-icon-menu"></i>
+              <span>库存列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <!--厂商管理-->
+          <el-submenu index="5">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">厂商管理</span>
+            </template>
+            <el-menu-item index="/manufacturerList">
+              <i class="el-icon-menu"></i>
+              <span>厂商列表</span>
+            </el-menu-item>
+            <el-menu-item index="/manufacturerAdd">
+              <i class="el-icon-menu"></i>
+              <span>新增厂商</span>
+            </el-menu-item>
+          </el-submenu>
+          <!--订单管理-->
+          <el-submenu index="6">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">订单管理</span>
+            </template>
+            <el-menu-item index="/orderFormList">
+              <i class="el-icon-menu"></i>
+              <span>订单列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <!--销售管理-->
+          <el-submenu index="7">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">销售管理</span>
+            </template>
+            <el-menu-item index="/marketList">
+              <i class="el-icon-menu"></i>
+              <span>销售列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <!--分账管理-->
+          <el-submenu index="8">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">分账管理</span>
+            </template>
+            <el-menu-item index="/splitAccountList">
+              <i class="el-icon-menu"></i>
+              <span>分账列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <!--客户端管理-->
+          <el-submenu index="9">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">C端客户</span>
+            </template>
+            <el-menu-item index="/clientList">
+              <i class="el-icon-menu"></i>
+              <span>客户列表</span>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
+        <!--厂商-->
+        <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'manufacturerToken'">
+          <!--账户管理-->
+          <el-submenu index="10">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span slot="title">账户管理</span>
+            </template>
+            <el-menu-item index="/myZiZi">
+              <i class="el-icon-menu"></i>
+              <span>我的孖孖</span>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
+        <!--商家-->
+        <el-menu router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" :unique-opened='uniqueFlag' :default-active="defaultActive" :default-openeds="currentMenu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" v-else-if="userType === 'venderToken'">
           <!--账户管理-->
           <el-submenu index="10">
             <template slot="title">
@@ -180,36 +171,26 @@
             </el-menu-item>
           </el-submenu>
         </el-menu>
-          <!--<div style="height: 60;"></div>-->
-        </el-scrollbar>
-      </el-aside>
-      <el-main>
-        <router-view></router-view>
-      </el-main>
+      </el-scrollbar>
+    </el-aside>
+    <el-container>
+      <el-header>
+        <div v-model="isCollapse">
+          <i @click="toggleFlag" class="myicon myicon-menu btnsize"></i>
+          <div class="stitle">孖孖后台管理系统</div>
+          <div class="userEdit">
+            <!--<el-button class="modify" type="primary" size="mini" @click='modifyDialog = true'>修改密码</el-button>-->
+            <span class="userMessage">{{userMessage}}</span>
+            <el-button class="logoutbtn" type="warning" size="mini" @click='handleLogout'>退出</el-button>
+          </div>
+        </div>
+      </el-header>
+      <el-scrollbar class="mainBar" style="height: 100%;">
+        <el-main>
+          <router-view></router-view>
+        </el-main>
+      </el-scrollbar>
     </el-container>
-    <!--修改密码-->
-    <el-dialog title="修改密码"
-               :visible.sync="modifyDialog"
-               append-to-body width="40%"
-               :close-on-click-modal="false"
-               @close="closeDialog"
-    >
-      <el-form ref="userInfo" :rules="rules" :model="userInfo" label-width="110px">
-        <el-form-item label="原密码" prop="formerPsd">
-          <el-input v-model="userInfo.formerPsd" style="width:86%"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="userInfo.password" style="width:86%"></el-input>
-        </el-form-item>
-        <el-form-item label="再次输入密码" prop="secondNowPsd">
-          <el-input v-model="userInfo.secondNowPsd" style="width:86%"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="closeModifyDialog">取 消</el-button>
-        <el-button type="primary" @click="modify('userInfo')">确 定</el-button>
-      </span>
-    </el-dialog>
   </el-container>
 </template>
 
@@ -240,18 +221,6 @@
             this.userMessage = `你好商家，${res.data.venderName}`
           }
         }
-        // else {
-        //   this.$message({
-        //     type: 'error',
-        //     message: res.message
-        //   })
-        //   this.$router.push({
-        //     path: '/login',
-        //     query: {
-        //       redirect: window.location.hash
-        //     }
-        //   })
-        // }
       })
     },
     mounted () {
@@ -354,6 +323,7 @@
                 // 1. 删除本地存储中的用户登陆信息
                 // 清除token
                 removeToken('adminToken')
+                removeToken('adminToken')
                 removeToken('userType')
                 // 跳转到登录页面
                 this.$router.push({path: 'login'})
@@ -374,6 +344,7 @@
               if (res.code === 1) {
                 // 1. 删除本地存储中的用户登陆信息
                 // 清除token
+                removeToken('manufacturerToken')
                 removeToken('manufacturerToken')
                 removeToken('userType')
                 // 跳转到登录页面
@@ -396,6 +367,7 @@
                 // 1. 删除本地存储中的用户登陆信息
                 // 清除token
                 removeToken('venderToken')
+                removeToken('sessionId')
                 removeToken('userType')
                 // 跳转到登录页面
                 this.$router.push({path: 'login'})
@@ -418,6 +390,10 @@
       },
       toggleFlag () {
         this.isCollapse = !this.isCollapse
+      },
+      // 点击logo去到主页
+      logoGoHome () {
+        this.$router.push({path: '/'})
       }
     },
     watch: {
@@ -453,6 +429,10 @@
     text-align: left;
     line-height: 60px;
   }
+  .el-header {
+    float: right;
+    z-index: 3;
+  }
   .el-aside {
     background-color: #545c64;
     color: #333;
@@ -461,13 +441,25 @@
     overflow-x: hidden;
     overflow-y: hidden;
     box-sizing: border-box;
-    z-index: 100;
+    margin-top: 60px;
+    z-index: 1;
+  }
+  .logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    cursor: pointer;
+    height: 60px;
+    width: 200px;
+    z-index: 2;
+    background: url(../assets/logo_1.jpg);
+    background-size:contain;
   }
   .el-main {
     background-color: #E9EEF3;
     color: #333;
     text-align: left;
-    /*overflow: '';*/
   }
   .userEdit {
     position: absolute;
@@ -476,12 +468,6 @@
   }
   .el-header {
     background-color: #545c64;
-  }
-  .logo {
-    display: inline-block;
-    height:60px;
-    background: url(../assets/logo.jpg);
-    /*background-size:contain;*/
   }
   .stitle {
     position: absolute;
@@ -495,8 +481,8 @@
   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
     margin-bottom: 10px;
   }
-  .el-scrollbar__wrap {
-    overflow-x: hidden;
+  .mainBar {
+    background-color: #E9EEF3;
   }
   .userMessage {
     color: #fff;
