@@ -150,7 +150,10 @@
   .manufacturerForm {
     margin-top: 10px;
   }
-  .vender {
-    width: 200px;
+  .el-input {
+    width: 200px !important;
+  }
+  .el-select {
+    width: 200px !important;
   }
 </style>

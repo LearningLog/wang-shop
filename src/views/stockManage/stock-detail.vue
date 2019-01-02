@@ -186,6 +186,7 @@
           operateType: '' // 操作类型
         }
         this.operateTime = [] // 发布时间
+        this.pageNum = 1
         this.onSearch()
       },
       // 获取发布时间

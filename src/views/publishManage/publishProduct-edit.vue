@@ -2,17 +2,19 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/publishProductList' }">发布管理</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="source === 1" :to="{ path: '/publishProductList' }">商品发布</el-breadcrumb-item>
+      <el-breadcrumb-item v-else-if="source === 2" :to="{ path: '/publishProductApprove' }">发布审核</el-breadcrumb-item>
+      <el-breadcrumb-item v-else :to="{ path: '/publishProductList' }">发布管理</el-breadcrumb-item>
       <el-breadcrumb-item>编辑发布</el-breadcrumb-item>
     </el-breadcrumb>
     <!--商品编辑-->
     <el-form inline :rules="rules" ref="product" status-icon :model="product" label-width="140px" size="small" class="productForm">
       <el-col span="12">
-        <el-form-item label="产品编号（SKU）">
-          <el-input v-model="product.skuId" disabled></el-input>
-        </el-form-item>
         <el-form-item label="产品名称">
           <el-input v-model="product.skuName" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="产品编号（SKU）">
+          <el-input v-model="product.skuId" disabled></el-input>
         </el-form-item>
         <el-form-item label="规格">
           <el-input v-model="product.saleProperty" disabled></el-input>
@@ -56,18 +58,9 @@
   import {onNumValid} from '../../api/util.js'
   export default {
     created () {
-      this.skuId = this.$route.query.skuId
       this.publishId = this.$route.query.publishId
-      if (this.publishId) {
-        getPublishDetail(this.publishId).then(res => {
-          if (res.code === 1) {
-            this.product = res.data
-            this.product.publishNum = this.$accounting.format(this.product.publishNum.toString(), 0)
-            this.product.originalPrice = this.$accounting.format(this.product.originalPrice.toString(), 0)
-            this.product.salePrice = this.$accounting.format(this.product.salePrice.toString(), 0)
-          }
-        })
-      }
+      this.source = this.$route.query.source
+      this.initData()
     },
     data () {
       return {
@@ -90,6 +83,7 @@
           updateTime: '',
           publisher: '' // 发布人
         },
+        source: null, // 来源 1 发布列表 2审核列表
         rules: {
           publishNum: [
             { required: true, message: '请输入发布数量', trigger: 'blur' }
@@ -98,6 +92,18 @@
       }
     },
     methods: {
+      initData () {
+        if (this.publishId) {
+          getPublishDetail(this.publishId).then(res => {
+            if (res.code === 1) {
+              this.product = res.data
+              this.product.publishNum = this.$accounting.format(this.product.publishNum, 0)
+              this.product.originalPrice = this.$accounting.format((this.product.originalPrice / 100), 2)
+              this.product.salePrice = this.$accounting.format((this.product.salePrice / 100), 2)
+            }
+          })
+        }
+      },
       // 发布
       publishProduct () {
         this.$refs['product'].validate((valid) => {
@@ -121,7 +127,7 @@
       },
       // 重置
       reset () {
-        this.product.publishNum = '' // 发布数量
+        this.initData()
         this.$refs['product'].resetFields()
       },
       // 数字输入框失去焦点时
@@ -142,5 +148,11 @@
   }
   .productForm {
     margin-top: 10px;
+  }
+  .el-input {
+    width: 200px !important;
+  }
+  .el-select {
+    width: 200px !important;
   }
 </style>

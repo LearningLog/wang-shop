@@ -33,7 +33,7 @@
 </template>
 <script>
   import { loginAdmin, loginManufacturer, loginVender } from '../api/login.js'
-  import { saveToken } from '../api/auth.js'
+  import { saveToken, getToken } from '../api/auth.js'
   const qs = require('querystring')
   export default {
     data () {
@@ -58,7 +58,6 @@
       loginSubmit () {
         this.$refs['loginForm'].validate(valid => {
           if (valid) {
-            console.log(this.userType)
             if (!this.userType) {
               this.$message({
                 message: '请选择身份类型！',
@@ -108,9 +107,10 @@
                 })
               } else {
                 loginVender(qs.stringify(this.loginForm)).then(res => {
-                  if (res.code === 1) {
+                  if (res.code === 200) {
                     // 路由跳转
-                    saveToken('venderToken', res.data, 'h24')
+                    let sessionId = getToken('sessionId')
+                    saveToken('venderToken', sessionId, 'h24')
                     saveToken('userType', 'venderToken', 'h24')
                     this.$router.push({path: '/'})
                     // 给出登陆成功的提示消息
@@ -156,13 +156,13 @@
     box-sizing: border-box;
     background-color: #2f4050;
     background-image: url(../assets/loginbg.jpg);
+    background-size: cover;
   }
   .container {
     box-sizing: border-box;
     margin: 280px auto 0;
     width: 400px;
     height: 340px;
-    /*background-color: #fff;*/
     position: relative;
   }
   .avatar {
@@ -175,9 +175,8 @@
     margin-left: -70px;
     border-radius: 50%;
     box-shadow: 0 1px 5px #CCC;
-    background-color: pink;
+    /*background-color: pink;*/
     overflow: hidden;
-    /*z-index: 9999;*/
   }
   .avatar img {
     width: 100%;
@@ -200,11 +199,6 @@
   .userType {
     width: 400px;
   }
-  /*.userType {*/
-    /*float: left;*/
-    /*margin-left: 98px;*/
-    /*!*width: 310px;*!*/
-  /*}*/
   .input-group-prepend {
     margin-right: -1px;
     margin-top: 9px;
@@ -246,7 +240,6 @@
     line-height: 44px;
     background: #ff3366;
     display: inline-block;
-    /*width: 100%;*/
     outline: none;
     border: 2px solid #ff3366;
     cursor: pointer;

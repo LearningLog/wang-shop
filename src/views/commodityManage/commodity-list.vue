@@ -18,8 +18,8 @@
         <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button type="primary" size="mini" @click="add" :disabled="btnDisabled">添加</el-button>
-    <el-button type="danger" size="mini" @click="remove" :disabled="btnDisabled">删除</el-button>
+    <el-button type="primary" size="mini" @click="add" >添加</el-button>
+    <el-button type="danger" size="mini" @click="remove" >删除</el-button>
     <!--表格-->
     <el-table
       :data="productList"
@@ -97,16 +97,15 @@
         label="创建时间">
       </el-table-column>
       <el-table-column
-        prop="status"
+        prop="statusDesc"
         align="center"
-        :formatter="statusFormatter"
         label="状态">
       </el-table-column>
       <el-table-column
         fixed="right"
         label="操作"
         align="center"
-        width="220">
+        width="160">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -116,10 +115,10 @@
             type="success"
             size="mini"
             @click="handleDetail(scope.$index, scope.row)">明细</el-button>
-          <el-button
-            type="primary"
-            size="mini"
-            @click="handlePublish(scope.$index, scope.row)">发布</el-button>
+          <!--<el-button-->
+            <!--type="primary"-->
+            <!--size="mini"-->
+            <!--@click="handlePublish(scope.$index, scope.row)">发布</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -177,6 +176,7 @@
           skuName: '', // 产品名称
           skuId: '' // 产品编号
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // 添加
@@ -237,17 +237,7 @@
       },
       // 单价、数量格式化
       priceFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
-      },
-      statusFormatter (row, column, cellValue, index) {
-        switch (cellValue) {
-          case 0:
-            return '待审核'
-          case 1:
-            return '上架'
-          case 2:
-            return '下架'
-        }
+        return this.$accounting.format((cellValue / 100), '2')
       },
       // 处理分页
       handleSizeChange (val) {

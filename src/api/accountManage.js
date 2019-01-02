@@ -49,3 +49,7 @@ export const takeDelivery = params => {
 export const consignment = params => {
   return http.post('/manufacturer/order/updateLogistics', params).then(res => res.data)
 }
+// 物流公司
+export const getLogisticsCompanylist = params => {
+  return http.get('/manufacturer/order/logisticscompanylist').then(res => res.data)
+}

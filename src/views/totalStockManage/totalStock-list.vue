@@ -172,6 +172,7 @@
           // manufacturerName: '', // 厂商名称
           brand: '' // 品牌
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // 监听厂家改变
@@ -193,7 +194,7 @@
       },
       // 金额格式化
       priceFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+        return this.$accounting.format((cellValue / 100), '2')
       },
       // 处理分页
       handleSizeChange (val) {

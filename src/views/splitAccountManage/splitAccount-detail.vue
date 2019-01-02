@@ -32,7 +32,7 @@
     prop="orderTimeStr"
     label="销售日期"
     align="center"
-    min-width="150"
+    min-width="160"
     show-overflow-tooltip>
   </el-table-column>
   <el-table-column
@@ -67,7 +67,7 @@
     prop="shareAcount"
     header-align="cenetr"
     align="right"
-    :formatter="numFormatter"
+    :formatter="priceFormatter"
     min-width="100"
     show-overflow-tooltip
     label="分账金额">
@@ -82,7 +82,7 @@
     label="分账费率">
   </el-table-column>
   <el-table-column
-    prop="status"
+    prop="statusStr"
     align="center"
     min-width="100"
     show-overflow-tooltip
@@ -131,11 +131,11 @@ export default {
       }
     },
     // 单价、数量格式化
-    numFormatter (row, column, cellValue, index) {
-      return this.$accounting.format(cellValue, '2')
+    priceFormatter (row, column, cellValue, index) {
+      return this.$accounting.format((cellValue / 100), '2')
     },
     rateFormatter (row, column, cellValue, index) {
-      return this.$accounting.format(cellValue, '4')
+      return this.$accounting.format(cellValue, '2')
     },
     // 处理分页
     handleSizeChange (val) {

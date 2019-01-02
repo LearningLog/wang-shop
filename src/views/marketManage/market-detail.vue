@@ -73,7 +73,7 @@
         prop="skuBuyPrice"
         header-align="center"
         align="right"
-        :formatter="numFormatter"
+        :formatter="priceFormatter"
         min-width="100"
         show-overflow-tooltip
         label="价格">
@@ -120,8 +120,8 @@
         }
       },
       // 单价、数量格式化
-      numFormatter (row, column, cellValue, index) {
-        return this.$accounting.format(cellValue, '2')
+      priceFormatter (row, column, cellValue, index) {
+        return this.$accounting.format((cellValue / 100), '2')
       },
       // 处理分页
       handleSizeChange (val) {

@@ -142,6 +142,7 @@
           userId: '', // 客户编号
           unique: '' // 客户标识
         }
+        this.pageNum = 1
         this.onSearch()
       },
       // 明细
