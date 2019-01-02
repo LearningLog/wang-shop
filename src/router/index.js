@@ -171,9 +171,9 @@ const router = new Router({
       ]
     },
     {
-      path: '*',
+      path: '*', // 配置非法页面
       hidden: true,
-      redirect: { path: '/login' }
+      redirect: { path: '/main' }
     }
   ]
 })

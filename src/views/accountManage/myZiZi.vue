@@ -7,7 +7,7 @@
     </el-breadcrumb>
     <span class="zizilogo"></span>
     <h2 class="condition">我的孖孖</h2>
-    <el-form v-if="userType === 'manufacturer'">
+    <el-form v-if="userType === 'vender'">
       <el-col span="7">
         <el-form-item label="">
         </el-form-item>
@@ -26,7 +26,7 @@
     <div class="myZiZiMain" :style='{marginTop: myZiZiMainMarginTop}'>
       <el-radio-group size="mini" v-model="searchData.type" @change="typeChange" v-if="userType === 'manufacturer'">
         <el-radio-button :label="1" border>未发货订单</el-radio-button>
-        <el-radio-button :label="2" border >已发货订单</el-radio-button>
+        <el-radio-button :label="2" border >已发货或已收货订单</el-radio-button>
       </el-radio-group>
       <el-radio-group size="mini" v-model="searchData.type" @change="typeChange" v-else>
         <el-radio-button :label="3" border>已发货订单</el-radio-button>
@@ -57,11 +57,17 @@
           align="center">
           <template slot-scope="scope" align="left">
             <div v-if="scope.row.skuList">
-              <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '40px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '40px'}">订单状态：{{scope.row.orderStatusStr}}</span><span :style="{paddingLeft: '40px'}">收货人：{{scope.row.receiverName}}</span><span class="receiveAddrInfo" :style="{paddingLeft: '40px'}">收货地址：{{scope.row.receiveAddrInfo}}</span>
+              <span>{{scope.row.orderTimeStr}}</span><span :style="{paddingLeft: '25px'}">订单号：{{scope.row.orderId}}</span><span :style="{paddingLeft: '25px'}">订单状态：{{scope.row.orderStatusStr}}</span>
+              <el-tooltip :content="scope.row.receiverName" placement="top">
+                <span :style="receiverNameStyle">收货人：{{scope.row.receiverName}}</span>
+              </el-tooltip>
+              <el-tooltip :content="scope.row.receiveAddrInfo" placement="top">
+                <span class="receiveAddrInfo" :style="receiveAddrInfoStyle">收货地址：{{scope.row.receiveAddrInfo}}</span>
+              </el-tooltip>
             </div>
             <div v-else>
               <el-tooltip content="点击查看商品图片" placement="top">
-                <img ref="skuImage" class="skuImage" :src="scope.row.skuImage" alt="商品图片" @click="visible">
+                <img class="skuImage" :src="scope.row.skuImage" alt="商品图片" @click="visible(scope.row.skuImage)">
               </el-tooltip>
               <el-tooltip :content="scope.row.brand" placement="top">
                 <span class="brand">{{scope.row.brand}}</span>
@@ -92,7 +98,7 @@
               type="primary"
               size="mini"
               @click="handleDelivery(scope.$index, scope.row)">{{userTypeStr}}</el-button>
-            <el-form label-width="100px" :size="mini" v-else class="orderInfo">
+            <el-form label-width="80px" :size="mini" v-else class="orderInfo">
               <el-form-item label="发货人：">
                 <span>{{scope.row.senderName}}</span>
               </el-form-item>
@@ -155,7 +161,7 @@
   export default {
     created () {
       this.userTypeToken = getToken('userType')
-      if (this.userTypeToken === 'venderToken') {
+      if (this.userTypeToken === 'manufacturerToken') {
         this.searchData.type = 1
       } else {
         this.searchData.type = 3
@@ -198,11 +204,32 @@
         dialogVisible: false, // dialog弹窗是否显示
         logisticsDialog: false, // dialog弹窗是否显示
         daysList: [{code: 7, desc: '近一周订单'}, {code: 30, desc: '近一个月订单'}, {code: 90, desc: '近三个月订单'}], // 订单日期下列数据
-        ziZiList: [] // 我的订单列表
+        ziZiList: [], // 我的订单列表
+        receiverNameStyle: { // 收货人样式
+          display: 'inline-block',
+          width: '18%',
+          textAlign: 'left',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          verticalAlign: 'text-bottom',
+          marginLeft: '25px'
+        },
+        receiveAddrInfoStyle: { // 收货地址样式
+          display: 'inline-block',
+          width: '30%',
+          textAlign: 'left',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          verticalAlign: 'text-bottom',
+          marginLeft: '25px'
+        }
       }
     },
     methods: {
       initData () {
+        // 厂商
         if (this.userTypeToken === 'manufacturerToken') {
           this.myZiZiMainMarginTop = '82px'
           getLogisticsCompanylist().then(res => {
@@ -212,7 +239,7 @@
           })
           getManufacturerZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
             if (res.code === 1) {
-              this.userType = 'vender'
+              this.userType = 'manufacturer'
               this.userTypeStr = '发货'
               let list = res.data.list
               this.total = res.data.total
@@ -231,6 +258,9 @@
                   item2.receiverName = item1.receiverName
                   item2.orderId = item1.orderId
                   item2.logisticsTimeStr = item1.logisticsTimeStr
+                  item2.senderName = item1.senderName
+                  item2.logisticsCompany = item1.logisticsCompany
+                  item2.logisticsNo = item1.logisticsNo
                   this.ziZiList.push(item2)
                 }
               }
@@ -241,6 +271,7 @@
             }
           })
         }
+        // 商家
         if (this.userTypeToken === 'venderToken') {
           this.myZiZiMainMarginTop = '0px'
           getMyCoinsBeans().then(res => {
@@ -251,7 +282,7 @@
           })
           getVenderZiZiList({pageSize: this.pageSize, pageNum: this.pageNum, params: qs.stringify((this.searchData))}).then(res => {
             if (res.code === 1) {
-              this.userType = 'manufacturer'
+              this.userType = 'vender'
               this.userTypeStr = '收货'
               let list = res.data.list
               this.total = res.data.total
@@ -270,6 +301,9 @@
                   item2.receiverName = item1.receiverName
                   item2.orderId = item1.orderId
                   item2.logisticsTimeStr = item1.logisticsTimeStr
+                  item2.senderName = item1.senderName
+                  item2.logisticsCompany = item1.logisticsCompany
+                  item2.logisticsNo = item1.logisticsNo
                   this.ziZiList.push(item2)
                 }
               }
@@ -283,7 +317,7 @@
       },
       // 点击收货
       handleDelivery (index, row) {
-        if (this.userType === 'vender') {
+        if (this.userType === 'manufacturer') {
           this.logisticsInfo.orderId = row.orderId
           this.logisticsDialog = true
         } else {
@@ -386,6 +420,7 @@
       // 监听类型改变
       typeChange (val) {
         this.searchData.type = val
+        this.ziZiList = []
         this.initData()
       },
       // 监听天数改变
@@ -394,8 +429,8 @@
         this.initData()
       },
       // 处理预览
-      visible () {
-        this.dialogImageUrl = this.$refs['skuImage'].src
+      visible (url) {
+        this.dialogImageUrl = url
         this.dialogVisible = true
       },
       // 关闭dialog
@@ -473,9 +508,9 @@
     text-align: left;
     vertical-align: text-bottom;
   }
-  .receiveAddrInfo {
+  .receiveAddrInfos {
     display: inline-block;
-    /*width: 440px;*/
+    width: 34%;
     text-align: left;
     overflow: hidden;
     text-overflow:ellipsis;

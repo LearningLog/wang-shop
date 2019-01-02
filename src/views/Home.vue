@@ -323,6 +323,7 @@
                 // 1. 删除本地存储中的用户登陆信息
                 // 清除token
                 removeToken('adminToken')
+                removeToken('adminToken')
                 removeToken('userType')
                 // 跳转到登录页面
                 this.$router.push({path: 'login'})
@@ -343,6 +344,7 @@
               if (res.code === 1) {
                 // 1. 删除本地存储中的用户登陆信息
                 // 清除token
+                removeToken('manufacturerToken')
                 removeToken('manufacturerToken')
                 removeToken('userType')
                 // 跳转到登录页面
@@ -365,6 +367,7 @@
                 // 1. 删除本地存储中的用户登陆信息
                 // 清除token
                 removeToken('venderToken')
+                removeToken('sessionId')
                 removeToken('userType')
                 // 跳转到登录页面
                 this.$router.push({path: 'login'})

@@ -84,7 +84,7 @@
         productSelectList: [], // 商品下拉数据
         rules: {
           skuId: [
-            { required: true, message: '请选择商品', trigger: 'change' }
+            { required: true, message: '请选择产品', trigger: 'change' }
           ],
           publishNum: [
             { required: true, message: '请输入发布数量', trigger: 'blur' }
