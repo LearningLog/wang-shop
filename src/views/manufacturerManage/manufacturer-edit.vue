@@ -33,7 +33,48 @@
           <el-input v-model="manufacturer.creater" disabled></el-input>
         </el-form-item>
       </el-col>
+      <el-col span="12">
+        <el-form-item label="营业执照" prop="businessLicenseList">
+          <!-- 图片上传 -->
+          <el-upload
+            limit="2"
+            accept=".jpg,.png,.gif,.jepg,.jpeg"
+            class="upload-demo"
+            :action="uploadUrl()"
+            :on-success="handleSuccess0"
+            :before-remove="beforeRemove"
+            :on-remove="handleRemove0"
+            :on-preview="handlePreview"
+            :file-list="businessLicenseList"
+            list-type="picture-card">
+            <i class="el-icon-plus"></i>
+            <!--<el-button size="small" type="primary">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png/gif/jepg/jpeg文件</div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="经营许可证" prop="scopeBusinessList">
+          <!-- 图片上传 -->
+          <el-upload
+            limit="2"
+            accept=".jpg,.png,.gif,.jepg,.jpeg"
+            class="upload-demo"
+            :action="uploadUrl()"
+            :on-success="handleSuccess1"
+            :before-remove="beforeRemove"
+            :on-remove="handleRemove1"
+            :on-preview="handlePreview"
+            :file-list="scopeBusinessList"
+            list-type="picture-card">
+            <i class="el-icon-plus"></i>
+            <!--<el-button size="small" type="primary">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png/gif/jepg/jpeg文件</div>
+          </el-upload>
+        </el-form-item>
+      </el-col>
     </el-form>
+    <el-dialog :visible.sync="dialogVisible" append-to-body>
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
     <div class="operfixed">
       <el-button type="primary" size="small" @click="save">保存</el-button>
       <el-button type="warning" size="small" @click="reset">重置</el-button>
@@ -43,6 +84,8 @@
 <script>
   import { getManufacturerDetail, editManufacturer } from '../../api/manufacturerManage.js'
   import {onNumValid, validatePhone} from '../../api/util.js'
+  import { uploadSingle } from '../../api/commodityManage.js'
+  import { uploadInfo } from '../../api/http.js'
   export default {
     created () {
       this.manufacturerId = this.$route.query.id
@@ -82,9 +125,15 @@
           contact: '', // 联系人
           tel: '', // 联系电话
           registerAddress: '', // 注册地址
-          createDate: '', // 创建时间
-          creater: '' // 创建人
+          businessLicense: '', // 营业执照
+          scopeBusiness: '', // 经营许可证
+          createTime: '', // 创建时间
+          createMan: '' // 创建人
         },
+        businessLicenseList: [], // 营业执照图片
+        scopeBusinessList: [], // 经营许可证图片
+        dialogImageUrl: '', // dialog弹窗图片路径
+        dialogVisible: false, // dialog弹窗是否显示
         rules: {
           manufacturerName: [
             { required: true, message: '请输入厂商名称', trigger: 'blur' }
@@ -109,6 +158,8 @@
         getManufacturerDetail(this.manufacturerId).then(res => {
           if (res.code === 1) {
             this.manufacturer = res.data
+            this.businessLicenseList = [{url: res.data.businessLicense, name: res.data.businessLicenseName}]
+            this.scopeBusinessList = [{url: res.data.scopeBusiness, name: res.data.scopeBusinessName}]
           }
         })
       },
@@ -116,6 +167,20 @@
       save () {
         this.$refs['manufacturer'].validate((valid) => {
           if (valid) {
+            if (!this.manufacturer.businessLicense) {
+              this.$message({
+                type: 'warning',
+                message: '请上传营业执照图片!'
+              })
+              return false
+            }
+            if (!this.manufacturer.scopeBusiness) {
+              this.$message({
+                type: 'warning',
+                message: '请上传经营许可证图片!'
+              })
+              return false
+            }
             editManufacturer(this.manufacturer).then(res => {
               if (res.code === 1) {
                 this.$message({
@@ -135,6 +200,66 @@
       reset () {
         this.initData()
         this.$refs['manufacturer'].resetFields()
+      },
+      // 上传路径
+      uploadUrl () {
+        return uploadInfo().url + '/admin/upload/uploadFile'
+      },
+      // 上传成功
+      handleSuccess0 (response, file, fileList) {
+        this.businessLicenseList = [file]
+        let formData = new FormData()
+        formData.append('file', file.raw)
+        uploadSingle(formData).then(res => {
+          if (res.data) this.manufacturer.businessLicense = res.data
+        })
+      },
+      // 删除前处理
+      beforeRemove (file, fileList) {
+        return this.$confirm(`确定移除此图片吗？`, '删除提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+      },
+      // 处理文件移除
+      handleRemove0 (file, fileList) {
+        let now = ''
+        this.businessLicenseList.some((item, index) => {
+          if (file.uid === item.uid) {
+            now = index
+            return false
+          }
+        })
+        this.businessLicenseList.splice(now, 1)
+        this.manufacturer.businessLicense = ''
+      },
+      // 处理预览
+      handlePreview (file) {
+        // 图片预览
+        this.dialogImageUrl = file.url
+        this.dialogVisible = true
+      },
+      // 上传成功
+      handleSuccess1 (response, file, fileList) {
+        this.scopeBusinessList = [file]
+        let formData = new FormData()
+        formData.append('file', file.raw)
+        uploadSingle(formData).then(res => {
+          if (res.data) this.manufacturer.scopeBusiness = res.data
+        })
+      },
+      // 处理文件移除
+      handleRemove1 (file, fileList) {
+        let now = ''
+        this.scopeBusinessList.some((item, index) => {
+          if (file.uid === item.uid) {
+            now = index
+            return false
+          }
+        })
+        this.scopeBusinessList.splice(now, 1)
+        this.manufacturer.scopeBusiness = ''
       }
     }
   }

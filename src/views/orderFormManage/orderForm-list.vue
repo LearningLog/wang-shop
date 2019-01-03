@@ -64,28 +64,28 @@
         label="订单日期">
       </el-table-column>
       <el-table-column
-        prop="manufacturerId"
+        prop="venderId"
         align="center"
         min-width="100"
         show-overflow-tooltip
         label="商户编号">
       </el-table-column>
       <el-table-column
-        prop="manufacturerName"
+        prop="venderName"
         align="center"
         min-width="150"
         show-overflow-tooltip
         label="商户名称">
       </el-table-column>
       <el-table-column
-        prop="venderId"
+        prop="manufacturerId"
         align="center"
         min-width="100"
         show-overflow-tooltip
         label="厂商编号">
       </el-table-column>
       <el-table-column
-        prop="venderName"
+        prop="manufacturerName"
         align="center"
         min-width="150"
         show-overflow-tooltip

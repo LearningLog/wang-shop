@@ -47,19 +47,16 @@ export function onKeyValid (val, num) {
   }
   return val
 }
-export function onValidnum (val, event) {
+// 校验整数
+export function onValidnum (val) {
   val = val === undefined ? '' : val
   val = val.toString()
   let reg = /^\d+$/
   if (!reg.test(val)) {
-    if (event === 'blur') {
-      val = val.substring(0, val.length - 1)
-      return false
-    }
-    if (event === 'keyup' || event === 'input') {
-      val = val.replace(/[^\d]/g, '') // 清除数字以外的
-      return false
-    }
+    val = val.replace(/[^\d]/g, '') // 清除数字以外的
+    return val
+  } else {
+    return val
   }
 }
 export function checkNum (val, num) {

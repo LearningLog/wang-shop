@@ -14,6 +14,9 @@
         <el-form-item label="产品名称：">
           <div>{{product.skuName}}</div>
         </el-form-item>
+        <el-form-item label="条形码：">
+          <div>{{product.barCode}}</div>
+        </el-form-item>
         <el-form-item label="规格：">
           <div>{{product.saleProperty}}</div>
         </el-form-item>

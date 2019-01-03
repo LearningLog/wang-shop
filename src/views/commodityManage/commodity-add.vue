@@ -14,6 +14,9 @@
         <el-form-item label="产品名称" prop="skuName">
           <el-input v-model="product.skuName"></el-input>
         </el-form-item>
+        <el-form-item label="条形码" prop="barCode">
+          <el-input v-model="product.barCode" maxlength="32"></el-input>
+        </el-form-item>
         <el-form-item label="规格" prop="saleProperty">
           <el-input v-model="product.saleProperty"></el-input>
         </el-form-item>
@@ -80,7 +83,7 @@
 <script>
   import { addProduct, uploadSingle, getManufacturerList } from '../../api/commodityManage.js'
   import { uploadInfo } from '../../api/http.js'
-  import {onNumValid, onKeyValid} from '../../api/util.js'
+  import {onNumValid, onKeyValid, onValidnum} from '../../api/util.js'
 
   export default {
     created () {
@@ -96,6 +99,7 @@
           skuId: '', // 产品编号,
           brand: '', // 产品品牌
           skuName: '', // 产品名称
+          barCode: '', // 条形码
           manufacturerName: '', // 厂家
           manufacturerId: '', // 厂家ID
           saleProperty: '', // 规格
@@ -111,7 +115,7 @@
         skuImageList: [], // 商品图片
         dialogImageUrl: '', // dialog弹窗图片路径
         dialogVisible: false, // dialog弹窗是否显示
-        manufacturerList: [{code: 3464, desc: '厂商13'}, {code: 3465, desc: '厂商14'}], // 厂家数组
+        manufacturerList: [], // 厂家数组
         rules: {
           brand: [
             { required: true, message: '请输入产品品牌', trigger: 'blur' }
@@ -121,6 +125,9 @@
           ],
           manufacturerName: [
             { required: true, message: '请选择厂家', trigger: 'change' }
+          ],
+          barCode: [
+            { required: true, message: '请输入数字类型条形码', trigger: 'blur' }
           ],
           saleProperty: [
             { required: true, message: '请输入规格', trigger: 'blur' }
@@ -185,6 +192,7 @@
           skuId: '', // 产品编号,
           brand: '', // 产品品牌
           skuName: '', // 产品名称
+          barCode: '', // 条形码
           manufacturerName: '', // 厂家
           manufacturerId: '', // 厂家ID
           saleProperty: '', // 规格
@@ -257,6 +265,17 @@
         }
         this.product[name] = value || value === 0 ? this.$accounting.formatNumber(value, num) : ''
         if (this.product.fraction === '1.00') this.product.fraction = ''
+      }
+    },
+    watch: {
+      'product.barCode': function (val, oldVal) {
+        val = onValidnum(val)
+        // 数据改变驱动视图更新不是立即的
+        // 你甚至可以认为更新视图的操作是异步的
+        // 在视图更新后调用 this.$nextTick 修改数据再次更新视图
+        this.$nextTick(() => {
+          this.product.barCode = val || ''
+        })
       }
     }
   }
