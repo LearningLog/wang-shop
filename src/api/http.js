@@ -60,7 +60,7 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
   loading('close')
   const res = response.data
-  if (res.code === 2100) {
+  if (res.code === 2100 || res.code === 4300) {
     Message({
       message: res.message,
       type: 'error'
