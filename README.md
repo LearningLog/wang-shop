@@ -1,4 +1,4 @@
-# myadmin1
+# wang-shop
 
 > A Vue.js project
 
@@ -44,11 +44,12 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * ES6代码转为ES5代码库babel-polyfill
 * CSS手册 http://css.cuishifeng.cn/
 
-### 项目启迪
+### 项目启动
 
 * npm start 启动预览
 * 默认占用 8081
 * 启动之后，访问 localhost:8081
+* 后端 API 接口文档： https://coding.net/u/yan005020671/p/zizi-shop/wiki 
 
 ### 项目结构介绍
 
@@ -81,15 +82,14 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ```
 build   webpack打包相关配置文件目录
 config  webpack打包相关配置文件目录
-docs  我们自己添加的文档目录
-  开发文档.md  案例开发步骤文档
-  接口文档.md  后台 API 接口文档
 node_modules  第三发包
 src  项目源码
+  api http请求函数及一些前端公共处理函数
   assegts  存储资源，例如 css、img、fonts
   components  存储所有组件
   router  路由
     index.js  路由配置文件
+  views 存储所有视图组件
   App.vue  单页面应用程序的根组件
   main.js  开机键，负责把根组件替换到根节点
 static  可以放一些静态资源
